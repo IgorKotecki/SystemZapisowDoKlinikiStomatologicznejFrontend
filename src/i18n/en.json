@@ -1,0 +1,44 @@
+{
+  "homeText": "Home",
+  "about": "About Us",
+  "services": "Services",
+  "team": "Team",
+  "pricing": "Pricing",
+  "contact": "Contact",
+  "book": "Book an appointment",
+  "loginText": "Login",
+  "dropLine": "Drop a line",
+  "appointment": {
+    "title": "Book Appointment",
+    "date": "Select a date",
+    "service": "Service",
+    "cleaning": "Cleaning",
+    "filling": "Filling",
+    "whitening": "Whitening",
+    "hour": "Time",
+    "doctor": "Doctor",
+    "drKowalski": "Dr Kowalski",
+    "drNowak": "Dr Nowak",
+    "drSzeliga": "Dr Szeliga",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "message": "Additional Information",
+    "submit": "Book Appointment"
+  },
+  "home": {
+    "welcomeTitle": "Welcome to Our Dental Office",
+    "welcomeText": "Professional dental care for you and your family",
+    "ourServices": "Our Services",
+    "testimonials": "Patient opinions"
+  },
+  "login": {
+    "title": "Log In",
+    "email": "Email Address",
+    "password": "Password",
+    "signIn": "Sign In",
+    "noAccount": "Don't have an account?",
+    "register": "Register"
+  }
+}

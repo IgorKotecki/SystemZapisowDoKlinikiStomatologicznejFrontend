@@ -1,0 +1,44 @@
+{
+  "homeText": "Home",
+  "about": "O nas",
+  "services": "Usługi",
+  "team": "Zespół",
+  "pricing": "Cennik",
+  "contact": "Kontakt",
+  "book": "Umów wizytę",
+  "loginText": "Zaloguj się",
+  "dropLine": "Napisz do nas",
+  "appointment": {
+    "title": "Umów wizytę",
+    "date": "Wybierz datę",
+    "service": "Usługa",
+    "cleaning": "Czyszczenie",
+    "filling": "Wypełnienie",
+    "whitening": "Wybielanie",
+    "hour": "Godzina",
+    "doctor": "Lekarz",
+    "drKowalski": "Dr Kowalski",
+    "drNowak": "Dr Nowak",
+    "drSzeliga": "Dr Szeliga",
+    "firstName": "Imię",
+    "lastName": "Nazwisko",
+    "email": "Email",
+    "phone": "Telefon",
+    "message": "Dodatkowe informacje",
+    "submit": "Umów wizytę"
+  },
+  "home": {
+    "welcomeTitle": "Witamy w naszym gabinecie dentystycznym",
+    "welcomeText": "Profesjonalna opieka stomatologiczna dla Ciebie i Twojej rodziny",
+    "ourServices": "Nasze usługi",
+    "testimonials": "Opinie pacjentów"
+  },
+  "login": {
+    "title": "Zaloguj się",
+    "email": "Adres e-mail",
+    "password": "Hasło",
+    "signIn": "Zaloguj",
+    "noAccount": "Nie masz konta?",
+    "register": "Zarejestruj się"
+  }
+}
