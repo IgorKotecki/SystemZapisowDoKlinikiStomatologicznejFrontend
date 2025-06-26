@@ -89,7 +89,7 @@ export default function LogIn() {
           <Box sx={{ mt: 2, textAlign: 'center' }}>
             <Typography variant="body2">
               {t('login.noAccount')}{' '}
-              <Link href="/register" underline="hover" sx={{ color: colors.color3 }}>
+              <Link href="/Register" underline="hover" sx={{ color: colors.color3 }}>
                 {t('login.register')}
               </Link>
             </Typography>

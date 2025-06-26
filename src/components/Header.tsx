@@ -22,6 +22,10 @@ export default function Header() {
     navigate('/appointment');
   }
 
+  const  handleLogInClick = () => {
+    navigate('/LogIn');
+  }
+
   const handleHomeClick = () => {
     navigate('');
   }
@@ -73,9 +77,7 @@ export default function Header() {
           </Menu>
 
           <Button variant="outlined" onClick={handleAppointmentClick}>{t('book')}</Button>
-          <Button variant="contained" color="primary">
-            {t('loginText')}
-          </Button>
+          <Button variant="contained" color="primary" onClick={handleLogInClick}>{t('loginText')}</Button>
         </Box>
       </Toolbar>
     </AppBar>

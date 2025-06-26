@@ -23,7 +23,6 @@ export default function Home() {
 
   return (
     <Box sx={{ width: '100vw', minHeight: '100vh', backgroundColor: colors.white }}>
-      {/* Hero section */}
       <Box
         sx={{
           width: '100%',
@@ -70,7 +69,6 @@ export default function Home() {
         </Box>
       </Box>
 
-      {/* Services section */}
       <Box sx={{ py: 8, px: { xs: 2, md: 10 }, backgroundColor: '#f5f5f5' }}>
         <Typography variant="h4" textAlign="center" gutterBottom>
           {t('home.ourServices') || 'ajdnkjansdjknajksnjdkansdjknas'}
@@ -98,8 +96,7 @@ export default function Home() {
           ))}
         </Grid>
       </Box>
-
-      {/* Testimonials / Opinie */}
+      
       <Box sx={{ py: 6, px: 2, backgroundColor: colors.color1, color: colors.white }}>
         <Typography variant="h4" textAlign="center" gutterBottom>
           {t('home.testimonials') || 'ajdnkjansdjknajksnjdkansdjknas'}
