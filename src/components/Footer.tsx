@@ -9,7 +9,7 @@ export default function Footer() {
 
   return (
     <Box component="footer" sx={{ bgcolor: '#f5f5f5', py: 6, mt: 10 }}>
-      {/* Container automatycznie dodaje marginesy po bokach */}
+    
       <Container maxWidth="lg">
         <Grid container spacing={6} justifyContent="space-between">
           <Grid item xs={12} md={5}>

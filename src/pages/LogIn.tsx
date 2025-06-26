@@ -11,11 +11,18 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import api from '../api/axios';
+import { storage } from '../utils/storage';
 
 export default function LogIn() {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [language, setLanguage] = useState(i18n.language || 'pl');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,6 +32,31 @@ export default function LogIn() {
     const lang = e.target.value;
     i18n.changeLanguage(lang);
     setLanguage(lang);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await api.post('/auth/login', formData);
+      const { token, user } = response.data;
+
+      storage.setToken(token);
+      storage.setUser(user);
+
+      navigate('/dashboard');
+
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        setError(t('error.userDataIncorrect'));
+      } else {
+        setError(t('error.errorOccurred'));
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const colors = {
@@ -48,52 +80,62 @@ export default function LogIn() {
     >
       <Card sx={{ maxWidth: 420, width: '100%', borderRadius: 3, boxShadow: 5 }}>
         <CardContent sx={{ p: 4 }}>
-          <Typography variant="h5" sx={{ textAlign: 'center', mb: 3, color: colors.color1 }}>
-            {t('login.title')}
-          </Typography>
-
-          <TextField
-            label={t('login.email')}
-            name="email"
-            fullWidth
-            margin="normal"
-            value={formData.email}
-            onChange={handleChange}
-            sx={{ backgroundColor: colors.white, borderRadius: 1 }}
-          />
-
-          <TextField
-            label={t('login.password')}
-            name="password"
-            type="password"
-            fullWidth
-            margin="normal"
-            value={formData.password}
-            onChange={handleChange}
-            sx={{ backgroundColor: colors.white, borderRadius: 1 }}
-          />
-
-          <Button
-            variant="contained"
-            fullWidth
-            sx={{
-              mt: 3,
-              backgroundColor: colors.color3,
-              '&:hover': { backgroundColor: colors.color4 },
-              textTransform: 'none'
-            }}
-          >
-            {t('login.signIn')}
-          </Button>
-
-          <Box sx={{ mt: 2, textAlign: 'center' }}>
-            <Typography variant="body2">
-              {t('login.noAccount')}{' '}
-              <Link href="/Register" underline="hover" sx={{ color: colors.color3 }}>
-                {t('login.register')}
-              </Link>
+          <form onSubmit={handleSubmit}>
+            <Typography variant="h5" sx={{ textAlign: 'center', mb: 3, color: colors.color1 }}>
+              {t('login.title')}
             </Typography>
-          </Box>
+
+            <TextField
+              label={t('login.email')}
+              name="email"
+              fullWidth
+              margin="normal"
+              value={formData.email}
+              onChange={handleChange}
+              sx={{ backgroundColor: colors.white, borderRadius: 1 }}
+            />
+
+            <TextField
+              label={t('login.password')}
+              name="password"
+              type="password"
+              fullWidth
+              margin="normal"
+              value={formData.password}
+              onChange={handleChange}
+              sx={{ backgroundColor: colors.white, borderRadius: 1 }}
+            />
+
+            {error && (
+              <Typography color="error" sx={{ mt: 1 }}>
+                {error}
+              </Typography>
+            )}
+
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              disabled={loading}
+              sx={{
+                mt: 3,
+                backgroundColor: colors.color3,
+                '&:hover': { backgroundColor: colors.color4 },
+                textTransform: 'none'
+              }}
+            >
+              {loading ? t('login.loading') : t('login.signIn')}
+            </Button>
+
+            <Box sx={{ mt: 2, textAlign: 'center' }}>
+              <Typography variant="body2">
+                {t('login.noAccount')}{' '}
+                <Link href="/Register" underline="hover" sx={{ color: colors.color3 }}>
+                  {t('login.register')}
+                </Link>
+              </Typography>
+            </Box>
+          </form>
         </CardContent>
       </Card>
     </Box>

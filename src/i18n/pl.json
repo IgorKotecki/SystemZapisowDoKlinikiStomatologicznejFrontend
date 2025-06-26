@@ -39,6 +39,11 @@
     "password": "Hasło",
     "signIn": "Zaloguj",
     "noAccount": "Nie masz konta?",
-    "register": "Zarejestruj się"
+    "register": "Zarejestruj się",
+    "loading": "Logowanie..."
+  },
+  "error": {
+    "userDataIncorrect": "Email lub hasło jest nieprawidłowe. Spróbuj ponownie.",
+    "errorOccurred": "Wystąpił błąd. Spróbuj ponownie."
   }
 }

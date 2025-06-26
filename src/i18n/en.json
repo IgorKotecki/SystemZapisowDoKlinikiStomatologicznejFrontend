@@ -39,6 +39,11 @@
     "password": "Password",
     "signIn": "Sign In",
     "noAccount": "Don't have an account?",
-    "register": "Register"
+    "register": "Register",
+    "loading": "Logging in..."
+  },
+  "error": {
+    "userDataIncorrect": "Email address or password is incorrect. Please try again.",
+    "errorOccurred": "Error occurred! Please try again."
   }
 }
