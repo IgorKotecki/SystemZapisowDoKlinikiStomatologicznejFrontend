@@ -25,7 +25,14 @@
     "email": "Email",
     "phone": "Phone",
     "message": "Additional Information",
-    "submit": "Book Appointment"
+    "submit": "Book Appointment",
+    "errorFirstName" : "Enter name",
+    "errorLastName" : "Enter surname",
+    "errorEmail" : "Incorrect email adress",
+    "errorPhone" : "Enter tel. number",
+    "errorService" : "Choose service",
+    "errorDoctor" : "Choose doctor",
+    "errorHour" : "Choose hour"
   },
   "home": {
     "welcomeTitle": "Welcome to Our Dental Office",
@@ -42,8 +49,24 @@
     "register": "Register",
     "loading": "Logging in..."
   },
+  "register": {
+    "title": "Registration",
+    "firstName": "Name",
+    "lastName": "Surname",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "confirm password",
+    "signUp": "Register",
+    "haveAccount": "Already have an account?",
+    "login": "Log in",
+    "loading": "Registration...",
+    "phone": "Tel. number"
+  },
   "error": {
     "userDataIncorrect": "Email address or password is incorrect. Please try again.",
+    "invalidEmail": "Nieprawidłowy adres email.",
+    "shortPassword": "Hasło musi mieć co najmniej 6 znaków.",
+    "passwordsDontMatch": "Hasła nie są takie same.",
     "errorOccurred": "Error occurred! Please try again."
   }
 }

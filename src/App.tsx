@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import LogIn from "./pages/LogIn";
+import Register from "./pages/Register";
 import Appointment from "./pages/Appointment";
 
 
@@ -18,6 +19,7 @@ const App = () => {
             <Route path="/about" element={<LogIn />} />
             <Route path="/appointment" element={<Appointment />} />
             <Route path="/LogIn" element={<LogIn/>}/>
+            <Route path="/register" element={<Register/>}/>
           </Routes>
         </main>
         <Footer />

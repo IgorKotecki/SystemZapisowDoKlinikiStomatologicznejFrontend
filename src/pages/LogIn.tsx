@@ -40,11 +40,11 @@ export default function LogIn() {
     setError('');
 
     try {
-      const response = await api.post('/auth/login', formData);
-      const { token, user } = response.data;
+      const response = await api.post('/api/login', formData);
+      const { accessToken, refreshToken } = response.data;
+      
 
-      storage.setToken(token);
-      storage.setUser(user);
+      storage.setToken(accessToken);
 
       navigate('/dashboard');
 
@@ -130,7 +130,7 @@ export default function LogIn() {
             <Box sx={{ mt: 2, textAlign: 'center' }}>
               <Typography variant="body2">
                 {t('login.noAccount')}{' '}
-                <Link href="/Register" underline="hover" sx={{ color: colors.color3 }}>
+                <Link href="/register" underline="hover" sx={{ color: colors.color3 }}>
                   {t('login.register')}
                 </Link>
               </Typography>

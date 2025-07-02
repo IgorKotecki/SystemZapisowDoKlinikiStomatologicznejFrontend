@@ -25,7 +25,14 @@
     "email": "Email",
     "phone": "Telefon",
     "message": "Dodatkowe informacje",
-    "submit": "Umów wizytę"
+    "submit": "Umów wizytę",
+    "errorFirstName" : "Podaj imię",
+    "errorLastName" : "Podaj nazwisko",
+    "errorEmail" : "Niepoprawny adres email",
+    "errorPhone" : "Podaj numer telefonu",
+    "errorService" : "Wybierz usługę",
+    "errorDoctor" : "Wybierz lekarza",
+    "errorHour" : "Wybierz godzinę"
   },
   "home": {
     "welcomeTitle": "Witamy w naszym gabinecie dentystycznym",
@@ -42,8 +49,24 @@
     "register": "Zarejestruj się",
     "loading": "Logowanie..."
   },
+  "register": {
+    "title": "Rejestracja",
+    "firstName": "Imię",
+    "lastName": "Nazwisko",
+    "email": "Email",
+    "password": "Hasło",
+    "confirmPassword": "Potwierdź hasło",
+    "signUp": "Zarejestruj się",
+    "haveAccount": "Masz już konto?",
+    "login": "Zaloguj się",
+    "loading": "Rejestrowanie...",
+    "phone": "Numer tel."
+  },
   "error": {
     "userDataIncorrect": "Email lub hasło jest nieprawidłowe. Spróbuj ponownie.",
+    "invalidEmail": "Nieprawidłowy adres email.",
+    "shortPassword": "Hasło musi mieć co najmniej 6 znaków.",
+    "passwordsDontMatch": "Hasła nie są takie same.",
     "errorOccurred": "Wystąpił błąd. Spróbuj ponownie."
   }
 }
