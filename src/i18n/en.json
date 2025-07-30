@@ -8,6 +8,7 @@
   "book": "Book an appointment",
   "loginText": "Login",
   "dropLine": "Drop a line",
+  "phoneNumber" : "call +48 123-456-789",
   "appointment": {
     "title": "Book Appointment",
     "date": "Select a date",
@@ -68,5 +69,15 @@
     "shortPassword": "Hasło musi mieć co najmniej 6 znaków.",
     "passwordsDontMatch": "Hasła nie są takie same.",
     "errorOccurred": "Error occurred! Please try again."
+  },
+  "teamPage" : {
+    "boldInformation" : "Main informaiton",
+    "normalInformation" : "Somewhere over the rainbow, cos tam cos tam, jedne dzien pawł jest ładny, ładny o tak o taaaaaaak, boze nudne to jest",
+    "doctor" : {
+      "1" : "Paweł Szeliga",
+      "2" : "Twoja stara",
+      "3" : "Mateusz Talarek",
+      "4" : "Tomek Tomaszewski"
+    }
   }
 }

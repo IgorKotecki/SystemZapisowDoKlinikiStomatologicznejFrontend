@@ -22,9 +22,13 @@ export default function Header() {
     navigate('/appointment');
   }
 
-  const  handleLogInClick = () => {
+  const handleLogInClick = () => {
     navigate('/LogIn');
   }
+
+  const handleTeamClick = () => {
+    navigate('/team');
+  } 
 
   const handleHomeClick = () => {
     navigate('');
@@ -50,7 +54,7 @@ export default function Header() {
           <Button color="inherit" onClick={handleHomeClick}>{t('homeText')}</Button>
           <Button color="inherit">{t('about')}</Button>
           <Button color="inherit">{t('services')}</Button>
-          <Button color="inherit">{t('team')}</Button>
+          <Button color="inherit" onClick={handleTeamClick}>{t('team')}</Button>
           <Button color="inherit">{t('pricing')}</Button>
           <Button color="inherit">{t('contact')}</Button>
         </Box>
@@ -78,6 +82,7 @@ export default function Header() {
 
           <Button variant="outlined" onClick={handleAppointmentClick}>{t('book')}</Button>
           <Button variant="contained" color="primary" onClick={handleLogInClick}>{t('loginText')}</Button>
+         
         </Box>
       </Toolbar>
     </AppBar>
