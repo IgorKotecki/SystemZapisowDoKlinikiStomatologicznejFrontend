@@ -12,8 +12,11 @@ import {
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
 import api from '../api/axios';
 import { storage } from '../utils/storage';
+import { useAuth } from '../context/AuthContext';
+
 
 export default function LogIn() {
   const { t, i18n } = useTranslation();
@@ -23,6 +26,8 @@ export default function LogIn() {
   const [language, setLanguage] = useState(i18n.language || 'pl');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const { setLoggedIn } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -43,11 +48,17 @@ export default function LogIn() {
       const response = await api.post('/api/login', formData);
       const { accessToken, refreshToken } = response.data;
       
-
       storage.setToken(accessToken);
+      storage.setRefreshToken(refreshToken);
 
-      navigate('/dashboard');
+      const claims = jwtDecode(accessToken);
 
+      localStorage.setItem('claims',JSON.stringify(claims));
+      console.log('Claims:', claims);
+      // const role = claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+      // console.log('User role:', role);
+      setLoggedIn(true);
+      navigate('/user');
     } catch (err: any) {
       if (err.response?.status === 401) {
         setError(t('error.userDataIncorrect'));
@@ -56,6 +67,7 @@ export default function LogIn() {
       }
     } finally {
       setLoading(false);
+      
     }
   };
 

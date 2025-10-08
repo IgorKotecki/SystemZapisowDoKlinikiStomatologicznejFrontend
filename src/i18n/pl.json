@@ -1,6 +1,5 @@
 {
   "homeText": "Home",
-  "about": "O nas",
   "services": "Usługi",
   "team": "Zespół",
   "pricing": "Cennik",
@@ -85,5 +84,14 @@
       "3" : "jeszcze wiekszy debil",
       "4" : "Lubi uwalać uczniów na PPJ"
     }
+  },
+  "about" : {
+    "about": "O nas",
+    "aboutOutClinic" : "About out clinic",
+    "aboutOutClinicText" : "More then 15 year of experience in helping your smile. Learn our story....",
+    "ourStroy" : "Our stroy",
+    "ourValues" : "Our values",
+    "ourAchievements" : "Our achievements",
+    "whatPSay" : "What our patients say"
   }
 }

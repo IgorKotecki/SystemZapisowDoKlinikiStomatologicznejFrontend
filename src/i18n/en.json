@@ -1,6 +1,5 @@
 {
   "homeText": "Home",
-  "about": "About Us",
   "services": "Services",
   "team": "Team",
   "pricing": "Pricing",
@@ -79,5 +78,14 @@
       "3" : "Mateusz Talarek",
       "4" : "Tomek Tomaszewski"
     }
+  },
+  "about" : {
+    "about": "About Us",
+    "aboutOurClinic" : "About our clinic",
+    "aboutOurClinicText" : "More then 15 year of experience in helping your smile. Learn our story....",
+    "makeAnAppointment" : "Appointment",
+    "meetOutTeam" : "Meet out team",
+    "ourStory" : "Our story",
+    ""  : ""
   }
 }
