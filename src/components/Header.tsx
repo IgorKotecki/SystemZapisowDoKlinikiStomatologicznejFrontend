@@ -37,7 +37,7 @@ export default function Header() {
 
   const handleAccount = () => {
     handleUserClose();
-    navigate('/user');
+    navigate('/user/profile');
   };
 
   const handleLogout = () => {

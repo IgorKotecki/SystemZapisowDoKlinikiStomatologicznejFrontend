@@ -7,10 +7,18 @@ import BuildIcon from "@mui/icons-material/Build"
 import ChildCareIcon from "@mui/icons-material/ChildCare"
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital"
 import PsychologyIcon from "@mui/icons-material/Psychology"
+import { useEffect, useState } from "react"
+import api from '../api/axios';
 
 export default function Services() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
+
+  const [servicesData, setServicesData] = useState<{
+    Id: string, lowPrice: string, highPrice: string, minTime: string, langCode: string, name: string, description: string
+  }[]>([]);
+  const [loadingServices, setLoadingServices] = useState(false);
+  const [services, setServices] = useState<{ id: string, name: string }[]>([]);
 
   const colors = {
     color1: "#003141",
@@ -18,6 +26,57 @@ export default function Services() {
     color4: "#00b2b9",
     white: "#ffffff",
   }
+
+  const decodeJwt = (token) => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      return JSON.parse(jsonPayload);
+    } catch (err) {
+      console.error('Błąd przy dekodowaniu tokena:', err);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      setLoadingServices(true);
+      try {
+        const token = localStorage.getItem('token');
+        let role = 'Unregistered_user'; // domyślnie dla niezalogowanych
+        if (token) {
+          const claims = decodeJwt(token);
+          if (claims) {
+            const userRole =
+              claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+            if (userRole) {
+              role = userRole;
+            }
+          }
+        }
+        const response = await api.get('/api/service/UserServices', {
+          params: {
+            lang: i18n.language,
+            role: role,
+          },
+        });
+        console.log(response.data);
+        //setServices(response.data);
+      } catch (error) {
+        console.error('Error while geting the services:', error);
+      } finally {
+        setLoadingServices(false);
+      }
+    };
+
+    fetchServices();
+  }, [i18n.language]);
 
   const serviceCategories = [
     {

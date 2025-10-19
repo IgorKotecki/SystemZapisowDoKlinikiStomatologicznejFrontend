@@ -87,5 +87,49 @@
     "meetOutTeam" : "Meet out team",
     "ourStory" : "Our story",
     ""  : ""
+  },
+  "userNavigation" : {
+    "panel" : "User Panel",
+    "role" : "Role",
+    "myProfile" : "My Profile",
+    "myAppointments" : "My Appointments",
+    "teeth" : "Dentition",
+    "makeAnAppointment" : "Make an Appointment"
+  },
+  "userProfile" : {
+    "profile" : "My Profile",
+    "pageInfo" : "Manage your personal data",
+    "firstName" : "Name",
+    "lastName":"Surname",
+    "email":"Email",
+    "phone":"Phone number",
+    "dateOfBirth":"Date of birth",
+    "address":"Address",
+    "edit":"Edit",
+    "save":"Save",
+    "cancel":"Cancel"
+  },
+  "userAppointments" : {
+    "title" : "Appointment history",
+    "pageInfo" : "View your past and upcoming dental appointments",
+    "date" : "Date",
+    "hour" : "Hour",
+    "service" : "Service",
+    "dentist" : "Dentist",
+    "price" : "Price",
+    "state" : "State"
+  },
+  "userMakeAppointment": {
+    "title": "Book an Appointment",
+    "subtitle": "Schedule your next dental visit easily",
+    "date": "Date",
+    "service": "Service",
+    "doctor": "Dentist",
+    "hour": "Hour",
+    "submit": "Book Appointment",
+    "success": "Appointment booked successfully!",
+    "errorOccurred": "An error occurred. Please try again.",
+    "errorFields": "Please fill in all required fields."
   }
+
 }

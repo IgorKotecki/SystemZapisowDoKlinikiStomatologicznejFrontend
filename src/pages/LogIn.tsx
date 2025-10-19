@@ -58,7 +58,7 @@ export default function LogIn() {
       // const role = claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
       // console.log('User role:', role);
       setLoggedIn(true);
-      navigate('/user');
+      navigate('/user/profile');
     } catch (err: any) {
       if (err.response?.status === 401) {
         setError(t('error.userDataIncorrect'));

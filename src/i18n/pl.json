@@ -93,5 +93,49 @@
     "ourValues" : "Our values",
     "ourAchievements" : "Our achievements",
     "whatPSay" : "What our patients say"
+  },
+  "userNavigation" : {
+    "panel" : "Panel Użytkownika",
+    "role" : "Rola",
+    "myProfile" : "Mój Profil",
+    "myAppointments" : "Moje Wizyty",
+    "teeth" : "Uzębienie",
+    "makeAnAppointment" : "Umów Wizytę"
+  },
+  "userProfile" : {
+    "profile" : "Mój profil",
+    "pageInfo" : "Zarządzaj swoimi danymi osobowymi",
+    "firstName" : "Imię",
+    "lastName":"Nazwisko",
+    "email":"Email",
+    "phone":"Numer tel.",
+    "dateOfBirth":"Data urodzenia",
+    "address":"Adres",
+    "edit":"Edytuj",
+    "save":"Zapisz",
+    "cancel":"Anuluj"
+  },
+  "userAppointments" : {
+    "title" : "Historia Wizyt",
+    "pageInfo" : "Przeglądaj swoje przeszłe i nadchodzące wizyty stomatologiczne",
+    "date" : "Data",
+    "hour" : "Godzina",
+    "service" : "Zabieg",
+    "dentist" : "Dentysta",
+    "price" : "Cena",
+    "state" : "Status"
+  },
+  "userMakeAppointment": {
+    "title": "Umów wizytę",
+    "subtitle": "Zarezerwuj swoją kolejną wizytę stomatologiczną w prosty sposób",
+    "date": "Data",
+    "service": "Usługa",
+    "doctor": "Lekarz dentysta",
+    "hour": "Godzina",
+    "submit": "Zarezerwuj wizytę",
+    "success": "Wizyta została pomyślnie zarezerwowana!",
+    "errorOccurred": "Wystąpił błąd. Spróbuj ponownie.",
+    "errorFields": "Uzupełnij wszystkie wymagane pola."
   }
+
 }
