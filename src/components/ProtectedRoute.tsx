@@ -1,5 +1,5 @@
-import { Navigate } from 'react-router-dom';
-import { storage } from '../utils/storage';
+import { Navigate } from "react-router-dom";
+import { storage } from "../utils/storage";
 import { jwtDecode } from "jwt-decode";
 
 type UserRole =
@@ -21,17 +21,36 @@ export default function ProtectedRoute({ children, allowedRoles }: Props) {
     return <Navigate to="/login" replace />;
   }
 
-  //const claims = jwtDecode(accessToken);
+  let claims: any = null;
 
-  // Pobieranie claims z localStorage
-  const claimsString = localStorage.getItem('claims');
-  //console.log('siema siema elo elo ' , claimsString);
-  //console.log(claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"])
-  const claims = claimsString ? JSON.parse(claimsString) : null;
-  console.log("siema siema ", claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]);
-  // Brak claims lub brak wymaganej roli → przekieruj
-  if (allowedRoles && (!claims || !allowedRoles.includes(claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]))) {
+  try {
+    // 1️⃣ Spróbuj zdekodować token
+    claims = jwtDecode(token);
+  } catch {
+    // 2️⃣ Jeśli nie da się zdekodować, spróbuj z localStorage
+    const claimsString = localStorage.getItem("claims");
+    claims = claimsString ? JSON.parse(claimsString) : null;
+  }
+
+  if (!claims) {
+    console.warn("Brak danych użytkownika — przekierowanie do logowania");
+    return <Navigate to="/login" replace />;
+  }
+
+  // 3️⃣ Pobierz rolę z JWT (Azure lub backend custom claim)
+  const role =
+    claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
+    claims.role ||
+    claims.Role ||
+    claims.roles?.[0];
+
+  console.log("ProtectedRoute → decoded role:", role);
+
+  // 4️⃣ Sprawdź uprawnienia
+  if (allowedRoles && !allowedRoles.includes(role)) {
+    console.warn(`Brak dostępu: rola ${role} nie jest w ${allowedRoles}`);
     return <Navigate to="/" replace />;
   }
+
   return children;
 }

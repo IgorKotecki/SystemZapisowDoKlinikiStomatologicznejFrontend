@@ -130,6 +130,27 @@
     "success": "Appointment booked successfully!",
     "errorOccurred": "An error occurred. Please try again.",
     "errorFields": "Please fill in all required fields."
+  },
+  "receptionistNavigation": {
+    "profile": "Profile",
+    "visits": "Calendar",
+    "users": "Users",
+    "scheduleVisit": "Schedule Appointment",
+    "editServices": "Edit Services"
+  },
+  "receptionistProfile": {
+    "title": "Receptionist Profile",
+    "subtitle": "Manage your information and contact details",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone",
+    "position": "Position",
+    "positionValue": "Receptionist",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "Data has been saved"
   }
 
 }

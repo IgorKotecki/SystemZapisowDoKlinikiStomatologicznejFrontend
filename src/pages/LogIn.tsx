@@ -55,10 +55,16 @@ export default function LogIn() {
 
       localStorage.setItem('claims',JSON.stringify(claims));
       console.log('Claims:', claims);
-      // const role = claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-      // console.log('User role:', role);
+      const role = claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+      console.log('User role:', role);
       setLoggedIn(true);
-      navigate('/user/profile');
+      
+      if(role == "Registered_user"){
+        navigate('/user/profile');
+      }else if(role == "Receptionist"){
+        navigate('/receptionist/profile');
+      }
+      
     } catch (err: any) {
       if (err.response?.status === 401) {
         setError(t('error.userDataIncorrect'));

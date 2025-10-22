@@ -1,19 +1,17 @@
 import React, { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  Box,
-  Typography,
-  ButtonBase,
-  Divider,
-} from "@mui/material";
+import { Box, Typography, ButtonBase, Divider } from "@mui/material";
 import {
   User,
+  Users,
   Calendar,
   Bluetooth as Tooth,
   CalendarPlus,
   ShieldCheck,
+  Settings2,
+  Smile
 } from "lucide-react";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function decodeJwt(token: string) {
   try {
@@ -46,9 +44,10 @@ function getUserRoleFromToken() {
   const role = msRole || simpleRole || "Unregistered";
 
   if (typeof role === "string") {
-    if (role.toLowerCase().includes("admin")) return "Admin";
-    if (role.toLowerCase().includes("user") || role.toLowerCase().includes("registered"))
-      return "User";
+    const r = role.toLowerCase();
+    if (r.includes("admin")) return "Admin";
+    if (r.includes("user") || r.includes("registered")) return "User";
+    if (r.includes("receptionist")) return "Receptionist";
   }
 
   return "Unregistered";
@@ -64,26 +63,38 @@ const colors = {
 };
 
 export default function UserNavigation() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { pathname } = useLocation();
   const role = useMemo(() => getUserRoleFromToken(), []);
 
-  const baseItems = [
-    { href: "/user/profile", label: t('userNavigation.myProfile'), icon: User, roles: ["User", "Admin"] },
-    { href: "/user/appointments", label: t('userNavigation.myAppointments'), icon: Calendar, roles: ["User", "Admin"] },
-    { href: "/user/teeth", label: t('userNavigation.teeth'), icon: Tooth, roles: ["User", "Admin"] },
-    { href: "/user/makeAppointment", label: t('userNavigation.makeAnAppointment'), icon: CalendarPlus, roles: ["User", "Admin"] },
-  ];
-
-  const adminItems = [
-    { href: "/admin", label: "Panel Admina", icon: ShieldCheck, roles: ["Admin"] },
-  ];
-
   const navItems = useMemo(() => {
-    const items = [...baseItems];
-    if (role === "Admin") items.push(...adminItems);
-    return items.filter((it) => it.roles.includes(role));
-  }, [role]);
+    // User
+    const baseItemsTranslated = [
+      { href: "/user/profile", label: t('userNavigation.myProfile'), icon: User, roles: ["User", "Admin"] },
+      { href: "/user/appointments", label: t('userNavigation.myAppointments'), icon: Calendar, roles: ["User", "Admin"] },
+      { href: "/user/teeth", label: t('userNavigation.teeth'), icon: Smile, roles: ["User", "Admin"] },
+      { href: "/user/makeAppointment", label: t('userNavigation.makeAnAppointment'), icon: CalendarPlus, roles: ["User", "Admin"] },
+    ];
+
+    // Receptionist
+    const receptionistTranslated = [
+      { href: "/receptionist/profile", label: t("receptionistNavigation.profile"), icon: User, roles: ["Receptionist"] },
+      { href: "/receptionist/calendar", label: t("receptionistNavigation.visits"), icon: Calendar, roles: ["Receptionist"] },
+      { href: "/receptionist/users", label: t("receptionistNavigation.users"), icon: Users, roles: ["Receptionist"] },
+      { href: "/receptionist/schedule", label: t("receptionistNavigation.scheduleVisit"), icon: CalendarPlus, roles: ["Receptionist"] },
+      { href: "/receptionist/services", label: t("receptionistNavigation.editServices"), icon: Settings2, roles: ["Receptionist"] },
+    ];
+
+    // Admin
+    const adminTranslated = [
+      { href: "/admin", label: "Panel Admina", icon: ShieldCheck, roles: ["Admin"] },
+    ];
+
+    if (role === "Receptionist") return receptionistTranslated;
+    const items = [...baseItemsTranslated];
+    if (role === "Admin") items.push(...adminTranslated);
+    return items.filter(it => it.roles.includes(role));
+  }, [role, i18n.language]);
 
   return (
     <Box
@@ -101,10 +112,10 @@ export default function UserNavigation() {
     >
       <Box>
         <Typography variant="h5" sx={{ color: colors.color5, mb: 1 }}>
-         {t('userNavigation.panel')}
+          {t("userNavigation.panel")}
         </Typography>
         <Typography variant="body2" sx={{ color: colors.white, mb: 3 }}>
-          {t('userNavigation.role')}: {role}
+          {t("userNavigation.role")}: {role}
         </Typography>
         <Divider sx={{ borderColor: colors.color3, mb: 2 }} />
 
@@ -117,7 +128,7 @@ export default function UserNavigation() {
               key={item.href}
               component={isActive ? "div" : Link}
               to={isActive ? undefined : item.href}
-              disabled={isActive} 
+              disabled={isActive}
               sx={{
                 width: "100%",
                 display: "flex",

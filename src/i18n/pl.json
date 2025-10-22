@@ -136,6 +136,28 @@
     "success": "Wizyta została pomyślnie zarezerwowana!",
     "errorOccurred": "Wystąpił błąd. Spróbuj ponownie.",
     "errorFields": "Uzupełnij wszystkie wymagane pola."
+  },
+  "receptionistNavigation": {
+    "profile": "Profil",
+    "visits": "Kalendarz",
+    "users": "Użytkownicy",
+    "scheduleVisit": "Zaplanuj wizytę",
+    "editServices": "Edytuj usługi"
+  },
+  "receptionistProfile": {
+    "title": "Profil recepcjonisty",
+    "subtitle": "Zarządzaj swoimi danymi i informacjami kontaktowymi",
+    "firstName": "Imię",
+    "lastName": "Nazwisko",
+    "email": "Email",
+    "phone": "Telefon",
+    "position": "Stanowisko",
+    "positionValue": "Recepcjonista",
+    "edit": "Edytuj",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "saved": "Dane zostały zapisane"
   }
+
 
 }

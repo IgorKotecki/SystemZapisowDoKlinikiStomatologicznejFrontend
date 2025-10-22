@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { storage } from '../utils/storage';
 import { useAuth } from '../context/AuthContext';
 import React from 'react';
+import { ro } from 'date-fns/locale';
+import { jwtDecode } from "jwt-decode";
 
 export default function Header() {
   const { t, i18n } = useTranslation();
@@ -21,6 +23,24 @@ export default function Header() {
   //   return () => window.removeEventListener("storage", handleStorageChange);
   // }, []);
 
+  const getUserRole = () => {
+    const token = storage.getToken();
+    if (!token) return "Unregistered_user";
+    try {
+      const claims: any = jwtDecode(token);
+      return (
+        claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
+        claims.role ||
+        claims.Role ||
+        claims.roles?.[0] ||
+        "Unregistered_user"
+      );
+    } catch {
+      return "Unregistered_user";
+    }
+  };
+
+
   // handlery do zmiany jezyków
   const handleLangClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -35,10 +55,25 @@ export default function Header() {
   const handleUserClick = (event: React.MouseEvent<HTMLButtonElement>) => setUserAnchor(event.currentTarget);
   const handleUserClose = () => setUserAnchor(null);
 
+  // const handleAccount = () => {
+  //   handleUserClose();
+  //   navigate('/user/profile');
+  // };
   const handleAccount = () => {
+    const role = getUserRole();
+    console.log(role);
     handleUserClose();
-    navigate('/user/profile');
+    if (role === "Receptionist") {
+      navigate("/receptionist/profile");
+    } else if (role === "Registered_user") {
+      navigate("/user/profile");
+    } else if (role === "Admin") {
+      navigate("/admin");
+    } else {
+      navigate("/");
+    }
   };
+
 
   const handleLogout = () => {
     storage.clearAll();
@@ -58,7 +93,7 @@ export default function Header() {
 
   const handleTeamClick = () => {
     navigate('/team');
-  } 
+  }
 
   const handleHomeClick = () => {
     navigate('');
@@ -127,7 +162,7 @@ export default function Header() {
           </Menu>
 
           <Button variant="outlined" onClick={handleAppointmentClick}>{t('book')}</Button>
-          
+
           {isLoggedIn ? (
             <>
               <IconButton onClick={handleUserClick}>

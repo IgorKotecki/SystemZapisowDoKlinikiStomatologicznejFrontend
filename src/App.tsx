@@ -14,6 +14,8 @@ import Contact from "./pages/Contact";
 import User from "./pages/userPages/userProfile";
 import Appointments from "./pages/userPages/userAppointments";
 import UserMakeAppointment from "./pages/userPages/userMakeAppointment";
+import ReceptionistProfile from "./pages/receptionist/receptionistProfile";
+// import ReceptionistCalendar from "./pages/receptionist/receptionistAppointments";
 import { storage } from './utils/storage';
 
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -59,6 +61,22 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/receptionist/profile"
+              element={
+                <ProtectedRoute allowedRoles={["Receptionist"]}>
+                  <ReceptionistProfile />
+                </ProtectedRoute>
+              }
+            />
+            {/* <Route
+              path="/receptionist/calendar"
+              element={
+                <ProtectedRoute allowedRoles={["Receptionist"]}>
+                  <ReceptionistCalendar />
+                </ProtectedRoute>
+              }
+            /> */}
           </Routes>
         </main>
         <Footer />
