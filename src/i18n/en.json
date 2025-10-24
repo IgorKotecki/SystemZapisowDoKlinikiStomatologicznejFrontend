@@ -7,7 +7,7 @@
   "book": "Book an appointment",
   "loginText": "Login",
   "dropLine": "Drop a line",
-  "phoneNumber" : "call +48 123-456-789",
+  "phoneNumber": "call +48 123-456-789",
   "appointment": {
     "title": "Book Appointment",
     "date": "Select a date",
@@ -26,13 +26,13 @@
     "phone": "Phone",
     "message": "Additional Information",
     "submit": "Book Appointment",
-    "errorFirstName" : "Enter name",
-    "errorLastName" : "Enter surname",
-    "errorEmail" : "Incorrect email adress",
-    "errorPhone" : "Enter tel. number",
-    "errorService" : "Choose service",
-    "errorDoctor" : "Choose doctor",
-    "errorHour" : "Choose hour"
+    "errorFirstName": "Enter name",
+    "errorLastName": "Enter surname",
+    "errorEmail": "Incorrect email adress",
+    "errorPhone": "Enter tel. number",
+    "errorService": "Choose service",
+    "errorDoctor": "Choose doctor",
+    "errorHour": "Choose hour"
   },
   "home": {
     "welcomeTitle": "Welcome to Our Dental Office",
@@ -69,55 +69,55 @@
     "passwordsDontMatch": "Hasła nie są takie same.",
     "errorOccurred": "Error occurred! Please try again."
   },
-  "teamPage" : {
-    "boldInformation" : "Main informaiton",
-    "normalInformation" : "Somewhere over the rainbow, cos tam cos tam, jedne dzien pawł jest ładny, ładny o tak o taaaaaaak, boze nudne to jest",
-    "doctor" : {
-      "1" : "Paweł Szeliga",
-      "2" : "Twoja stara",
-      "3" : "Mateusz Talarek",
-      "4" : "Tomek Tomaszewski"
+  "teamPage": {
+    "boldInformation": "Main informaiton",
+    "normalInformation": "Somewhere over the rainbow, cos tam cos tam, jedne dzien pawł jest ładny, ładny o tak o taaaaaaak, boze nudne to jest",
+    "doctor": {
+      "1": "Paweł Szeliga",
+      "2": "Twoja stara",
+      "3": "Mateusz Talarek",
+      "4": "Tomek Tomaszewski"
     }
   },
-  "about" : {
+  "about": {
     "about": "About Us",
-    "aboutOurClinic" : "About our clinic",
-    "aboutOurClinicText" : "More then 15 year of experience in helping your smile. Learn our story....",
-    "makeAnAppointment" : "Appointment",
-    "meetOutTeam" : "Meet out team",
-    "ourStory" : "Our story",
-    ""  : ""
+    "aboutOurClinic": "About our clinic",
+    "aboutOurClinicText": "More then 15 year of experience in helping your smile. Learn our story....",
+    "makeAnAppointment": "Appointment",
+    "meetOutTeam": "Meet out team",
+    "ourStory": "Our story",
+    "": ""
   },
-  "userNavigation" : {
-    "panel" : "User Panel",
-    "role" : "Role",
-    "myProfile" : "My Profile",
-    "myAppointments" : "My Appointments",
-    "teeth" : "Dentition",
-    "makeAnAppointment" : "Make an Appointment"
+  "userNavigation": {
+    "panel": "User Panel",
+    "role": "Role",
+    "myProfile": "My Profile",
+    "myAppointments": "My Appointments",
+    "teeth": "Dentition",
+    "makeAnAppointment": "Make an Appointment"
   },
-  "userProfile" : {
-    "profile" : "My Profile",
-    "pageInfo" : "Manage your personal data",
-    "firstName" : "Name",
-    "lastName":"Surname",
-    "email":"Email",
-    "phone":"Phone number",
-    "dateOfBirth":"Date of birth",
-    "address":"Address",
-    "edit":"Edit",
-    "save":"Save",
-    "cancel":"Cancel"
+  "userProfile": {
+    "profile": "My Profile",
+    "pageInfo": "Manage your personal data",
+    "firstName": "Name",
+    "lastName": "Surname",
+    "email": "Email",
+    "phone": "Phone number",
+    "dateOfBirth": "Date of birth",
+    "address": "Address",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel"
   },
-  "userAppointments" : {
-    "title" : "Appointment history",
-    "pageInfo" : "View your past and upcoming dental appointments",
-    "date" : "Date",
-    "hour" : "Hour",
-    "service" : "Service",
-    "dentist" : "Dentist",
-    "price" : "Price",
-    "state" : "State"
+  "userAppointments": {
+    "title": "Appointment history",
+    "pageInfo": "View your past and upcoming dental appointments",
+    "date": "Date",
+    "hour": "Hour",
+    "service": "Service",
+    "dentist": "Dentist",
+    "price": "Price",
+    "state": "State"
   },
   "userMakeAppointment": {
     "title": "Book an Appointment",
@@ -151,6 +151,75 @@
     "save": "Save",
     "cancel": "Cancel",
     "saved": "Data has been saved"
+  },
+  "receptionistUsers": {
+    "title": "Patient List",
+    "subtitle": "Click on a patient to view or edit their data.",
+    "id": "ID",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "phone": "Phone"
+  },
+  "editUser": {
+    "title": "Edit Patient Data",
+    "subtitle": "Modify the patient's information and save changes.",
+    "goBack": "Back to patient list",
+    "id": "ID",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "phone": "Phone",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "Patient data has been saved!",
+    "notFound": "Patient not found"
+  },
+  "receptionistAppointment": {
+    "title": "Book appointment for user",
+    "selectUser": "Select user",
+    "date": "Date",
+    "service": "Service",
+    "doctor": "Doctor",
+    "hour": "Hour",
+    "submit": "Book appointment",
+    "errorFillAll": "Please fill all required fields.",
+    "success": "User has been booked successfully!",
+    "errorOccurred": "An error occurred while booking.",
+    "navProfile": "Receptionist profile",
+    "navNewAppointment": "New appointment",
+    "navCalendar": "Calendar"
+  },
+  "receptionistServices": {
+    "title": "Dental Services List",
+    "subtitle": "Browse all available services in the clinic.",
+    "id": "ID",
+    "name": "Name",
+    "price": "Price"
+  },
+  "editService": {
+    "title": "Edit Service",
+    "subtitle": "Update the service details and save changes.",
+    "goBack": "Back to services list",
+    "name": "Service name",
+    "price": "Price",
+    "duration": "Duration",
+    "description": "Description",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "Changes saved successfully!",
+    "notFound": "Service not found."
+  },
+  "receptionistCalendar": {
+    "title": "Appointment Calendar",
+    "subtitle": "View all scheduled patient appointments",
+    "patient": "Patient",
+    "doctor": "Doctor",
+    "service": "Service",
+    "date": "Date",
+    "cancel": "Cancel appointment",
+    "cancelButton": "Cancel",
+    "details" : "Appointment information"
   }
-
 }

@@ -81,7 +81,7 @@ export default function UserNavigation() {
       { href: "/receptionist/profile", label: t("receptionistNavigation.profile"), icon: User, roles: ["Receptionist"] },
       { href: "/receptionist/calendar", label: t("receptionistNavigation.visits"), icon: Calendar, roles: ["Receptionist"] },
       { href: "/receptionist/users", label: t("receptionistNavigation.users"), icon: Users, roles: ["Receptionist"] },
-      { href: "/receptionist/schedule", label: t("receptionistNavigation.scheduleVisit"), icon: CalendarPlus, roles: ["Receptionist"] },
+      { href: "/receptionist/appointment", label: t("receptionistNavigation.scheduleVisit"), icon: CalendarPlus, roles: ["Receptionist"] },
       { href: "/receptionist/services", label: t("receptionistNavigation.editServices"), icon: Settings2, roles: ["Receptionist"] },
     ];
 
@@ -155,14 +155,6 @@ export default function UserNavigation() {
           );
         })}
       </Box>
-
-      <Typography
-        variant="caption"
-        align="center"
-        sx={{ color: "#cccccc", mt: 4 }}
-      >
-        © 2025 DentalCare
-      </Typography>
     </Box>
   );
 }

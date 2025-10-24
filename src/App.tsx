@@ -15,7 +15,12 @@ import User from "./pages/userPages/userProfile";
 import Appointments from "./pages/userPages/userAppointments";
 import UserMakeAppointment from "./pages/userPages/userMakeAppointment";
 import ReceptionistProfile from "./pages/receptionist/receptionistProfile";
-// import ReceptionistCalendar from "./pages/receptionist/receptionistAppointments";
+import ReceptionistCalendar from "./pages/receptionist/receptionistAppointments";
+import ReceptionistUsers from "./pages/receptionist/receptionistUsers";
+import EditUser from "./pages/receptionist/receptionistUserInfo";
+import ReceptionistAppointment from "./pages/receptionist/receptionistMakeAppointment";
+import ReceptionistServices from "./pages/receptionist/receptionistServices";
+import EditService from "./pages/receptionist/receptionistServiceInfo";
 import { storage } from './utils/storage';
 
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -69,14 +74,55 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            {/* <Route
+            <Route
               path="/receptionist/calendar"
               element={
                 <ProtectedRoute allowedRoles={["Receptionist"]}>
                   <ReceptionistCalendar />
                 </ProtectedRoute>
               }
-            /> */}
+            />
+            <Route
+              path="/receptionist/users"
+              element={
+                <ProtectedRoute allowedRoles={["Receptionist"]}>
+                  <ReceptionistUsers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/receptionist/users/:id"
+              element={
+                <ProtectedRoute allowedRoles={["Receptionist"]}>
+                  <EditUser />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/receptionist/appointment"
+              element={
+                <ProtectedRoute allowedRoles={["Receptionist"]}>
+                  <ReceptionistAppointment />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/receptionist/services"
+              element={
+                <ProtectedRoute allowedRoles={["Receptionist"]}>
+                  <ReceptionistServices />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/receptionist/services/:id"
+              element={
+                <ProtectedRoute allowedRoles={["Receptionist"]}>
+                  <EditService />
+                </ProtectedRoute>
+              }
+            />
+
           </Routes>
         </main>
         <Footer />

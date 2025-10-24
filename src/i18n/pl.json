@@ -7,7 +7,7 @@
   "book": "Umów wizytę",
   "loginText": "Zaloguj się",
   "dropLine": "Napisz do nas",
-  "phoneNumber" : "zadzwoń +48 123-456-789",
+  "phoneNumber": "zadzwoń +48 123-456-789",
   "appointment": {
     "title": "Umów wizytę",
     "date": "Wybierz datę",
@@ -26,13 +26,13 @@
     "phone": "Telefon",
     "message": "Dodatkowe informacje",
     "submit": "Umów wizytę",
-    "errorFirstName" : "Podaj imię",
-    "errorLastName" : "Podaj nazwisko",
-    "errorEmail" : "Niepoprawny adres email",
-    "errorPhone" : "Podaj numer telefonu",
-    "errorService" : "Wybierz usługę",
-    "errorDoctor" : "Wybierz lekarza",
-    "errorHour" : "Wybierz godzinę"
+    "errorFirstName": "Podaj imię",
+    "errorLastName": "Podaj nazwisko",
+    "errorEmail": "Niepoprawny adres email",
+    "errorPhone": "Podaj numer telefonu",
+    "errorService": "Wybierz usługę",
+    "errorDoctor": "Wybierz lekarza",
+    "errorHour": "Wybierz godzinę"
   },
   "home": {
     "welcomeTitle": "Witamy w naszym gabinecie dentystycznym",
@@ -69,61 +69,61 @@
     "passwordsDontMatch": "Hasła nie są takie same.",
     "errorOccurred": "Wystąpił błąd. Spróbuj ponownie."
   },
-  "teamPage" : {
-    "boldInformation" : "Główne informacje",
-    "normalInformation" : "Somewhere over the rainbow, cos tam cos tam, jedne dzien pawł jest ładny, ładny o tak o taaaaaaak, boze nudne to jest",
-     "doctor" : {
-      "1" : "Paweł Szeliga",
-      "2" : "Twoja stara",
-      "3" : "Mateusz Talarek",
-      "4" : "Tomek Tomaszewski"
+  "teamPage": {
+    "boldInformation": "Główne informacje",
+    "normalInformation": "Somewhere over the rainbow, cos tam cos tam, jedne dzien pawł jest ładny, ładny o tak o taaaaaaak, boze nudne to jest",
+    "doctor": {
+      "1": "Paweł Szeliga",
+      "2": "Twoja stara",
+      "3": "Mateusz Talarek",
+      "4": "Tomek Tomaszewski"
     },
-    "doctorInfo" : {
-      "1" : "Debil jakiego mało osob zna ",
-      "2" : "Umie ugotować twoj ulubiony obiad ez",
-      "3" : "jeszcze wiekszy debil",
-      "4" : "Lubi uwalać uczniów na PPJ"
+    "doctorInfo": {
+      "1": "Debil jakiego mało osob zna ",
+      "2": "Umie ugotować twoj ulubiony obiad ez",
+      "3": "jeszcze wiekszy debil",
+      "4": "Lubi uwalać uczniów na PPJ"
     }
   },
-  "about" : {
+  "about": {
     "about": "O nas",
-    "aboutOutClinic" : "About out clinic",
-    "aboutOutClinicText" : "More then 15 year of experience in helping your smile. Learn our story....",
-    "ourStroy" : "Our stroy",
-    "ourValues" : "Our values",
-    "ourAchievements" : "Our achievements",
-    "whatPSay" : "What our patients say"
+    "aboutOutClinic": "About out clinic",
+    "aboutOutClinicText": "More then 15 year of experience in helping your smile. Learn our story....",
+    "ourStroy": "Our stroy",
+    "ourValues": "Our values",
+    "ourAchievements": "Our achievements",
+    "whatPSay": "What our patients say"
   },
-  "userNavigation" : {
-    "panel" : "Panel Użytkownika",
-    "role" : "Rola",
-    "myProfile" : "Mój Profil",
-    "myAppointments" : "Moje Wizyty",
-    "teeth" : "Uzębienie",
-    "makeAnAppointment" : "Umów Wizytę"
+  "userNavigation": {
+    "panel": "Panel Użytkownika",
+    "role": "Rola",
+    "myProfile": "Mój Profil",
+    "myAppointments": "Moje Wizyty",
+    "teeth": "Uzębienie",
+    "makeAnAppointment": "Umów Wizytę"
   },
-  "userProfile" : {
-    "profile" : "Mój profil",
-    "pageInfo" : "Zarządzaj swoimi danymi osobowymi",
-    "firstName" : "Imię",
-    "lastName":"Nazwisko",
-    "email":"Email",
-    "phone":"Numer tel.",
-    "dateOfBirth":"Data urodzenia",
-    "address":"Adres",
-    "edit":"Edytuj",
-    "save":"Zapisz",
-    "cancel":"Anuluj"
+  "userProfile": {
+    "profile": "Mój profil",
+    "pageInfo": "Zarządzaj swoimi danymi osobowymi",
+    "firstName": "Imię",
+    "lastName": "Nazwisko",
+    "email": "Email",
+    "phone": "Numer tel.",
+    "dateOfBirth": "Data urodzenia",
+    "address": "Adres",
+    "edit": "Edytuj",
+    "save": "Zapisz",
+    "cancel": "Anuluj"
   },
-  "userAppointments" : {
-    "title" : "Historia Wizyt",
-    "pageInfo" : "Przeglądaj swoje przeszłe i nadchodzące wizyty stomatologiczne",
-    "date" : "Data",
-    "hour" : "Godzina",
-    "service" : "Zabieg",
-    "dentist" : "Dentysta",
-    "price" : "Cena",
-    "state" : "Status"
+  "userAppointments": {
+    "title": "Historia Wizyt",
+    "pageInfo": "Przeglądaj swoje przeszłe i nadchodzące wizyty stomatologiczne",
+    "date": "Data",
+    "hour": "Godzina",
+    "service": "Zabieg",
+    "dentist": "Dentysta",
+    "price": "Cena",
+    "state": "Status"
   },
   "userMakeAppointment": {
     "title": "Umów wizytę",
@@ -157,7 +157,75 @@
     "save": "Zapisz",
     "cancel": "Anuluj",
     "saved": "Dane zostały zapisane"
+  },
+  "receptionistUsers": {
+    "title": "Lista pacjentów",
+    "subtitle": "Kliknij pacjenta, aby zobaczyć lub edytować jego dane.",
+    "id": "ID",
+    "firstName": "Imię",
+    "lastName": "Nazwisko",
+    "phone": "Telefon"
+  },
+  "editUser": {
+    "title": "Edycja danych pacjenta",
+    "subtitle": "Zmień dane pacjenta i zapisz zmiany.",
+    "goBack": "Wróć do listy pacjentów",
+    "id": "ID",
+    "firstName": "Imię",
+    "lastName": "Nazwisko",
+    "email": "Email",
+    "phone": "Telefon",
+    "edit": "Edytuj",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "saved": "Dane pacjenta zostały zapisane!",
+    "notFound": "Nie znaleziono pacjenta"
+  },
+  "receptionistAppointment": {
+    "title": "Zapisz użytkownika na wizytę",
+    "selectUser": "Wybierz użytkownika",
+    "date": "Data",
+    "service": "Usługa",
+    "doctor": "Lekarz",
+    "hour": "Godzina",
+    "submit": "Zapisz wizytę",
+    "errorFillAll": "Uzupełnij wszystkie pola.",
+    "success": "Użytkownik został zapisany na wizytę!",
+    "errorOccurred": "Wystąpił błąd przy zapisie.",
+    "navProfile": "Profil recepcjonisty",
+    "navNewAppointment": "Nowa rezerwacja",
+    "navCalendar": "Kalendarz"
+  },
+  "receptionistServices": {
+    "title": "Lista usług stomatologicznych",
+    "subtitle": "Tutaj możesz przeglądać dostępne usługi kliniki.",
+    "id": "ID",
+    "name": "Nazwa",
+    "price": "Cena"
+  },
+  "editService": {
+    "title": "Edycja usługi",
+    "subtitle": "Zmień dane usługi i zapisz zmiany.",
+    "goBack": "Wróć do listy usług",
+    "name": "Nazwa usługi",
+    "price": "Cena",
+    "duration": "Czas trwania",
+    "description": "Opis",
+    "edit": "Edytuj",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "saved": "Zmiany zapisane pomyślnie!",
+    "notFound": "Nie znaleziono usługi."
+  },
+  "receptionistCalendar": {
+    "title": "Kalendarz wizyt",
+    "subtitle": "Zobacz wszystkie zaplanowane spotkania pacjentów",
+    "patient": "Pacjent",
+    "doctor": "Lekarz",
+    "service": "Usługa",
+    "date": "Data",
+    "cancel": "Anuluj wizytę",
+    "cancelButton": "Anuluj",
+    "details" : "Informacje dotyczące wizyty"
   }
-
-
 }
