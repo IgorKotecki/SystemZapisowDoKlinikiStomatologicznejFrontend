@@ -9,8 +9,10 @@ import {
   CalendarPlus,
   ShieldCheck,
   Settings2,
-  Smile
+  Smile,
+  CalendarCheck
 } from "lucide-react";
+import { jwtDecode } from "jwt-decode";
 import { useTranslation } from "react-i18next";
 
 function decodeJwt(token: string) {
@@ -34,6 +36,8 @@ function getUserRoleFromToken() {
   if (!token) return "Unregistered";
 
   const claims = decodeJwt(token);
+  //const claims = jwtDecode(token);
+
   if (!claims) return "Unregistered";
 
   const msRole =
@@ -48,6 +52,7 @@ function getUserRoleFromToken() {
     if (r.includes("admin")) return "Admin";
     if (r.includes("user") || r.includes("registered")) return "User";
     if (r.includes("receptionist")) return "Receptionist";
+    if (r.includes("doctor")) return "Doctor";
   }
 
   return "Unregistered";
@@ -85,12 +90,26 @@ export default function UserNavigation() {
       { href: "/receptionist/services", label: t("receptionistNavigation.editServices"), icon: Settings2, roles: ["Receptionist"] },
     ];
 
+    //Doctor
+    const DoctorTranslated = [
+      { href: "/doctor/profile", label: t("doctorNavigation.profile"), icon: User, roles: ["Doctor"] },
+      { href: "/doctor/appointment", label: t("doctorNavigation.scheduleVisit"), icon: Calendar, roles: ["Doctor"] },
+      { href: "/doctor/users", label: t("doctorNavigation.users"), icon: Users, roles: ["Doctor"] },
+      { href: "/doctor/calendar", label: t("doctorNavigation.visits"), icon: CalendarPlus, roles: ["Doctor"] },
+      { href: "/receptionist/services", label: t("doctorNavigation.editServices"), icon: Settings2, roles: ["Doctor"] },
+    ];
+
     // Admin
     const adminTranslated = [
       { href: "/admin", label: "Panel Admina", icon: ShieldCheck, roles: ["Admin"] },
     ];
 
-    if (role === "Receptionist") return receptionistTranslated;
+    if (role === "Receptionist"){
+      return receptionistTranslated;
+    } else if (role === "Doctor") {
+      return DoctorTranslated;
+    }
+    
     const items = [...baseItemsTranslated];
     if (role === "Admin") items.push(...adminTranslated);
     return items.filter(it => it.roles.includes(role));

@@ -63,6 +63,8 @@ export default function LogIn() {
         navigate('/user/profile');
       }else if(role == "Receptionist"){
         navigate('/receptionist/profile');
+      }else if(role == "Doctor"){
+        navigate('/doctor/profile');
       }
       
     } catch (err: any) {

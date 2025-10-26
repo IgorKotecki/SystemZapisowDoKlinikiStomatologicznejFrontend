@@ -4,12 +4,13 @@ import {
   Typography,
   Paper,
   CircularProgress,
-  Button,
 } from "@mui/material";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import api from "../../api/axios";
+import { jwtDecode } from "jwt-decode";
+import { ro } from "date-fns/locale";
+// import api from "../../api/axios";
 
 const colors = {
   color1: "#003141",
@@ -52,7 +53,13 @@ const ReceptionistUsers: React.FC = () => {
   }, []);
 
   const handleUserClick = (userId: number) => {
-    navigate(`/receptionist/users/${userId}`);
+    const claims = jwtDecode(localStorage.getItem("token"));
+    const role  = claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+    if(role == "Doctor"){
+      navigate(`/doctor/users/${userId}`);
+    }else if (role == "Receptionist"){
+      navigate(`/receptionist/users/${userId}`);
+    }
   };
 
   return (

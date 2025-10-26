@@ -11,6 +11,7 @@ import {
 import { ArrowLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import UserNavigation from "../../components/userComponents/userNavigation";
 
 const colors = {
@@ -130,7 +131,16 @@ const EditUser: React.FC = () => {
         <Box sx={{ width: "100%", maxWidth: 1500 }}>
           <Button
             startIcon={<ArrowLeft />}
-            onClick={() => navigate("/receptionist/users")}
+            onClick={() => {
+              const claims = jwtDecode(localStorage.getItem("token"));
+              const role = claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+              if (role == "Doctor") {
+                navigate(`/doctor/users`);
+              } else if (role == "Receptionist") {
+                navigate(`/receptionist/users`);
+              }
+              //navigate("/receptionist/users")
+            }}
             sx={{
               mb: 3,
               color: colors.color5,

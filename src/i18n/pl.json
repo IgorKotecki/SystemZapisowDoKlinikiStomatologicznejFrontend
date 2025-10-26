@@ -226,6 +226,49 @@
     "date": "Data",
     "cancel": "Anuluj wizytę",
     "cancelButton": "Anuluj",
-    "details" : "Informacje dotyczące wizyty"
+    "details": "Informacje dotyczące wizyty"
+  },
+  "doctorProfile": {
+    "title": "Profil lekarza",
+    "subtitle": "Zarządzaj swoimi danymi osobowymi i specjalizacją",
+    "firstName": "Imię",
+    "lastName": "Nazwisko",
+    "email": "Email",
+    "phone": "Telefon",
+    "specialization": "Specjalizacja",
+    "edit": "Edytuj",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "saved": "Profil został zapisany"
+  },
+  "doctorCalendar": {
+    "title": "Kalendarz lekarza",
+    "details": "Szczegóły wizyty",
+    "patient": "Pacjent",
+    "service": "Usługa",
+    "time": "Czas",
+    "addNote": "Dodaj notatkę do wizyty",
+    "selectTeeth": "Zaznacz zęby",
+    "save": "Zapisz notatkę",
+    "savedNote": "Notatka została zapisana"
+  },
+  "doctorFreeDays": {
+    "title": "Dni i godziny wolne lekarza",
+    "subtitle": "Kliknij w kalendarzu, aby dodać dzień wolny lub przerwę",
+    "addTitle": "Dodaj czas wolny",
+    "type": "Typ",
+    "dayOff": "Dzień wolny",
+    "break": "Przerwa",
+    "reason": "Powód przerwy",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "removeConfirm": "Czy na pewno chcesz usunąć ten czas wolny?"
+  },
+  "doctorNavigation": {
+    "profile": "Profil",
+    "visits": "Kalendarz",
+    "users": "Użytkownicy",
+    "scheduleVisit": "Zaplanowane wizyty",
+    "editServices": "Edit Services"
   }
 }

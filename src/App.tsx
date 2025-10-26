@@ -21,6 +21,9 @@ import EditUser from "./pages/receptionist/receptionistUserInfo";
 import ReceptionistAppointment from "./pages/receptionist/receptionistMakeAppointment";
 import ReceptionistServices from "./pages/receptionist/receptionistServices";
 import EditService from "./pages/receptionist/receptionistServiceInfo";
+import DoctorProfile from "./pages/doctor/doctorProfile";
+import DoctorAppointments from "./pages/doctor/doctorAppointments";
+import DoctorCalendar from "./pages/doctor/doctorCalendar";
 import { storage } from './utils/storage';
 
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -42,6 +45,9 @@ const App = () => {
             <Route path="/services" element={<Services />} />
             <Route path="/prices" element={<Pricing />} />
             <Route path="/contacts" element={<Contact />} />
+            
+            {/* USER */}
+
             <Route
               path="/user/profile"
               element={
@@ -66,6 +72,9 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
+            {/* RECETIONIST */}
+            
             <Route
               path="/receptionist/profile"
               element={
@@ -119,6 +128,49 @@ const App = () => {
               element={
                 <ProtectedRoute allowedRoles={["Receptionist"]}>
                   <EditService />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* DOCTOR */}
+            
+            <Route
+              path="/doctor/profile"
+              element={
+                <ProtectedRoute allowedRoles={["Doctor"]}>
+                  <DoctorProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/doctor/users"
+              element={
+                <ProtectedRoute allowedRoles={["Doctor"]}>
+                  <ReceptionistUsers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/doctor/users/:id"
+              element={
+                <ProtectedRoute allowedRoles={["Doctor"]}>
+                  <EditUser />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/doctor/appointment"
+              element={
+                <ProtectedRoute allowedRoles={["Doctor"]}>
+                  <DoctorAppointments />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/doctor/calendar"
+              element={
+                <ProtectedRoute allowedRoles={["Doctor"]}>
+                  <DoctorCalendar />
                 </ProtectedRoute>
               }
             />

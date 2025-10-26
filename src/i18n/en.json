@@ -220,6 +220,49 @@
     "date": "Date",
     "cancel": "Cancel appointment",
     "cancelButton": "Cancel",
-    "details" : "Appointment information"
+    "details": "Appointment information"
+  },
+  "doctorProfile": {
+    "title": "Doctor Profile",
+    "subtitle": "Manage your personal data and specialization",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "phone": "Phone",
+    "specialization": "Specialization",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "Profile saved successfully"
+  },
+  "doctorCalendar": {
+    "title": "Doctor's Calendar",
+    "details": "Appointment details",
+    "patient": "Patient",
+    "service": "Service",
+    "time": "Time",
+    "addNote": "Add appointment note",
+    "selectTeeth": "Select teeth",
+    "save": "Save note",
+    "savedNote": "Note has been saved"
+  },
+  "doctorFreeDays": {
+    "title": "Doctor's Free Days and Breaks",
+    "subtitle": "Click on the calendar to add a day off or a break",
+    "addTitle": "Add free time",
+    "type": "Type",
+    "dayOff": "Day off",
+    "break": "Break",
+    "reason": "Break reason",
+    "save": "Save",
+    "cancel": "Cancel",
+    "removeConfirm": "Are you sure you want to remove this free time?"
+  },
+  "doctorNavigation": {
+    "profile": "Profile",
+    "visits": "Calendar",
+    "users": "Users",
+    "scheduleVisit": "Schedule Appointment",
+    "editServices": "Edit Services"
   }
 }
