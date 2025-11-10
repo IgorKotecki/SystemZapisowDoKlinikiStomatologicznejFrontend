@@ -137,6 +137,16 @@
     "errorOccurred": "Wystąpił błąd. Spróbuj ponownie.",
     "errorFields": "Uzupełnij wszystkie wymagane pola."
   },
+  "dentalChart": {
+    "back": "Powrót",
+    "title": "Karta stomatologiczna pacjenta",
+    "subtitle": "Kliknij na ząb, aby zobaczyć szczegóły jego stanu",
+    "toothDiagram": "Schemat uzębienia",
+    "tooth": "Ząb",
+    "state": "Stan",
+    "notes": "Uwagi",
+    "close": "Zamknij"
+  },
   "receptionistNavigation": {
     "profile": "Profil",
     "visits": "Kalendarz",

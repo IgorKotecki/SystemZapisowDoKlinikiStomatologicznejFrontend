@@ -14,6 +14,7 @@ import Contact from "./pages/Contact";
 import User from "./pages/userPages/userProfile";
 import Appointments from "./pages/userPages/userAppointments";
 import UserMakeAppointment from "./pages/userPages/userMakeAppointment";
+import DentalChartPage from "./pages/userPages/DentalChartPage";
 import ReceptionistProfile from "./pages/receptionist/receptionistProfile";
 import ReceptionistCalendar from "./pages/receptionist/receptionistAppointments";
 import ReceptionistUsers from "./pages/receptionist/receptionistUsers";
@@ -69,6 +70,14 @@ const App = () => {
               element={
                 <ProtectedRoute allowedRoles={['Registered_user']}>
                   <UserMakeAppointment />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/user/dental"
+              element={
+                <ProtectedRoute allowedRoles={['Registered_user']}>
+                  <DentalChartPage />
                 </ProtectedRoute>
               }
             />

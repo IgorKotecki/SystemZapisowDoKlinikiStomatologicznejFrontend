@@ -35,10 +35,29 @@ export default function DoctorProfile() {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, minHeight: "100vh", backgroundColor: colors.color1 }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: { xs: "column", md: "row" },
+        minHeight: "100vh",
+        width: "100%",
+        backgroundColor: colors.color1,
+      }}
+    >
       <UserNavigation />
 
-      <Box component="main" sx={{ flex: 1, px: { xs: 2, md: 8 }, py: 6, color: colors.white }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          width: "100%",
+          px: { xs: 2, md: 6 },
+          py: 6,
+          color: colors.white,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
           {t("doctorProfile.title")}
         </Typography>
@@ -46,7 +65,16 @@ export default function DoctorProfile() {
           {t("doctorProfile.subtitle")}
         </Typography>
 
-        <Paper elevation={4} sx={{ p: 4, borderRadius: 3, backgroundColor: colors.color2 }}>
+        <Paper
+          elevation={4}
+          sx={{
+            p: 4,
+            borderRadius: 3,
+            backgroundColor: colors.color2,
+            width: "100%", // 🔹 Wypełnia całą szerokość
+            boxSizing: "border-box",
+          }}
+        >
           <Grid container spacing={3}>
             {[
               { name: "firstName", label: t("doctorProfile.firstName") },
@@ -73,17 +101,47 @@ export default function DoctorProfile() {
             ))}
           </Grid>
 
-          <Box sx={{ mt: 4, display: "flex", gap: 2, justifyContent: "flex-end" }}>
+          <Box
+            sx={{
+              mt: 4,
+              display: "flex",
+              gap: 2,
+              justifyContent: "flex-end",
+              flexWrap: "wrap",
+            }}
+          >
             {!isEditing ? (
-              <Button variant="contained" sx={{ backgroundColor: colors.color3, "&:hover": { backgroundColor: colors.color4 } }} onClick={() => setIsEditing(true)}>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: colors.color3,
+                  "&:hover": { backgroundColor: colors.color4 },
+                }}
+                onClick={() => setIsEditing(true)}
+              >
                 {t("doctorProfile.edit")}
               </Button>
             ) : (
               <>
-                <Button variant="contained" sx={{ backgroundColor: colors.color3, "&:hover": { backgroundColor: colors.color4 } }} onClick={handleSave}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: colors.color3,
+                    "&:hover": { backgroundColor: colors.color4 },
+                  }}
+                  onClick={handleSave}
+                >
                   {t("doctorProfile.save")}
                 </Button>
-                <Button variant="outlined" sx={{ borderColor: colors.color3, color: colors.white, "&:hover": { backgroundColor: colors.color4 } }} onClick={() => setIsEditing(false)}>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    borderColor: colors.color3,
+                    color: colors.white,
+                    "&:hover": { backgroundColor: colors.color4 },
+                  }}
+                  onClick={() => setIsEditing(false)}
+                >
                   {t("doctorProfile.cancel")}
                 </Button>
               </>
