@@ -24,6 +24,7 @@ import EditService from "./pages/receptionist/receptionistServiceInfo";
 import DoctorProfile from "./pages/doctor/doctorProfile";
 import DoctorAppointments from "./pages/doctor/doctorAppointments";
 import DoctorCalendar from "./pages/doctor/doctorCalendar";
+import ResetPassword from "./pages/ResetPassword";
 import { storage } from './utils/storage';
 
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -45,6 +46,7 @@ const App = () => {
             <Route path="/services" element={<Services />} />
             <Route path="/prices" element={<Pricing />} />
             <Route path="/contacts" element={<Contact />} />
+            <Route path="/resetpassword" element={<ResetPassword />} />
             
             {/* USER */}
 

@@ -47,7 +47,8 @@
     "signIn": "Sign In",
     "noAccount": "Don't have an account?",
     "register": "Register",
-    "loading": "Logging in..."
+    "loading": "Logging in...",
+    "forgotPassword": "Forgot password?"
   },
   "register": {
     "title": "Registration",
@@ -264,5 +265,19 @@
     "users": "Users",
     "scheduleVisit": "Schedule Appointment",
     "editServices": "Edit Services"
+  },
+  "forget": {
+    "title": "Reset your password",
+    "description": "Enter the email address associated with your account. We'll send a link to reset your password.",
+    "sendResetLink": "Send reset link",
+    "sending": "Sending..."
+  },
+  "reset": {
+    "title": "Set a new password",
+    "description": "Enter your new password to reset your account.",
+    "loading": "Loading...",
+    "changePassword": "Change password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password"
   }
 }

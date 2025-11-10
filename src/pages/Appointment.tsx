@@ -1,4 +1,4 @@
-import { Box, Typography, TextField, MenuItem, Button, Grid, Select, FormControl, InputLabel } from '@mui/material';
+import { Box, Typography, TextField, MenuItem, Button, Select, FormControl, InputLabel } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 import api from '../api/axios';
 import { da } from 'date-fns/locale';
+import Grid from '@mui/material/Grid';
 
 export default function Appointment() {
     const { t, i18n } = useTranslation();

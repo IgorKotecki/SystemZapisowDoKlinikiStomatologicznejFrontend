@@ -17,6 +17,13 @@ import api from '../api/axios';
 import { storage } from '../utils/storage';
 import { useAuth } from '../context/AuthContext';
 
+const colors = {
+  color1: "#003141",
+  color3: "#007987",
+  color4: "#00b2b9",
+  white: "#ffffff",
+}
+
 
 export default function LogIn() {
   const { t, i18n } = useTranslation();
@@ -47,26 +54,26 @@ export default function LogIn() {
     try {
       const response = await api.post('/api/login', formData);
       const { accessToken, refreshToken } = response.data;
-      
+
       storage.setToken(accessToken);
       storage.setRefreshToken(refreshToken);
 
       const claims = jwtDecode(accessToken);
 
-      localStorage.setItem('claims',JSON.stringify(claims));
+      localStorage.setItem('claims', JSON.stringify(claims));
       console.log('Claims:', claims);
       const role = claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
       console.log('User role:', role);
       setLoggedIn(true);
-      
-      if(role == "Registered_user"){
+
+      if (role == "Registered_user") {
         navigate('/user/profile');
-      }else if(role == "Receptionist"){
+      } else if (role == "Receptionist") {
         navigate('/receptionist/profile');
-      }else if(role == "Doctor"){
+      } else if (role == "Doctor") {
         navigate('/doctor/profile');
       }
-      
+
     } catch (err: any) {
       if (err.response?.status === 401) {
         setError(t('error.userDataIncorrect'));
@@ -75,7 +82,7 @@ export default function LogIn() {
       }
     } finally {
       setLoading(false);
-      
+
     }
   };
 
@@ -125,6 +132,11 @@ export default function LogIn() {
               onChange={handleChange}
               sx={{ backgroundColor: colors.white, borderRadius: 1 }}
             />
+            <Link underline="hover"
+                  sx={{ color: colors.color3, cursor: 'pointer' }}
+                  onClick={() => navigate('/resetpassword')}>
+              {t('login.forgotPassword')}
+            </Link>
 
             {error && (
               <Typography color="error" sx={{ mt: 1 }}>
@@ -150,7 +162,11 @@ export default function LogIn() {
             <Box sx={{ mt: 2, textAlign: 'center' }}>
               <Typography variant="body2">
                 {t('login.noAccount')}{' '}
-                <Link href="/register" underline="hover" sx={{ color: colors.color3 }}>
+                <Link
+                  underline="hover"
+                  sx={{ color: colors.color3, cursor: 'pointer' }}
+                  onClick={() => navigate('/register')}
+                >
                   {t('login.register')}
                 </Link>
               </Typography>

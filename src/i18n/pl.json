@@ -47,7 +47,8 @@
     "signIn": "Zaloguj",
     "noAccount": "Nie masz konta?",
     "register": "Zarejestruj się",
-    "loading": "Logowanie..."
+    "loading": "Logowanie...",
+    "forgotPassword": "Zapomniałeś hasła?"
   },
   "register": {
     "title": "Rejestracja",
@@ -270,5 +271,19 @@
     "users": "Użytkownicy",
     "scheduleVisit": "Zaplanowane wizyty",
     "editServices": "Edit Services"
+  },
+  "forget": {
+    "title": "Resetuj hasło",
+    "description": "Wprowadź adres e-mail powiązany z Twoim kontem. Wyślemy link do zresetowania hasła.",
+    "sendResetLink": "Wyślij link do resetowania",
+    "sending": "Wysyłanie..."
+  },
+  "reset": {
+    "title": "Ustaw nowe hasło",
+    "description": "Wprowadź nowe hasło dla konta.",
+    "loading": "Ładowanie...",
+    "changePassword": "Zmień hasło",
+    "newPassword": "Nowe hasło",
+    "confirmNewPassword": "Potwierdź nowe hasło"
   }
 }
