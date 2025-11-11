@@ -77,7 +77,7 @@ export default function UserNavigation() {
     const baseItemsTranslated = [
       { href: "/user/profile", label: t('userNavigation.myProfile'), icon: User, roles: ["User", "Admin"] },
       { href: "/user/appointments", label: t('userNavigation.myAppointments'), icon: Calendar, roles: ["User", "Admin"] },
-      { href: "/user/teeth", label: t('userNavigation.teeth'), icon: Smile, roles: ["User", "Admin"] },
+      { href: "/user/dental", label: t('userNavigation.teeth'), icon: Smile, roles: ["User", "Admin"] },
       { href: "/user/makeAppointment", label: t('userNavigation.makeAnAppointment'), icon: CalendarPlus, roles: ["User", "Admin"] },
     ];
 

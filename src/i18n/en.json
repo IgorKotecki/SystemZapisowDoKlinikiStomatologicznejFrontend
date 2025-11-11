@@ -132,6 +132,16 @@
     "errorOccurred": "An error occurred. Please try again.",
     "errorFields": "Please fill in all required fields."
   },
+  "dentalChart": {
+    "back": "Back",
+    "title": "Patient Dental Chart",
+    "subtitle": "Click on a tooth to view its details",
+    "toothDiagram": "Tooth Diagram",
+    "tooth": "Tooth",
+    "state": "Condition",
+    "notes": "Notes",
+    "close": "Close"
+  },
   "receptionistNavigation": {
     "profile": "Profile",
     "visits": "Calendar",
