@@ -199,6 +199,7 @@ export default function ResetPassword() {
                             <TextField
                                 label={t('reset.newPassword')}
                                 name="newPassword"
+                                type="password"
                                 fullWidth
                                 margin="normal"
                                 value={newPassword}
@@ -209,6 +210,7 @@ export default function ResetPassword() {
                             <TextField
                                 label={t('reset.confirmNewPassword')}
                                 name="confirm"
+                                type="password"
                                 fullWidth
                                 margin="normal"
                                 value={confirm}
