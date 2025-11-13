@@ -49,9 +49,9 @@ const DentalChartPage: React.FC = () => {
         // setTeeth(response.data);
 
         const mockTeeth = Array.from({ length: 32 }, (_, i) => ({
-          number: i < 16 ? 18 - i : 49 - (i - 16), 
-          state: ["healthy", "cavity", "missing", "crown", "root-canal"][
-            Math.floor(Math.random() * 5)
+          number: i < 16 ? 18 - i : 49 - (i - 16),
+          state: ["1", "2", "3", "4", "5", "6"][
+            Math.floor(Math.random() * 6)
           ] as ToothData["state"],
           notes: "Brak dodatkowych uwag.",
         }));
@@ -68,16 +68,18 @@ const DentalChartPage: React.FC = () => {
 
   const getToothColor = (state: ToothData["state"]) => {
     switch (state) {
-      case "healthy":
+      case "1":
         return "#4CAF50";
-      case "cavity":
-        return "#F44336";
-      case "missing":
-        return "#9E9E9E";
-      case "crown":
+      case "2":
         return "#FFC107";
-      case "root-canal":
-        return "#3F51B5";
+      case "3":
+        return "#F44336";
+      case "4":
+        return "#953bdfff";
+      case "5":
+        return "#3e3e3fff";
+      case "6":
+        return "#dbdbdfff";
       default:
         return colors.white;
     }
@@ -103,10 +105,10 @@ const DentalChartPage: React.FC = () => {
     <Box
       sx={{
         display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          minHeight: "100vh",
-          width: "100%",
-          backgroundColor: colors.color1,
+        flexDirection: { xs: "column", md: "row" },
+        minHeight: "100vh",
+        width: "100%",
+        backgroundColor: colors.color1,
       }}
     >
       <UserNavigation />
