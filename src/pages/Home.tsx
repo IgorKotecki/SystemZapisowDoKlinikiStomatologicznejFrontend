@@ -21,6 +21,7 @@ interface ServiceDTO {
   highPrice: number;
   minTime: number;
   languageCode: string;
+  category: string;
 }
 
 export default function Home() {
