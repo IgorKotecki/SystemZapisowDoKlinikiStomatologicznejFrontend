@@ -10,8 +10,16 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
-import  api  from "../../api/axios";
-import { jwtDecode } from "jwt-decode";
+import api from "../../api/axios";
+
+interface userDTO {
+  id: number;
+  name: string;
+  surename: string;
+  email: string;
+  phoneNumber: string;
+  roleName: string;
+}
 
 const colors = {
   color1: "#003141",
@@ -50,16 +58,38 @@ export default function ProfilePage() {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
-  const handleSave = () => {
-    setIsEditing(false);
-    alert("Dane zostały zapisane");
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const claims = decodeJwt(token);
+      const userId =
+        claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+
+      const dto = {
+        name: userData.name,
+        surname: userData.surname || userData.surename,
+        email: userData.email,
+        phoneNumber: userData.phoneNumber,
+      };
+
+      const response = await api.put(`api/User/${userId}`, dto);
+
+      setUserData(response.data);
+      setIsEditing(false);
+      alert("Dane zostały zapisane!");
+    } catch (err: any) {
+      console.error("Błąd zapisu:", err.response?.data || err);
+      alert("Nie udało się zapisać zmian");
+    }
   };
+
+
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        console.log("Fetching user data...");
-
         const token = localStorage.getItem("token");
         if (!token) {
           console.log("Brak tokena");
@@ -85,15 +115,15 @@ export default function ProfilePage() {
         }
 
         const response = await api.get(`api/User/${userId}`);
-        console.log("Odpowiedź z backendu:", response.data);
+        const data: userDTO[] = response.data;
 
-        setUserData(response.data); 
+        setUserData(data);
         setError(null);
       } catch (err) {
         console.error("Błąd pobierania danych:", err);
         setError("Nie udało się pobrać danych użytkownika");
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
@@ -146,7 +176,7 @@ export default function ProfilePage() {
   }
 
   if (!userData) {
-    return null; 
+    return null;
   }
 
   return (
@@ -191,10 +221,10 @@ export default function ProfilePage() {
           >
             <Grid container spacing={3}>
               {[
-                { name: "firstName", label: t("userProfile.firstName"), type: "text" },
-                { name: "lastName", label: t("userProfile.lastName"), type: "text" },
+                { name: "name", label: t("userProfile.firstName"), type: "text" },
+                { name: "surname", label: t("userProfile.lastName"), type: "text" },
                 { name: "email", label: t("userProfile.email"), type: "email" },
-                { name: "phone", label: t("userProfile.phone"), type: "tel" },
+                { name: "phoneNumber", label: t("userProfile.phone"), type: "tel" },
               ].map((field) => (
                 <Grid item xs={12} sm={6} key={field.name}>
                   <TextField

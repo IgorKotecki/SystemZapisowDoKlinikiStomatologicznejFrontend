@@ -5,10 +5,9 @@ import {
   TextField,
   MenuItem,
   Button,
-  Grid,
-  Select,
   FormControl,
   InputLabel,
+  Select,
   Paper,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -27,6 +26,23 @@ const colors = {
   white: "#ffffff",
 };
 
+function decodeJwt(token: string) {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
+  } catch {
+    return null;
+  }
+}
+
+
 export default function UserAppointmentPage() {
   const { t, i18n } = useTranslation();
 
@@ -34,13 +50,14 @@ export default function UserAppointmentPage() {
   const [service, setService] = useState("");
   const [doctor, setDoctor] = useState("");
   const [hour, setHour] = useState("");
+
   const [services, setServices] = useState<{ id: string; name: string }[]>([]);
   const [doctors, setDoctors] = useState<{ id: string; name: string; surname: string }[]>([]);
   const [availableTimeBlocks, setAvailableTimeBlocks] = useState<any[]>([]);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Pobieranie usług
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -55,11 +72,13 @@ export default function UserAppointmentPage() {
     fetchServices();
   }, [i18n.language]);
 
-  // Pobieranie dostępnych bloków czasowych po wyborze daty
   useEffect(() => {
     if (!date) return;
 
     const fetchTimeBlocks = async () => {
+      setDoctor("");
+      setHour("");
+
       try {
         const res = await api.get("/api/TimeBlocks", {
           params: {
@@ -96,6 +115,10 @@ export default function UserAppointmentPage() {
     fetchTimeBlocks();
   }, [date]);
 
+  useEffect(() => {
+    setHour("");
+  }, [doctor]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -107,12 +130,21 @@ export default function UserAppointmentPage() {
 
     setLoading(true);
     try {
-      await api.post("/api/Appointment/user", {
-        doctorBlockId: [Number(hour)],
-        service: { id: Number(service) },
+      const token = localStorage.getItem("token");
+      console.log(token);
+      if (!token) return "Unregistered";
+
+      const claims = decodeJwt(token);
+      const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+
+      await api.post(`/api/Appointment/user/${userId}/book`, {
+        doctorId: Number(doctor),
+        timeBlockId: Number(hour),
+        serviceIds: [Number(service)],
       });
 
       alert(t("userMakeAppointment.success"));
+
       setService("");
       setDoctor("");
       setHour("");
@@ -186,7 +218,7 @@ export default function UserAppointmentPage() {
                   {t("userMakeAppointment.service")}
                 </InputLabel>
                 <Select
-                  value={service}
+                  value={service || ""}
                   onChange={(e) => setService(e.target.value)}
                   sx={{ backgroundColor: colors.white, borderRadius: 1 }}
                 >
@@ -203,7 +235,7 @@ export default function UserAppointmentPage() {
                   {t("userMakeAppointment.doctor")}
                 </InputLabel>
                 <Select
-                  value={doctor}
+                  value={doctor || ""}
                   onChange={(e) => setDoctor(e.target.value)}
                   sx={{ backgroundColor: colors.white, borderRadius: 1 }}
                 >
@@ -220,7 +252,7 @@ export default function UserAppointmentPage() {
                   {t("userMakeAppointment.hour")}
                 </InputLabel>
                 <Select
-                  value={hour}
+                  value={hour || ""}
                   onChange={(e) => setHour(e.target.value)}
                   sx={{ backgroundColor: colors.white, borderRadius: 1 }}
                 >

@@ -16,7 +16,14 @@ import { ArrowLeft } from "lucide-react";
 import { useParams, useNavigate } from "react-router-dom";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { useTranslation } from "react-i18next";
-// import api from "../../api/axios";
+import api from "../../api/axios";
+
+interface ToothStatusOutDto {
+  StatusId:number;
+  StatusName: string;
+  CategoryId: number;
+  CategoryName: string;
+}
 
 const colors = {
   color1: "#003141",
@@ -45,8 +52,8 @@ const DentalChartPage: React.FC = () => {
   useEffect(() => {
     const fetchTeethData = async () => {
       try {
-        // const response = await api.get();
-        // setTeeth(response.data);
+        const response = await api.get('api/Tooth/Statuses');
+        setTeeth(response.data);
 
         const mockTeeth = Array.from({ length: 32 }, (_, i) => ({
           number: i < 16 ? 18 - i : 49 - (i - 16),
