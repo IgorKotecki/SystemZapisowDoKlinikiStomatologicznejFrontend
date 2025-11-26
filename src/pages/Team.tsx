@@ -5,14 +5,30 @@ import {
     Grid,
     Card,
     CardContent,
-    CardMedia
+    CardMedia,
+    CircularProgress,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import api from '../api/axios';
+
+interface teamDTO {
+    id: number;
+    name: string;
+    surename: string;
+    email: string;
+    phoneNumber: string;
+    roleName: string;
+    specializationPl: string;
+    specializationEn: string;
+}
 
 export default function Team() {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
+    const [team, setTeam] = useState<teamDTO[]>([]);
+    const [loading, setLoading] = useState(true);
 
     const colors = {
         color1: '#003141',
@@ -20,6 +36,23 @@ export default function Team() {
         color4: '#00b2b9',
         white: '#ffffff'
     };
+
+    useEffect(() => {
+        const featchTeam = async () => {
+            setLoading(true);
+            try {
+                console.log("wysłane")
+                const response = await api.get(`api/Team/TeamMembers`);
+                const data: teamDTO[] = response.data;
+                setTeam(data)
+            } catch (error) {
+                console.error('Error feating team ', error)
+            } finally {
+                setLoading(false);
+            }
+        }
+        featchTeam();
+    }, []);
 
     return (
         <Box sx={{ width: '100vw', minHeight: '100vh', backgroundColor: colors.white }}>
@@ -110,51 +143,59 @@ export default function Team() {
                 </Box>
             </Box>
 
-            <Box>
-
-            </Box>
-
             <Box sx={{ py: 8, px: { xs: 2, md: 10 }, backgroundColor: '#f5f5f5' }}>
                 <Typography variant="h4" textAlign="center" gutterBottom>
-                    {t('home.ourServices') || 'ajdnkjansdjknajksnjdkansdjknas'}
+                    {t('home.ourServices')}
                 </Typography>
-                <Grid container spacing={20} justifyContent="center">
-                    {[1, 2, 3, 4].map((_, i) => (
-                        <Grid item xs={12} sm={6} md={4} key={i}>
-                            <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
-                                <CardMedia
-                                    component="img"
-                                    height="350"
-                                    image={`/images/doctors/${i + 1}.png`}
-                                    alt={`Service ${i + 1}`}
-                                    loading="lazy"
-                                    sx={{
-                                        objectFit: 'cover',
-                                        width: '100%',
-                                        borderTopLeftRadius: 12,
-                                        borderTopRightRadius: 12,
-                                        filter: 'brightness(1)', 
-                                        transition: 'transform 0.3s ease, filter 0.3s ease',
-                                        '&:hover': {
-                                            transform: 'scale(1.02)',
-                                            filter: 'brightness(1.05)',
-                                        }
-                                    }}
-                                />
 
-                                <CardContent>
-                                    <Typography variant="h6" gutterBottom>
-                                        {t(`teamPage.doctor.${i+1}`)}
-                                    </Typography>
-                                    <Typography variant="body2" color="text.secondary">
-                                        {t(`teamPage.doctorInfo.${i+1}`)}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    ))}
-                </Grid>
+                {loading ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                        <CircularProgress color="inherit" />
+                    </Box>
+                ) : (
+                    <Grid container spacing={4} justifyContent="center">
+                        {team.map((member, i) => (
+                            <Grid item xs={12} sm={6} md={4} key={member.id}>
+                                <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
+                                    
+                                    <CardMedia
+                                        component="img"
+                                        height="350"
+                                        image={`/images/doctors/${i + 1}.png`}
+                                        alt={member.name}
+                                        sx={{
+                                            objectFit: 'cover',
+                                            borderTopLeftRadius: 12,
+                                            borderTopRightRadius: 12
+                                        }}
+                                    />
+
+                                    <CardContent>
+                                        <Typography variant="h6" gutterBottom>
+                                            {member.roleName}
+                                        </Typography>
+
+                                        <Typography variant="body2" color="text.secondary">
+                                            {member.name} {member.surename}
+                                        </Typography>
+
+                                        {member.roleName === "Doctor" && (
+                                            <Typography variant="body2" color="text.secondary">
+                                                {i18n.language === 'pl'
+                                                    ? member.specializationPl
+                                                    : member.specializationEn
+                                                }
+                                            </Typography>
+                                        )}
+                                    </CardContent>
+
+                                </Card>
+                            </Grid>
+                        ))}
+                    </Grid>
+                )}
             </Box>
+
         </Box>
     );
 }

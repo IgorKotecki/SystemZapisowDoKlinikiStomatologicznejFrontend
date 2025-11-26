@@ -24,10 +24,8 @@ export default function ProtectedRoute({ children, allowedRoles }: Props) {
   let claims: any = null;
 
   try {
-    // 1️⃣ Spróbuj zdekodować token
     claims = jwtDecode(token);
   } catch {
-    // 2️⃣ Jeśli nie da się zdekodować, spróbuj z localStorage
     const claimsString = localStorage.getItem("claims");
     claims = claimsString ? JSON.parse(claimsString) : null;
   }
@@ -37,16 +35,12 @@ export default function ProtectedRoute({ children, allowedRoles }: Props) {
     return <Navigate to="/login" replace />;
   }
 
-  // 3️⃣ Pobierz rolę z JWT (Azure lub backend custom claim)
   const role =
     claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
     claims.role ||
     claims.Role ||
     claims.roles?.[0];
 
-  console.log("ProtectedRoute → decoded role:", role);
-
-  // 4️⃣ Sprawdź uprawnienia
   if (allowedRoles && !allowedRoles.includes(role)) {
     console.warn(`Brak dostępu: rola ${role} nie jest w ${allowedRoles}`);
     return <Navigate to="/" replace />;

@@ -1,24 +1,33 @@
 import { Box, Typography, Button, Grid, Card, CardContent, CardMedia, Chip, Paper } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import MedicalServicesIcon from "@mui/icons-material/MedicalServices"
-import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh"
-import BuildIcon from "@mui/icons-material/Build"
-import ChildCareIcon from "@mui/icons-material/ChildCare"
-import LocalHospitalIcon from "@mui/icons-material/LocalHospital"
-import PsychologyIcon from "@mui/icons-material/Psychology"
-import { useEffect, useState } from "react"
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
+import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
+import BuildIcon from "@mui/icons-material/Build";
+import ChildCareIcon from "@mui/icons-material/ChildCare";
+import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
+import PsychologyIcon from "@mui/icons-material/Psychology";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import React, { useEffect, useState } from "react"
+import type { JSX } from "react";
 import api from '../api/axios';
 
-export default function Services() {
-  const { t, i18n } = useTranslation()
-  const navigate = useNavigate()
+interface ServiceDTO {
+  id: number;
+  name: string;
+  description: string;
+  lowPrice: number;
+  highPrice: number;
+  minTime: number;
+  languageCode: string;
+  category: string;
+}
 
-  const [servicesData, setServicesData] = useState<{
-    Id: string, lowPrice: string, highPrice: string, minTime: string, langCode: string, name: string, description: string
-  }[]>([]);
-  const [loadingServices, setLoadingServices] = useState(false);
-  const [services, setServices] = useState<{ id: string, name: string }[]>([]);
+export default function Services() {
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const [services, setServices] = useState<ServiceDTO[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const colors = {
     color1: "#003141",
@@ -27,171 +36,41 @@ export default function Services() {
     white: "#ffffff",
   }
 
-  const decodeJwt = (token) => {
-    try {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-          .join('')
-      );
-      return JSON.parse(jsonPayload);
-    } catch (err) {
-      console.error('Błąd przy dekodowaniu tokena:', err);
-      return null;
-    }
-  };
-
   useEffect(() => {
     const fetchServices = async () => {
-      setLoadingServices(true);
+      setLoading(true);
       try {
-        const token = localStorage.getItem('token');
-        let role = 'Unregistered_user'; // domyślnie dla niezalogowanych
-        if (token) {
-          const claims = decodeJwt(token);
-          if (claims) {
-            const userRole =
-              claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-            if (userRole) {
-              role = userRole;
-            }
-          }
-        }
-        const response = await api.get('/api/service/UserServices', {
-          params: {
-            lang: i18n.language,
-            role: role,
-          },
-        });
-        console.log(response.data);
-        //setServices(response.data);
+        const lang = i18n.language || 'pl';
+        const response = await api.get(`api/Service/UserServices?lang=${lang}`)
+        const data: ServiceDTO[] = response.data;
+
+        const randomized = data.length > 3 ? [...data].sort(() => Math.random() - 0.5).slice(0, 3) : data;
+        setServices(randomized)
+        console.log(randomized)
       } catch (error) {
-        console.error('Error while geting the services:', error);
+        console.error('Error featchins services ', error);
       } finally {
-        setLoadingServices(false);
+        setLoading(false);
       }
     };
-
     fetchServices();
   }, [i18n.language]);
 
-  const serviceCategories = [
-    {
-      icon: <MedicalServicesIcon sx={{ fontSize: "3rem", color: colors.color3 }} />,
-      title: "Stomatologia ogólna",
-      description: "Kompleksowa opieka stomatologiczna dla całej rodziny",
-      services: [
-        "Przeglądy stomatologiczne",
-        "Leczenie próchnicy",
-        "Plomby kompozytowe",
-        "Czyszczenie kamienia",
-        "Fluoryzacja",
-      ],
-    },
-    {
-      icon: <AutoFixHighIcon sx={{ fontSize: "3rem", color: colors.color3 }} />,
-      title: "Stomatologia estetyczna",
-      description: "Piękny uśmiech to nasza specjalność",
-      services: [
-        "Wybielanie zębów",
-        "Licówki porcelanowe",
-        "Korony estetyczne",
-        "Bonding kompozytowy",
-        "Makeover uśmiechu",
-      ],
-    },
-    {
-      icon: <BuildIcon sx={{ fontSize: "3rem", color: colors.color3 }} />,
-      title: "Protetyka",
-      description: "Odbudowa i zastąpienie utraconych zębów",
-      services: ["Korony i mosty", "Protezy częściowe", "Protezy całkowite", "Protezy na implantach", "Naprawy protez"],
-    },
-    {
-      icon: <LocalHospitalIcon sx={{ fontSize: "3rem", color: colors.color3 }} />,
-      title: "Implantologia",
-      description: "Nowoczesne rozwiązania dla brakujących zębów",
-      services: ["Implanty pojedyncze", "Mosty na implantach", "All-on-4", "Augmentacja kości", "Sinus lift"],
-    },
-    {
-      icon: <PsychologyIcon sx={{ fontSize: "3rem", color: colors.color3 }} />,
-      title: "Ortodoncja",
-      description: "Prostowanie zębów dla dzieci i dorosłych",
-      services: [
-        "Aparaty stałe",
-        "Aparaty ruchome",
-        "Aparaty niewidoczne",
-        "Retencja ortodontyczna",
-        "Diagnostyka ortodontyczna",
-      ],
-    },
-    {
-      icon: <ChildCareIcon sx={{ fontSize: "3rem", color: colors.color3 }} />,
-      title: "Stomatologia dziecięca",
-      description: "Specjalistyczna opieka nad najmłodszymi",
-      services: ["Przeglądy dzieci", "Lakowanie bruzd", "Leczenie mleczaków", "Profilaktyka", "Edukacja higieniczna"],
-    },
-  ]
+  const grouped = services.reduce((acc, service) => {
+    if (!acc[service.category]) acc[service.category] = [];
+    acc[service.category].push(service);
+    return acc;
+  }, {} as Record<string, ServiceDTO[]>);
 
-  const featuredServices = [
-    {
-      title: "Wybielanie zębów",
-      description: "Profesjonalne wybielanie zębów w gabinecie lub w domu",
-      image: "/images/services/whitening.jpg",
-      price: "od 800 zł",
-      duration: "60 min",
-      popular: true,
-    },
-    {
-      title: "Implanty zębowe",
-      description: "Trwałe rozwiązanie dla brakujących zębów",
-      image: "/images/services/implants.jpg",
-      price: "od 2500 zł",
-      duration: "90 min",
-      popular: false,
-    },
-    {
-      title: "Licówki porcelanowe",
-      description: "Idealne rozwiązanie dla pięknego uśmiechu",
-      image: "/images/services/veneers.jpg",
-      price: "od 1200 zł",
-      duration: "120 min",
-      popular: true,
-    },
-    {
-      title: "Aparaty ortodontyczne",
-      description: "Nowoczesne rozwiązania ortodontyczne",
-      image: "/images/services/braces.jpg",
-      price: "od 3500 zł",
-      duration: "45 min",
-      popular: false,
-    },
-  ]
+  const categoryIcons: Record<string, JSX.Element> = {
+    "Higiena": <MedicalServicesIcon sx={{ fontSize: 50, color: "#007987" }} />,
+    "Estetyka": <AutoFixHighIcon sx={{ fontSize: 50, color: "#007987" }} />,
+    "Chirurgia": <BuildIcon sx={{ fontSize: 50, color: "#007987" }} />,
+    "Dziecięca": <ChildCareIcon sx={{ fontSize: 50, color: "#007987" }} />,
+    "Diagnostyka": <LocalHospitalIcon sx={{ fontSize: 50, color: "#007987" }} />,
+    "Psychologia": <PsychologyIcon sx={{ fontSize: 50, color: "#007987" }} />,
+  };
 
-  const processSteps = [
-    {
-      step: "01",
-      title: "Konsultacja",
-      description: "Szczegółowy przegląd i plan leczenia",
-    },
-    {
-      step: "02",
-      title: "Diagnostyka",
-      description: "Nowoczesne badania i zdjęcia RTG",
-    },
-    {
-      step: "03",
-      title: "Leczenie",
-      description: "Profesjonalne wykonanie zabiegu",
-    },
-    {
-      step: "04",
-      title: "Kontrola",
-      description: "Regularne wizyty kontrolne",
-    },
-  ]
 
   return (
     <Box sx={{ width: "100vw", minHeight: "100vh", backgroundColor: colors.white }}>
@@ -281,32 +160,36 @@ export default function Services() {
         </Box>
       </Box>
 
-      {/* Service Categories */}
       <Box sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: "#f5f5f5" }}>
-        <Typography variant="h4" textAlign="center" gutterBottom sx={{ mb: 6 }}>
-          Kategorie usług
+        <Typography variant="h4" textAlign="center" sx={{ mb: 6 }}>
+          {t("services.categories")}
         </Typography>
+
         <Grid container spacing={4}>
-          {serviceCategories.map((category, index) => (
+          {Object.keys(grouped).map((categoryName, index) => (
             <Grid item xs={12} md={6} lg={4} key={index}>
               <Card sx={{ borderRadius: 3, boxShadow: 2, height: "100%" }}>
-                <CardContent sx={{ p: 4, textAlign: "center" }}>
-                  <Box sx={{ mb: 3 }}>{category.icon}</Box>
-                  <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold" }}>
-                    {category.title}
-                  </Typography>
-                  <Typography variant="body1" color="text.secondary" paragraph>
-                    {category.description}
-                  </Typography>
-                  <Box sx={{ textAlign: "left" }}>
-                    {category.services.map((service, serviceIndex) => (
-                      <Typography key={serviceIndex} variant="body2" sx={{ mb: 0.5 }}>
-                        • {service}
-                      </Typography>
-                    ))}
+                <CardContent sx={{ p: 4 }}>
+                  <Box sx={{ mb: 2, fontSize: 40, color: colors.color3 }}>
+                    {categoryIcons[categoryName] ?? <HelpOutlineIcon sx={{ fontSize: 50, color: "#007987" }} />}
                   </Box>
+                  <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
+                    {categoryName}
+                  </Typography>
+                  {grouped[categoryName].map((service) => (
+                    <Box key={service.id} sx={{ mb: 1.5 }}>
+                      <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                        {service.name}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {service.lowPrice} - {service.highPrice} zł
+                      </Typography>
+                    </Box>
+                  ))}
+
                   <Button
                     variant="outlined"
+                    size="large"
                     sx={{
                       mt: 3,
                       borderColor: colors.color3,
@@ -319,7 +202,7 @@ export default function Services() {
                     }}
                     onClick={() => navigate("/appointment")}
                   >
-                    Umów wizytę
+                    {t("book")}
                   </Button>
                 </CardContent>
               </Card>
@@ -328,75 +211,7 @@ export default function Services() {
         </Grid>
       </Box>
 
-      {/* Featured Services */}
-      <Box sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: colors.white }}>
-        <Typography variant="h4" textAlign="center" gutterBottom sx={{ mb: 6 }}>
-          Popularne zabiegi
-        </Typography>
-        <Grid container spacing={4}>
-          {featuredServices.map((service, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Card sx={{ borderRadius: 3, boxShadow: 3, height: "100%", position: "relative" }}>
-                {service.popular && (
-                  <Chip
-                    label="Popularne"
-                    sx={{
-                      position: "absolute",
-                      top: 10,
-                      right: 10,
-                      backgroundColor: colors.color3,
-                      color: colors.white,
-                      zIndex: 1,
-                    }}
-                  />
-                )}
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image={service.image}
-                  alt={service.title}
-                  sx={{
-                    objectFit: "cover",
-                    borderTopLeftRadius: 12,
-                    borderTopRightRadius: 12,
-                  }}
-                />
-                <CardContent sx={{ p: 3 }}>
-                  <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
-                    {service.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" paragraph>
-                    {service.description}
-                  </Typography>
-                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-                    <Typography variant="h6" sx={{ color: colors.color3, fontWeight: "bold" }}>
-                      {service.price}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {service.duration}
-                    </Typography>
-                  </Box>
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    sx={{
-                      backgroundColor: colors.color3,
-                      "&:hover": { backgroundColor: colors.color4 },
-                      textTransform: "none",
-                    }}
-                    onClick={() => navigate("/appointment")}
-                  >
-                    Umów wizytę
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-
-      {/* Process Steps */}
-      <Box sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: colors.color1, color: colors.white }}>
+      {/* <Box sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: colors.color1, color: colors.white }}>
         <Typography variant="h4" textAlign="center" gutterBottom sx={{ mb: 6 }}>
           Jak przebiega leczenie?
         </Typography>
@@ -415,9 +230,8 @@ export default function Services() {
             </Grid>
           ))}
         </Grid>
-      </Box>
+      </Box> */}
 
-      {/* CTA Section */}
       <Box
         sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: colors.color3, color: colors.white, textAlign: "center" }}
       >
