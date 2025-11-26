@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
-  TextField,
   MenuItem,
   Button,
   FormControl,
   InputLabel,
   Select,
   Paper,
+  CircularProgress,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -42,21 +42,45 @@ function decodeJwt(token: string) {
   }
 }
 
+interface ServiceDTO {
+  id: number;
+  name: string;
+  lowPrice: number;
+  highPrice: number;
+  minTime: number;
+  description: string | null;
+  category: string | null;
+}
+
+interface DoctorDTO {
+  id: number;
+  name: string;
+  surname: string;
+}
+
+interface TimeBlockDTO {
+  doctorBlockId: number;
+  timeStart: string;
+  timeEnd: string;
+  isAvailable: boolean;
+  user: DoctorDTO;
+}
 
 export default function UserAppointmentPage() {
   const { t, i18n } = useTranslation();
-
   const [date, setDate] = useState<Date | null>(null);
-  const [service, setService] = useState("");
-  const [doctor, setDoctor] = useState("");
-  const [hour, setHour] = useState("");
-
-  const [services, setServices] = useState<{ id: string; name: string }[]>([]);
-  const [doctors, setDoctors] = useState<{ id: string; name: string; surname: string }[]>([]);
-  const [availableTimeBlocks, setAvailableTimeBlocks] = useState<any[]>([]);
-
+  const [serviceId, setServiceId] = useState<number | "">("");
+  const [doctorId, setDoctorId] = useState<number | "">("");
+  const [timeBlockId, setTimeBlockId] = useState<number | "">("");
+  const [services, setServices] = useState<ServiceDTO[]>([]);
+  const [doctors, setDoctors] = useState<DoctorDTO[]>([]);
+  const [timeBlocks, setTimeBlocks] = useState<TimeBlockDTO[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingDoctors, setLoadingDoctors] = useState(false);
+  const [loadingBlocks, setLoadingBlocks] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const claims = JSON.parse(localStorage.getItem("claims") || "{}");
+  const userId = claims?.id || claims?.sub;
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -66,64 +90,72 @@ export default function UserAppointmentPage() {
         });
         setServices(res.data);
       } catch (err) {
-        console.error("Błąd przy pobieraniu usług:", err);
+        console.error("Błąd pobierania usług:", err);
+        setServices([]);
       }
     };
+
     fetchServices();
   }, [i18n.language]);
 
   useEffect(() => {
-    if (!date) return;
+    if (!serviceId) {
+      setDoctors([]);
+      return;
+    }
+
+    const fetchDoctors = async () => {
+      setLoadingDoctors(true);
+      try {
+        const res = await api.get(`/api/Doctor/by-service/${serviceId}`);
+        setDoctors(res.data);
+      } catch (err) {
+        console.error("Błąd pobierania lekarzy:", err);
+        setDoctors([]);
+      } finally {
+        setLoadingDoctors(false);
+      }
+    };
+
+    fetchDoctors();
+  }, [serviceId]);
+
+  useEffect(() => {
+    if (!doctorId || !date) {
+      setTimeBlocks([]);
+      return;
+    }
 
     const fetchTimeBlocks = async () => {
-      setDoctor("");
-      setHour("");
-
+      setLoadingBlocks(true);
       try {
         const res = await api.get("/api/TimeBlocks", {
           params: {
             Year: date.getFullYear(),
             Month: date.getMonth() + 1,
             Day: date.getDate(),
+            DoctorId: doctorId,
           },
         });
 
-        const blocks = res.data;
-        setAvailableTimeBlocks(blocks);
-
-        const uniqueDoctors = Array.from(
-          new Map(
-            blocks
-              .filter((block) => block.user && block.user.id != null)
-              .map((block) => [
-                String(block.user.id),
-                {
-                  id: String(block.user.id),
-                  name: block.user.name,
-                  surname: block.user.surname,
-                },
-              ])
-          ).values()
-        );
-
-        setDoctors(uniqueDoctors);
+        setTimeBlocks(res.data);
       } catch (err) {
-        console.error("Błąd przy pobieraniu bloków czasowych:", err);
+        console.error("Błąd pobierania bloków czasowych:", err);
+        setTimeBlocks([]);
+      } finally {
+        setLoadingBlocks(false);
       }
     };
 
     fetchTimeBlocks();
-  }, [date]);
+  }, [doctorId, date]);
 
-  useEffect(() => {
-    setHour("");
-  }, [doctor]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const submitAppointment = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setError(null);
 
-    if (!service || !doctor || !hour || !date) {
+    if (!serviceId || !doctorId || !timeBlockId || !date) {
       setError(t("userMakeAppointment.errorFields"));
       return;
     }
@@ -131,27 +163,27 @@ export default function UserAppointmentPage() {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      console.log(token);
-      if (!token) return "Unregistered";
+      if (!token) return;
 
       const claims = decodeJwt(token);
       const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
 
+
       await api.post(`/api/Appointment/user/${userId}/book`, {
-        doctorId: Number(doctor),
-        timeBlockId: Number(hour),
-        serviceIds: [Number(service)],
+        doctorId,
+        timeBlockId,
+        serviceIds: [serviceId],
       });
 
       alert(t("userMakeAppointment.success"));
 
-      setService("");
-      setDoctor("");
-      setHour("");
+      setServiceId("");
+      setDoctorId("");
+      setTimeBlockId("");
       setDate(null);
     } catch (err: any) {
       console.error(err);
-      setError(err.response?.data?.message || t("userMakeAppointment.errorOccurred"));
+      setError(err.response?.data || t("userMakeAppointment.errorOccurred"));
     } finally {
       setLoading(false);
     }
@@ -185,6 +217,7 @@ export default function UserAppointmentPage() {
           <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
             {t("userMakeAppointment.title")}
           </Typography>
+
           <Typography variant="subtitle1" sx={{ mb: 4 }}>
             {t("userMakeAppointment.subtitle")}
           </Typography>
@@ -197,7 +230,7 @@ export default function UserAppointmentPage() {
               backgroundColor: colors.color2,
             }}
           >
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={submitAppointment}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                   label={t("userMakeAppointment.date")}
@@ -206,21 +239,19 @@ export default function UserAppointmentPage() {
                   slotProps={{
                     textField: {
                       fullWidth: true,
-                      margin: "normal",
-                      sx: { backgroundColor: colors.white, borderRadius: 1 },
+                      sx: { backgroundColor: colors.white, borderRadius: 1, mt: 2 },
                     },
                   }}
                 />
               </LocalizationProvider>
-
-              <FormControl fullWidth margin="normal">
+              <FormControl fullWidth sx={{ mt: 3 }}>
                 <InputLabel sx={{ color: colors.white }}>
                   {t("userMakeAppointment.service")}
                 </InputLabel>
                 <Select
-                  value={service || ""}
-                  onChange={(e) => setService(e.target.value)}
-                  sx={{ backgroundColor: colors.white, borderRadius: 1 }}
+                  value={serviceId}
+                  onChange={(e) => setServiceId(Number(e.target.value))}
+                  sx={{ backgroundColor: colors.white }}
                 >
                   {services.map((s) => (
                     <MenuItem key={s.id} value={s.id}>
@@ -229,52 +260,69 @@ export default function UserAppointmentPage() {
                   ))}
                 </Select>
               </FormControl>
-
-              <FormControl fullWidth margin="normal" disabled={!date}>
+              <FormControl
+                fullWidth
+                sx={{ mt: 3 }}
+                disabled={!serviceId}
+              >
                 <InputLabel sx={{ color: colors.white }}>
                   {t("userMakeAppointment.doctor")}
                 </InputLabel>
                 <Select
-                  value={doctor || ""}
-                  onChange={(e) => setDoctor(e.target.value)}
-                  sx={{ backgroundColor: colors.white, borderRadius: 1 }}
+                  value={doctorId}
+                  onChange={(e) => setDoctorId(Number(e.target.value))}
+                  sx={{ backgroundColor: colors.white }}
                 >
-                  {doctors.map((doc) => (
-                    <MenuItem key={doc.id} value={doc.id}>
-                      {doc.name} {doc.surname}
+                  {loadingDoctors ? (
+                    <MenuItem disabled>
+                      <CircularProgress size={20} />
                     </MenuItem>
-                  ))}
+                  ) : (
+                    doctors.map((doc) => (
+                      <MenuItem key={doc.id} value={doc.id}>
+                        {doc.name} {doc.surname}
+                      </MenuItem>
+                    ))
+                  )}
                 </Select>
               </FormControl>
 
-              <FormControl fullWidth margin="normal" disabled={!doctor}>
+              <FormControl
+                fullWidth
+                sx={{ mt: 3 }}
+                disabled={!doctorId || !date}
+              >
                 <InputLabel sx={{ color: colors.white }}>
                   {t("userMakeAppointment.hour")}
                 </InputLabel>
+
                 <Select
-                  value={hour || ""}
-                  onChange={(e) => setHour(e.target.value)}
-                  sx={{ backgroundColor: colors.white, borderRadius: 1 }}
+                  value={timeBlockId}
+                  onChange={(e) => setTimeBlockId(Number(e.target.value))}
+                  sx={{ backgroundColor: colors.white }}
                 >
-                  {availableTimeBlocks
-                    .filter(
-                      (block) => block.isAvailable && String(block.user.id) === doctor
-                    )
-                    .map((block) => {
-                      const start = new Date(block.timeStart);
-                      const formattedTime = start.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      });
-                      return (
-                        <MenuItem key={block.doctorBlockId} value={block.doctorBlockId}>
-                          {formattedTime}
-                        </MenuItem>
-                      );
-                    })}
+                  {loadingBlocks ? (
+                    <MenuItem disabled>
+                      <CircularProgress size={20} />
+                    </MenuItem>
+                  ) : (
+                    timeBlocks
+                      .filter((b) => b.isAvailable)
+                      .map((b) => {
+                        const time = new Date(b.timeStart).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        });
+
+                        return (
+                          <MenuItem key={b.doctorBlockId} value={b.doctorBlockId}>
+                            {time}
+                          </MenuItem>
+                        );
+                      })
+                  )}
                 </Select>
               </FormControl>
-
               {error && (
                 <Typography sx={{ mt: 2, color: "#ff8080" }}>{error}</Typography>
               )}

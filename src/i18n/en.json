@@ -120,17 +120,17 @@
     "state": "State"
   },
   "userMakeAppointment": {
-    "title": "Book an Appointment",
-    "subtitle": "Schedule your next dental visit easily",
-    "date": "Date",
-    "service": "Service",
-    "doctor": "Dentist",
-    "hour": "Hour",
-    "submit": "Book Appointment",
-    "success": "Appointment booked successfully!",
-    "errorOccurred": "An error occurred. Please try again.",
-    "errorFields": "Please fill in all required fields."
-  },
+  "title": "Book an Appointment",
+  "subtitle": "Choose a service, doctor and visit date.",
+  "date": "Date",
+  "service": "Service",
+  "doctor": "Doctor",
+  "hour": "Hour",
+  "submit": "Book Appointment",
+  "success": "The appointment has been booked successfully!",
+  "errorFields": "Please fill in all fields.",
+  "errorOccurred": "An error occurred during booking."
+},
   "dentalChart": {
     "back": "Back",
     "title": "Patient Dental Chart",

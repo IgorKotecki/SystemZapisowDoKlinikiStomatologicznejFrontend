@@ -12,13 +12,20 @@ import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import api from "../../api/axios";
 
-interface userDTO {
+interface UserDTO {
   id: number;
   name: string;
-  surename: string;
+  surname: string;
   email: string;
   phoneNumber: string;
   roleName: string;
+}
+
+interface UserUpdateDTO {
+  name: string;
+  surname: string;
+  phoneNumber: string;
+  email: string;
 }
 
 const colors = {
@@ -49,50 +56,58 @@ function decodeJwt(token: string) {
 export default function ProfilePage() {
   const { t } = useTranslation();
 
-  const [userData, setUserData] = useState<any>(null);
+  const [userData, setUserData] = useState<UserDTO | null>(null);
+  const [originalUserData, setOriginalUserData] = useState<UserDTO | null>(null);
+
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!userData) return;
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
   const handleSave = async () => {
+    if (!userData || !originalUserData) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const claims = decodeJwt(token);
+    const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+
+    const dto: UserUpdateDTO = {
+      name: userData.name,
+      surname: userData.surname,
+      phoneNumber: userData.phoneNumber,
+      email: userData.email,
+    };
+
     try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
-      const claims = decodeJwt(token);
-      const userId =
-        claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-
-      const dto = {
-        name: userData.name,
-        surname: userData.surname || userData.surename,
-        email: userData.email,
-        phoneNumber: userData.phoneNumber,
-      };
-
-      const response = await api.put(`api/User/${userId}`, dto);
+      const response = await api.put(`/api/User/edit/${userId}`, dto);
 
       setUserData(response.data);
+      setOriginalUserData(response.data);
       setIsEditing(false);
-      alert("Dane zostały zapisane!");
+
+      alert("Dane zostały zapisane");
     } catch (err: any) {
       console.error("Błąd zapisu:", err.response?.data || err);
       alert("Nie udało się zapisać zmian");
     }
   };
 
-
+  const handleCancel = () => {
+    setUserData(originalUserData);
+    setIsEditing(false);
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          console.log("Brak tokena");
           setError("Brak tokena");
           setLoading(false);
           return;
@@ -100,7 +115,6 @@ export default function ProfilePage() {
 
         const claims = decodeJwt(token);
         if (!claims) {
-          console.log("Niepoprawny token");
           setError("Niepoprawny token");
           setLoading(false);
           return;
@@ -108,17 +122,12 @@ export default function ProfilePage() {
 
         const userId =
           claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-        if (!userId) {
-          setError("Brak ID użytkownika w tokenie");
-          setLoading(false);
-          return;
-        }
 
-        const response = await api.get(`api/User/${userId}`);
-        const data: userDTO[] = response.data;
+        const response = await api.get(`/api/User/${userId}`);
 
-        setUserData(data);
-        setError(null);
+        setUserData(response.data);
+        setOriginalUserData(response.data);
+
       } catch (err) {
         console.error("Błąd pobierania danych:", err);
         setError("Nie udało się pobrać danych użytkownika");
@@ -143,7 +152,7 @@ export default function ProfilePage() {
         }}
       >
         <CircularProgress sx={{ color: colors.color5, mr: 2 }} />
-        <Typography>{t("userProfile.loading") || "Ładowanie danych..."}</Typography>
+        <Typography>Ładowanie danych...</Typography>
       </Box>
     );
   }
@@ -175,9 +184,7 @@ export default function ProfilePage() {
     );
   }
 
-  if (!userData) {
-    return null;
-  }
+  if (!userData) return null;
 
   return (
     <Box
@@ -207,9 +214,6 @@ export default function ProfilePage() {
           <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
             {t("userProfile.profile")}
           </Typography>
-          <Typography variant="subtitle1" sx={{ mb: 4 }}>
-            {t("userProfile.pageInfo")}
-          </Typography>
 
           <Paper
             elevation={4}
@@ -221,18 +225,17 @@ export default function ProfilePage() {
           >
             <Grid container spacing={3}>
               {[
-                { name: "name", label: t("userProfile.firstName"), type: "text" },
-                { name: "surname", label: t("userProfile.lastName"), type: "text" },
-                { name: "email", label: t("userProfile.email"), type: "email" },
-                { name: "phoneNumber", label: t("userProfile.phone"), type: "tel" },
+                { name: "name", label: t("userProfile.firstName") },
+                { name: "surname", label: t("userProfile.lastName") },
+                { name: "email", label: t("userProfile.email") },
+                { name: "phoneNumber", label: t("userProfile.phone") },
               ].map((field) => (
                 <Grid item xs={12} sm={6} key={field.name}>
                   <TextField
                     fullWidth
                     name={field.name}
                     label={field.label}
-                    type={field.type}
-                    value={userData?.[field.name] || ""}
+                    value={(userData as any)[field.name] || ""}
                     onChange={handleInputChange}
                     disabled={!isEditing}
                     sx={{
@@ -278,6 +281,7 @@ export default function ProfilePage() {
                   >
                     {t("userProfile.save")}
                   </Button>
+
                   <Button
                     variant="outlined"
                     sx={{
@@ -288,7 +292,7 @@ export default function ProfilePage() {
                         borderColor: colors.color4,
                       },
                     }}
-                    onClick={() => setIsEditing(false)}
+                    onClick={handleCancel}
                   >
                     {t("userProfile.cancel")}
                   </Button>
