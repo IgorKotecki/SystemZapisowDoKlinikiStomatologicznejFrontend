@@ -118,6 +118,7 @@ const DoctorAppointments: React.FC = () => {
                 <Typography sx={{ mt: 3 }}>{t("doctorCalendar.selectTeeth")}</Typography>
                 <Grid container spacing={1} sx={{ mt: 1 }}>
                   {Array.from({ length: 32 }, (_, i) => i + 1).map((num) => (
+                    // @ts-ignore
                     <Grid item xs={2} key={num}>
                       <Button
                         variant={selectedTeeth.includes(num) ? "contained" : "outlined"}

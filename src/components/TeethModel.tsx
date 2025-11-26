@@ -1,19 +1,13 @@
 import {
     Box,
     Typography,
-    CircularProgress,
     Paper,
     Tooltip,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    Button,
     Grid,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import type { ToothData } from "../Interfaces/ToothData"
-import { se } from "date-fns/locale";
+
 
 const colors = {
     color1: "#003141",
@@ -26,8 +20,8 @@ const colors = {
 
 type TeethModelProps = {
     teeth: ToothData[];
-    selectedTooth: ToothData | null;
-    setSelectedTooth: (tooth: ToothData) => void;
+    selectedTooth?: ToothData | null;
+    setSelectedTooth?: (tooth: ToothData) => void;
 };
 
 export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth }: TeethModelProps) {
@@ -72,19 +66,20 @@ export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth }:
 
                 <Grid container justifyContent="center" spacing={1} sx={{ mb: 5 }}>
                     {teeth.slice(0, 16).map((tooth) => (
+                        // @ts-ignore
                         <Grid item key={tooth.toothNumber}>
                             <Tooltip title={<div>Tooth {tooth.toothNumber} <br></br> {tooth.status.statusName} <br></br> {tooth.status.categoryName}</div>} arrow>
                                 <Box
                                     key={tooth.toothNumber}
                                     onClick={() => {
-                                        console.log("Tooth clicked:", tooth);
-                                        setSelectedTooth(tooth)
+                                        if (setSelectedTooth)
+                                            setSelectedTooth(tooth)
                                     }}
                                     sx={{
                                         width: 32,
                                         height: 48,
                                         backgroundColor: getToothColor(tooth.status.categoryId),
-                                        borderRadius:5,
+                                        borderRadius: 5,
                                         border: selectedTooth?.toothNumber === tooth.toothNumber ? "2px solid #FFD700" : "2px solid transparent",
                                         cursor: "pointer",
                                         transition: "transform 0.2s, box-shadow 0.2s",
@@ -101,11 +96,15 @@ export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth }:
 
                 <Grid container justifyContent="center" spacing={1}>
                     {teeth.slice(16, 32).map((tooth) => (
+                        // @ts-ignore
                         <Grid item key={tooth.toothNumber}>
                             <Tooltip title={<div>Tooth {tooth.toothNumber} <br></br> {tooth.status.statusName} <br></br> {tooth.status.categoryName}</div>} arrow>
                                 <Box
                                     key={tooth.toothNumber}
-                                    onClick={() => setSelectedTooth(tooth)}
+                                    onClick={() => {
+                                        if (setSelectedTooth)
+                                            setSelectedTooth(tooth)
+                                    }}
                                     sx={{
                                         width: 32,
                                         height: 48,
