@@ -63,13 +63,20 @@ export default function Header() {
     const role = getUserRole();
     console.log(role);
     handleUserClose();
-    if (role === "Receptionist") {
+    switch (role) {
+      case "Receptionist":
       navigate("/receptionist/profile");
-    } else if (role === "Registered_user") {
+      break;
+      case "Registered_user":
       navigate("/user/profile");
-    } else if (role === "Admin") {
+      break;
+      case "Admin":
       navigate("/admin");
-    } else {
+      break;
+      case "Doctor":
+      navigate("/doctor/profile");
+      break;
+      default:
       navigate("/");
     }
   };

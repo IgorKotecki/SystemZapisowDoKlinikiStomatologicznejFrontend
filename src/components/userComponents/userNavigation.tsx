@@ -96,6 +96,7 @@ export default function UserNavigation() {
       { href: "/doctor/appointment", label: t("doctorNavigation.scheduleVisit"), icon: Calendar, roles: ["Doctor"] },
       { href: "/doctor/users", label: t("doctorNavigation.users"), icon: Users, roles: ["Doctor"] },
       { href: "/doctor/calendar", label: t("doctorNavigation.visits"), icon: CalendarPlus, roles: ["Doctor"] },
+      { href: "/doctor/daySchedule", label: t("doctorNavigation.mySchedule"), icon: CalendarCheck, roles: ["Doctor"] },
       { href: "/receptionist/services", label: t("doctorNavigation.editServices"), icon: Settings2, roles: ["Doctor"] },
     ];
 
@@ -118,7 +119,7 @@ export default function UserNavigation() {
   return (
     <Box
       sx={{
-        width: { xs: "100%", md: 260 },
+        width: { xs: "100%", md: 250 , minWidth: 250},
         minHeight: { xs: "auto", md: "100vh" },
         backgroundColor: colors.color2,
         borderRight: `2px solid ${colors.color3}`,
@@ -129,7 +130,7 @@ export default function UserNavigation() {
         px: 3,
       }}
     >
-      <Box>
+      <Box sx={{ pr: { xs: 6, md: 0 } }}>
         <Typography variant="h5" sx={{ color: colors.color5, mb: 1 }}>
           {t("userNavigation.panel")}
         </Typography>

@@ -3,14 +3,7 @@ import {
   Box,
   Typography,
   CircularProgress,
-  Paper,
-  Tooltip,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Button,
-  Grid,
 } from "@mui/material";
 import { ArrowLeft } from "lucide-react";
 import UserNavigation from "../../components/userComponents/userNavigation";
@@ -18,19 +11,10 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import TeethModel from "../../components/TeethModel";
 import { useParams } from "react-router-dom";
-import { Language } from "@mui/icons-material";
 import i18n from "../../i18n";
 import api from "../../api/axios";
 import type { ToothData }  from "../../Interfaces/ToothData"
-
-const colors = {
-  color1: "#003141",
-  color2: "#004f5f",
-  color3: "#007987",
-  color4: "#00b2b9",
-  color5: "#00faf1",
-  white: "#ffffff",
-};
+import { colors } from "../../utils/colors";
 
 const DentalChartPage: React.FC = () => {
   const { t } = useTranslation();
@@ -49,15 +33,6 @@ const DentalChartPage: React.FC = () => {
         });
         console.log("Dane o zębach:", response.data);
         setTeeth(response.data.teeth);
-
-        // const mockTeeth = Array.from({ length: 32 }, (_, i) => ({
-        //   number: i < 16 ? 18 - i : 49 - (i - 16),
-        //   state: ["healthy", "cavity", "missing", "crown", "root-canal"][
-        //     Math.floor(Math.random() * 5)
-        //   ] as ToothData["state"],
-        //   notes: "Brak dodatkowych uwag.",
-        // }));
-        //setTeeth(mockTeeth);
       } catch (error) {
         console.error("Błąd pobierania danych o zębach:", error);
       } finally {
@@ -79,6 +54,7 @@ const DentalChartPage: React.FC = () => {
           backgroundColor: colors.color1,
         }}
       >
+        <UserNavigation />
         <CircularProgress sx={{ color: colors.color5 }} />
       </Box>
     );

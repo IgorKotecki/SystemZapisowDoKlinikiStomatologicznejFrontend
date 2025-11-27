@@ -280,6 +280,7 @@
     "visits": "Kalendarz",
     "users": "Użytkownicy",
     "scheduleVisit": "Zaplanowane wizyty",
+    "mySchedule": "Mój grafik",
     "editServices": "Edit Services"
   },
   "forget": {
@@ -295,5 +296,12 @@
     "changePassword": "Zmień hasło",
     "newPassword": "Nowe hasło",
     "confirmNewPassword": "Potwierdź nowe hasło"
+  },
+  "doctorDaySchedule": {
+    "title": "Grafik dni lekarza",
+    "subtitle": "Przeglądaj i zarządzaj swoim standardowym grafikiem pracy",
+    "scheduledTime": "Zaplanowany czas",
+    "addScheduledTime": "Dodaj zaplanowany czas",
+    "saveChanges": "Zapisz zmiany"
   }
 }

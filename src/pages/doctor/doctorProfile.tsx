@@ -2,15 +2,7 @@ import React, { useState } from "react";
 import { Box, Typography, TextField, Button, Grid, Paper } from "@mui/material";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { useTranslation } from "react-i18next";
-
-const colors = {
-  color1: "#003141",
-  color2: "#004f5f",
-  color3: "#007987",
-  color4: "#00b2b9",
-  color5: "#00faf1",
-  white: "#ffffff",
-};
+import { colors } from "../../utils/colors";
 
 export default function DoctorProfile() {
   const { t } = useTranslation();
@@ -83,6 +75,7 @@ export default function DoctorProfile() {
               { name: "phone", label: t("doctorProfile.phone") },
               { name: "specialization", label: t("doctorProfile.specialization") },
             ].map((field) => (
+              //@ts-ignore
               <Grid item xs={12} sm={6} key={field.name}>
                 <TextField
                   fullWidth

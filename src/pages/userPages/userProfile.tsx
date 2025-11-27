@@ -11,6 +11,7 @@ import {
 import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import api from "../../api/axios";
+import { colors } from "../../utils/colors";
 
 interface UserDTO {
   id: number;
@@ -27,15 +28,6 @@ interface UserUpdateDTO {
   phoneNumber: string;
   email: string;
 }
-
-const colors = {
-  color1: "#003141",
-  color2: "#004f5f",
-  color3: "#007987",
-  color4: "#00b2b9",
-  color5: "#00faf1",
-  white: "#ffffff",
-};
 
 function decodeJwt(token: string) {
   try {
@@ -151,6 +143,7 @@ export default function ProfilePage() {
           color: colors.white,
         }}
       >
+        <UserNavigation />
         <CircularProgress sx={{ color: colors.color5, mr: 2 }} />
         <Typography>Ładowanie danych...</Typography>
       </Box>
@@ -230,6 +223,7 @@ export default function ProfilePage() {
                 { name: "email", label: t("userProfile.email") },
                 { name: "phoneNumber", label: t("userProfile.phone") },
               ].map((field) => (
+                //@ts-ignore
                 <Grid item xs={12} sm={6} key={field.name}>
                   <TextField
                     fullWidth

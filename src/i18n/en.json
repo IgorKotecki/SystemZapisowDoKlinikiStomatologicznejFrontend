@@ -274,6 +274,7 @@
     "visits": "Calendar",
     "users": "Users",
     "scheduleVisit": "Schedule Appointment",
+    "mySchedule": "My Schedule",
     "editServices": "Edit Services"
   },
   "forget": {
@@ -289,5 +290,12 @@
     "changePassword": "Change password",
     "newPassword": "New password",
     "confirmNewPassword": "Confirm new password"
+  },
+  "doctorDaySchedule": {
+    "title": "Doctor's Day Schedule",
+    "subtitle": "View and manage your work day schedule template",
+    "scheduledTime": "Scheduled Time",
+    "addScheduledTime": "Add Scheduled Time",
+    "saveChanges": "Save Changes"
   }
 }

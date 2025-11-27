@@ -16,15 +16,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useTranslation } from "react-i18next";
 import api from "../../api/axios";
 import UserNavigation from "../../components/userComponents/userNavigation";
-
-const colors = {
-  color1: "#003141",
-  color2: "#004f5f",
-  color3: "#007987",
-  color4: "#00b2b9",
-  color5: "#00faf1",
-  white: "#ffffff",
-};
+import { colors } from "../../utils/colors";
 
 function decodeJwt(token: string) {
   try {
@@ -88,6 +80,7 @@ export default function UserAppointmentPage() {
         const res = await api.get(`/api/Service/UserServices`, {
           params: { lang: i18n.language },
         });
+        console.log("Usługi:", res.data);
         setServices(res.data);
       } catch (err) {
         console.error("Błąd pobierania usług:", err);
@@ -107,7 +100,7 @@ export default function UserAppointmentPage() {
     const fetchDoctors = async () => {
       setLoadingDoctors(true);
       try {
-        const res = await api.get(`/api/Doctor/by-service/${serviceId}`);
+        const res = await api.get(`/api/Doctor`);
         setDoctors(res.data);
       } catch (err) {
         console.error("Błąd pobierania lekarzy:", err);
@@ -129,12 +122,11 @@ export default function UserAppointmentPage() {
     const fetchTimeBlocks = async () => {
       setLoadingBlocks(true);
       try {
-        const res = await api.get("/api/TimeBlocks", {
+        const res = await api.get(`/api/GetTimeBlocks/${doctorId}`, {
           params: {
             Year: date.getFullYear(),
             Month: date.getMonth() + 1,
             Day: date.getDate(),
-            DoctorId: doctorId,
           },
         });
 
@@ -165,11 +157,7 @@ export default function UserAppointmentPage() {
       const token = localStorage.getItem("token");
       if (!token) return;
 
-      const claims = decodeJwt(token);
-      const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-
-
-      await api.post(`/api/Appointment/user/${userId}/book`, {
+      await api.post(`/api/Appointment/user/book`, {
         doctorId,
         timeBlockId,
         serviceIds: [serviceId],

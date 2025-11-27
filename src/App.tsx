@@ -29,6 +29,7 @@ import ResetPassword from "./pages/ResetPassword";
 import { storage } from './utils/storage';
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import DoctorDaySchedule from "./pages/doctor/doctorDaySchedule";
 
 const App = () => {
   storage.clearAll();
@@ -182,6 +183,14 @@ const App = () => {
               element={
                 <ProtectedRoute allowedRoles={["Doctor"]}>
                   <DoctorCalendar />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/doctor/daySchedule"
+              element={
+                <ProtectedRoute allowedRoles={["Doctor"]}>
+                  <DoctorDaySchedule />
                 </ProtectedRoute>
               }
             />

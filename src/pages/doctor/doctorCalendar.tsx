@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import {
   Box,
   Typography,
@@ -15,15 +15,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
-
-const colors = {
-  color1: "#003141",
-  color2: "#004f5f",
-  color3: "#007987",
-  color4: "#00b2b9",
-  color5: "#00faf1",
-  white: "#ffffff",
-};
+import { colors } from "../../utils/colors";
 
 interface FreeTime {
   id: string;
@@ -73,6 +65,7 @@ export default function DoctorCalendar() {
       type,
       reason,
     };
+    console.log(newEvent.id);
     setFreeTimes([...freeTimes, newEvent]);
     setReason("");
     setOpenModal(false);
