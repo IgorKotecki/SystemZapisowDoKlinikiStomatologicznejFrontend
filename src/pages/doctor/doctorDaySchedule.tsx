@@ -4,7 +4,6 @@ import {
     Typography,
     Dialog,
     DialogTitle,
-
     DialogActions,
     Button,
     CircularProgress,
@@ -35,7 +34,7 @@ export default function DoctorDaySchedule() {
         const fetchWeekScheme = async () => {
             try {
                 const res = await api.get("/api/Doctor/weekScheme");
-                setDaySchedule(CalendarMapper.toCalendar(res.data.daysSchemes));
+                setDaySchedule(CalendarMapper.ApiDayScheduletoCalendar(res.data.daysSchemes));
             } catch (err) {
                 console.error(err);
             }
@@ -46,7 +45,7 @@ export default function DoctorDaySchedule() {
 
     const updateWeekScheme = async () => {
         const payload = {
-            daysSchemes: CalendarMapper.toApi(daySchedule),
+            daysSchemes: CalendarMapper.CalendarDayScheduletoApi(daySchedule),
         };
         try {
             const response = await api.put("/api/Doctor/weekSchemeUpdate", payload);
@@ -61,7 +60,7 @@ export default function DoctorDaySchedule() {
 
 
     const events = useMemo(
-        () => CalendarMapper.toEvents(daySchedule, t),
+        () => CalendarMapper.DayScheduletoEvents(daySchedule, t),
         [daySchedule, t]
     );
 
@@ -86,7 +85,7 @@ export default function DoctorDaySchedule() {
     };
 
     const handleEventClick = (info: any) => {
-        if (window.confirm(t("doctorFreeDays.removeConfirm"))) {
+        if (window.confirm(t("doctorDaySchedule.remove"))) {
             setDaySchedule((prev) => prev.filter((f) => f.dayOfWeek != info.event.id));
             console.log(info.event.id);
             console.log(daySchedule);
@@ -102,19 +101,19 @@ export default function DoctorDaySchedule() {
                     {t("doctorDaySchedule.title")}
                 </Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                <Typography variant="subtitle1" sx={{ mb: 3 }}>
-                    {t("doctorDaySchedule.subtitle")}
-                </Typography>
-                <Button
-                    variant="contained"
-                    sx={{
-                        backgroundColor: colors.color3,
-                        "&:hover": { backgroundColor: colors.color4 },
-                    }}
-                    onClick={updateWeekScheme}
-                >
-                    {t("doctorDaySchedule.saveChanges")}
-                </Button>
+                    <Typography variant="subtitle1" sx={{ mb: 3 }}>
+                        {t("doctorDaySchedule.subtitle")}
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        sx={{
+                            backgroundColor: colors.color3,
+                            "&:hover": { backgroundColor: colors.color4 },
+                        }}
+                        onClick={updateWeekScheme}
+                    >
+                        {t("doctorDaySchedule.saveChanges")}
+                    </Button>
                 </Box>
 
                 {loading ? (
@@ -129,6 +128,12 @@ export default function DoctorDaySchedule() {
                             select={handleSelect}
                             eventClick={handleEventClick}
                             events={events}
+                            eventMouseEnter={(mouseEnterInfo) => {
+                                mouseEnterInfo.el.style.cursor = 'pointer';
+                            }}
+                            eventMouseLeave={(mouseLeaveInfo) => {
+                                mouseLeaveInfo.el.style.cursor = 'default';
+                            }}
                             height="auto"
                             dayHeaderFormat={{ weekday: 'long' }}
                             locale={i18n.language === 'pl' ? plLocale : enLocale}

@@ -6,4 +6,5 @@ export interface ToothData {
       categoryName: string;
     },
     toothNumber: number;
+    toothName: string;
 }

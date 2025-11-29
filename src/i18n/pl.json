@@ -302,6 +302,7 @@
     "subtitle": "Przeglądaj i zarządzaj swoim standardowym grafikiem pracy",
     "scheduledTime": "Zaplanowany czas",
     "addScheduledTime": "Dodaj zaplanowany czas",
-    "saveChanges": "Zapisz zmiany"
+    "saveChanges": "Zapisz zmiany",
+    "remove" : "Czy chcesz usunąć plan dnia?"
   }
 }

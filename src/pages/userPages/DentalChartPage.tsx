@@ -41,7 +41,7 @@ const DentalChartPage: React.FC = () => {
     };
 
     fetchTeethData();
-  }, [userId]);
+  }, [userId, t]);
 
   if (loading) {
     return (

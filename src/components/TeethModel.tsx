@@ -7,16 +7,7 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import type { ToothData } from "../Interfaces/ToothData"
-
-
-const colors = {
-    color1: "#003141",
-    color2: "#004f5f",
-    color3: "#007987",
-    color4: "#00b2b9",
-    color5: "#00faf1",
-    white: "#ffffff",
-};
+import { colors } from "../utils/colors";
 
 type TeethModelProps = {
     teeth: ToothData[];
@@ -66,9 +57,9 @@ export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth }:
 
                 <Grid container justifyContent="center" spacing={1} sx={{ mb: 5 }}>
                     {teeth.slice(0, 16).map((tooth) => (
-                        // @ts-ignore
-                        <Grid item key={tooth.toothNumber}>
-                            <Tooltip title={<div>Tooth {tooth.toothNumber} <br></br> {tooth.status.statusName} <br></br> {tooth.status.categoryName}</div>} arrow>
+                        
+                        <Grid key={tooth.toothNumber} component='div'>
+                            <Tooltip title={<div># {tooth.toothName} <br></br> {tooth.status.statusName} <br></br> {tooth.status.categoryName}</div>} arrow>
                                 <Box
                                     key={tooth.toothNumber}
                                     onClick={() => {
@@ -98,7 +89,7 @@ export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth }:
                     {teeth.slice(16, 32).map((tooth) => (
                         // @ts-ignore
                         <Grid item key={tooth.toothNumber}>
-                            <Tooltip title={<div>Tooth {tooth.toothNumber} <br></br> {tooth.status.statusName} <br></br> {tooth.status.categoryName}</div>} arrow>
+                            <Tooltip title={<div># {tooth.toothName} <br></br> {tooth.status.statusName} <br></br> {tooth.status.categoryName}</div>} arrow>
                                 <Box
                                     key={tooth.toothNumber}
                                     onClick={() => {

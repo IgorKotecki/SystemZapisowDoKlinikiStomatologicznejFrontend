@@ -18,22 +18,6 @@ import api from "../../api/axios";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { colors } from "../../utils/colors";
 
-function decodeJwt(token: string) {
-  try {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
-    );
-    return JSON.parse(jsonPayload);
-  } catch {
-    return null;
-  }
-}
-
 interface ServiceDTO {
   id: number;
   name: string;
@@ -61,8 +45,9 @@ interface TimeBlockDTO {
 export default function UserAppointmentPage() {
   const { t, i18n } = useTranslation();
   const [date, setDate] = useState<Date | null>(null);
-  const [serviceId, setServiceId] = useState<number | "">("");
+  const [servicesIds, setServicesIds] = useState<number[]>([]);
   const [doctorId, setDoctorId] = useState<number | "">("");
+  const [timeBlocksIds, setTimeBlocksIds] = useState<Set<number>>(new Set())
   const [timeBlockId, setTimeBlockId] = useState<number | "">("");
   const [services, setServices] = useState<ServiceDTO[]>([]);
   const [doctors, setDoctors] = useState<DoctorDTO[]>([]);
@@ -71,8 +56,6 @@ export default function UserAppointmentPage() {
   const [loadingDoctors, setLoadingDoctors] = useState(false);
   const [loadingBlocks, setLoadingBlocks] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const claims = JSON.parse(localStorage.getItem("claims") || "{}");
-  const userId = claims?.id || claims?.sub;
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -92,7 +75,7 @@ export default function UserAppointmentPage() {
   }, [i18n.language]);
 
   useEffect(() => {
-    if (!serviceId) {
+    if (!servicesIds) {
       setDoctors([]);
       return;
     }
@@ -111,7 +94,7 @@ export default function UserAppointmentPage() {
     };
 
     fetchDoctors();
-  }, [serviceId]);
+  }, [servicesIds]);
 
   useEffect(() => {
     if (!doctorId || !date) {
@@ -146,32 +129,63 @@ export default function UserAppointmentPage() {
     e.preventDefault();
 
     setError(null);
-
-    if (!serviceId || !doctorId || !timeBlockId || !date) {
+    try {
+    if (!servicesIds || !doctorId || !timeBlockId || !date) {
       setError(t("userMakeAppointment.errorFields"));
       return;
     }
 
     setLoading(true);
-    try {
+
+    let timeBlockCounter = 0;
+    servicesIds.forEach(s => {
+      const service = services.find(sdto => sdto.id == s);
+      if (service) {
+        timeBlockCounter += service.minTime;
+      }
+    }
+    );
+    console.log(timeBlockCounter);
+    console.log(timeBlocks);
+    
+    var baseTimeBlock = timeBlocks.find(tb => tb.doctorBlockId == timeBlockId)
+    for (let index = 0; index < timeBlockCounter; index++) {
+      var curTimeBlock = timeBlocks.find(tb => tb.doctorBlockId == timeBlockId + index)
+      console.log(timeBlockId + index)
+      if(curTimeBlock){
+        if(curTimeBlock.isAvailable){
+          if(baseTimeBlock?.timeStart.split("T")[0] == curTimeBlock.timeStart.split("T")[0]){
+          setTimeBlocksIds(prev => new Set(prev).add(timeBlockId + index))
+          }else{
+        throw new Error(`wymagany czas dla danych usług (${timeBlockCounter * 30} minut) przekracza czas pracy lekarza`)
+          }
+        }else{
+          throw new Error(`nie dostępne terminy dla usług o czasie trwania (${timeBlockCounter * 30} minut)`)
+        }
+      }else{
+        throw new Error(`nie isnieje block czasowy odpowidni aby pomiescic ilosc usług`)
+      }
+      
+    }
+    console.log(timeBlocks);
+    console.log(timeBlocksIds)
       const token = localStorage.getItem("token");
       if (!token) return;
 
       await api.post(`/api/Appointment/user/book`, {
-        doctorId,
-        timeBlockId,
-        serviceIds: [serviceId],
+        doctorBlocksIds : timeBlocksIds,
+        servicesIds,
       });
 
       alert(t("userMakeAppointment.success"));
 
-      setServiceId("");
+      setServicesIds([]);
       setDoctorId("");
       setTimeBlockId("");
       setDate(null);
     } catch (err: any) {
       console.error(err);
-      setError(err.response?.data || t("userMakeAppointment.errorOccurred"));
+      setError(t("userMakeAppointment.errorOccurred") + err);
     } finally {
       setLoading(false);
     }
@@ -227,18 +241,22 @@ export default function UserAppointmentPage() {
                   slotProps={{
                     textField: {
                       fullWidth: true,
-                      sx: { backgroundColor: colors.white, borderRadius: 1, mt: 2 },
+                      sx: { backgroundColor: colors.white, borderRadius: 1, mt: 2, color: colors.black },
                     },
                   }}
                 />
               </LocalizationProvider>
               <FormControl fullWidth sx={{ mt: 3 }}>
-                <InputLabel sx={{ color: colors.white }}>
+                <InputLabel sx={{ color: colors.black }}>
                   {t("userMakeAppointment.service")}
                 </InputLabel>
                 <Select
-                  value={serviceId}
-                  onChange={(e) => setServiceId(Number(e.target.value))}
+                  multiple
+                  value={servicesIds}
+                  onChange={(e) => {
+                    const value = e.target.value
+                    setServicesIds(typeof value === 'string' ? value.split(',').map(Number) : value)
+                  }}
                   sx={{ backgroundColor: colors.white }}
                 >
                   {services.map((s) => (
@@ -251,9 +269,9 @@ export default function UserAppointmentPage() {
               <FormControl
                 fullWidth
                 sx={{ mt: 3 }}
-                disabled={!serviceId}
+                disabled={!servicesIds}
               >
-                <InputLabel sx={{ color: colors.white }}>
+                <InputLabel sx={{ color: colors.black }}>
                   {t("userMakeAppointment.doctor")}
                 </InputLabel>
                 <Select
@@ -280,7 +298,7 @@ export default function UserAppointmentPage() {
                 sx={{ mt: 3 }}
                 disabled={!doctorId || !date}
               >
-                <InputLabel sx={{ color: colors.white }}>
+                <InputLabel sx={{ color: colors.black }}>
                   {t("userMakeAppointment.hour")}
                 </InputLabel>
 

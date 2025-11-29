@@ -9,20 +9,20 @@ export default function Footer() {
 
   return (
     <Box component="footer" sx={{ bgcolor: '#f5f5f5', py: 6, mt: 10 }}>
-    
       <Container maxWidth="lg">
-        <Grid container spacing={6} justifyContent="space-between">
-          <Grid item xs={12} md={5}>
+        <Grid container spacing={6} justifyContent="space-between">         
+
+          <Grid size={{ xs: 12, md: 5 }} component="div">
             <Typography variant="h6" gutterBottom sx={{ color: 'black' }}>
               Dentysta
             </Typography>
             <Typography variant="body2" gutterBottom sx={{ color: '#77767c' }}>
-              Dentist cos tu jeszcze na pewno fajnego bedzie 
+              Dentist cos tu jeszcze na pewno fajnego bedzie
             </Typography>
             <Button variant="contained" sx={{ mt: 2 }}>{t('dropLine')}</Button>
           </Grid>
 
-          <Grid item xs={12} md={5}>
+          <Grid size={{ xs: 12, md: 5 }} component="div">
             <Typography variant="subtitle1" gutterBottom sx={{ color: 'black' }}>
               Contact
             </Typography>

@@ -296,6 +296,7 @@
     "subtitle": "View and manage your work day schedule template",
     "scheduledTime": "Scheduled Time",
     "addScheduledTime": "Add Scheduled Time",
-    "saveChanges": "Save Changes"
+    "saveChanges": "Save Changes",
+    "remove" : "Do You wont to remove day schedule?"
   }
 }
