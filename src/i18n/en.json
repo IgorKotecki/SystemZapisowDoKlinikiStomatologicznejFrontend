@@ -34,6 +34,10 @@
     "errorDoctor": "Choose doctor",
     "errorHour": "Choose hour"
   },
+  "footer": {
+    "contact": "Contact",
+    "address": "Address"
+  },
   "home": {
     "welcomeTitle": "Welcome to Our Dental Office",
     "welcomeText": "Professional dental care for you and your family",
@@ -121,17 +125,17 @@
     "state": "State"
   },
   "userMakeAppointment": {
-  "title": "Book an Appointment",
-  "subtitle": "Choose a service, doctor and visit date.",
-  "date": "Date",
-  "service": "Service",
-  "doctor": "Doctor",
-  "hour": "Hour",
-  "submit": "Book Appointment",
-  "success": "The appointment has been booked successfully!",
-  "errorFields": "Please fill in all fields.",
-  "errorOccurred": "An error occurred during booking."
-},
+    "title": "Book an Appointment",
+    "subtitle": "Choose a service, doctor and visit date.",
+    "date": "Date",
+    "service": "Service",
+    "doctor": "Doctor",
+    "hour": "Hour",
+    "submit": "Book Appointment",
+    "success": "The appointment has been booked successfully!",
+    "errorFields": "Please fill in all fields.",
+    "errorOccurred": "An error occurred during booking."
+  },
   "dentalChart": {
     "back": "Back",
     "title": "Patient Dental Chart",

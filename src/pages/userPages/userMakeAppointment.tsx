@@ -17,46 +17,26 @@ import { useTranslation } from "react-i18next";
 import api from "../../api/axios";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { colors } from "../../utils/colors";
+import type { Service } from "../../Interfaces/Service";
+import type { Doctor } from "../../Interfaces/Doctor";
+import type { TimeBlock } from "../../Interfaces/TimeBlock";
 
-function decodeJwt(token: string) {
-  try {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
-    );
-    return JSON.parse(jsonPayload);
-  } catch {
-    return null;
-  }
-}
+// function decodeJwt(token: string) {
+//   try {
+//     const base64Url = token.split(".")[1];
+//     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+//     const jsonPayload = decodeURIComponent(
+//       atob(base64)
+//         .split("")
+//         .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+//         .join("")
+//     );
+//     return JSON.parse(jsonPayload);
+//   } catch {
+//     return null;
+//   }
+// }
 
-interface ServiceDTO {
-  id: number;
-  name: string;
-  lowPrice: number;
-  highPrice: number;
-  minTime: number;
-  description: string | null;
-  category: string | null;
-}
-
-interface DoctorDTO {
-  id: number;
-  name: string;
-  surname: string;
-}
-
-interface TimeBlockDTO {
-  doctorBlockId: number;
-  timeStart: string;
-  timeEnd: string;
-  isAvailable: boolean;
-  user: DoctorDTO;
-}
 
 export default function UserAppointmentPage() {
   const { t, i18n } = useTranslation();
@@ -64,9 +44,9 @@ export default function UserAppointmentPage() {
   const [serviceId, setServiceId] = useState<number | "">("");
   const [doctorId, setDoctorId] = useState<number | "">("");
   const [timeBlockId, setTimeBlockId] = useState<number | "">("");
-  const [services, setServices] = useState<ServiceDTO[]>([]);
-  const [doctors, setDoctors] = useState<DoctorDTO[]>([]);
-  const [timeBlocks, setTimeBlocks] = useState<TimeBlockDTO[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [timeBlocks, setTimeBlocks] = useState<TimeBlock[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadingDoctors, setLoadingDoctors] = useState(false);
   const [loadingBlocks, setLoadingBlocks] = useState(false);

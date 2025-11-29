@@ -12,44 +12,35 @@ import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import api from "../../api/axios";
 import { colors } from "../../utils/colors";
+import LoadingScreen from "../../components/Loading";
+import { useAuth } from "../../context/AuthContext";
+import type { User } from "../../Interfaces/User";
+import type { UserUpdate } from "../../Interfaces/UserUpdate";
 
-interface UserDTO {
-  id: number;
-  name: string;
-  surname: string;
-  email: string;
-  phoneNumber: string;
-  roleName: string;
-}
 
-interface UserUpdateDTO {
-  name: string;
-  surname: string;
-  phoneNumber: string;
-  email: string;
-}
-
-function decodeJwt(token: string) {
-  try {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
-    );
-    return JSON.parse(jsonPayload);
-  } catch {
-    return null;
-  }
-}
+// function decodeJwt(token: string) {
+//   try {
+//     const base64Url = token.split(".")[1];
+//     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+//     const jsonPayload = decodeURIComponent(
+//       atob(base64)
+//         .split("")
+//         .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+//         .join("")
+//     );
+//     return JSON.parse(jsonPayload);
+//   } catch {
+//     return null;
+//   }
+// }
 
 export default function ProfilePage() {
   const { t } = useTranslation();
 
-  const [userData, setUserData] = useState<UserDTO | null>(null);
-  const [originalUserData, setOriginalUserData] = useState<UserDTO | null>(null);
+  const { userId } = useAuth();
+
+  const [userData, setUserData] = useState<User | null>(null);
+  const [originalUserData, setOriginalUserData] = useState<User | null>(null);
 
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -63,13 +54,13 @@ export default function ProfilePage() {
   const handleSave = async () => {
     if (!userData || !originalUserData) return;
 
-    const token = localStorage.getItem("token");
-    if (!token) return;
+    // const token = localStorage.getItem("token");
+    // if (!token) return;
 
-    const claims = decodeJwt(token);
-    const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+    // const claims = decodeJwt(token);
+    // const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
 
-    const dto: UserUpdateDTO = {
+    const dto: UserUpdate = {
       name: userData.name,
       surname: userData.surname,
       phoneNumber: userData.phoneNumber,
@@ -78,6 +69,7 @@ export default function ProfilePage() {
 
     try {
       const response = await api.put(`/api/User/edit/${userId}`, dto);
+      console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ", response.data);
 
       setUserData(response.data);
       setOriginalUserData(response.data);
@@ -105,18 +97,20 @@ export default function ProfilePage() {
           return;
         }
 
-        const claims = decodeJwt(token);
-        if (!claims) {
-          setError("Niepoprawny token");
-          setLoading(false);
-          return;
-        }
+        // const claims = decodeJwt(token);
+        // if (!claims) {
+        //   setError("Niepoprawny token");
+        //   setLoading(false);
+        //   return;
+        // }
 
-        const userId =
-          claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+        // const userId =
+        //   claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+
+
 
         const response = await api.get(`/api/User/${userId}`);
-
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ", response.data);
         setUserData(response.data);
         setOriginalUserData(response.data);
 
@@ -177,7 +171,9 @@ export default function ProfilePage() {
     );
   }
 
-  if (!userData) return null;
+  if (loading) {
+    return <LoadingScreen />
+  }
 
   return (
     <Box

@@ -3,29 +3,15 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-
-interface ServiceDTO {
-  id: number;
-  name: string;
-  lowPrice: number;
-  highPrice: number;
-  category: string;
-}
+import { colors } from "../utils/colors";
+import type { Service } from "../Interfaces/Service";
 
 export default function Pricing() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
-  const [services, setServices] = useState<ServiceDTO[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const colors = {
-    color1: "#003141",
-    color3: "#007987",
-    color4: "#00b2b9",
-    white: "#ffffff",
-    gold: "#D4AF37",
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,14 +34,14 @@ export default function Pricing() {
     if (!acc[s.category]) acc[s.category] = [];
     acc[s.category].push(s);
     return acc;
-  }, {} as Record<string, ServiceDTO[]>);
+  }, {} as Record<string, Service[]>);
 
   const ServiceSection = ({
     title,
     items,
   }: {
     title: string;
-    items: ServiceDTO[];
+    items: Service[];
   }) => (
     <Box sx={{ mb: 8 }}>
       <Typography

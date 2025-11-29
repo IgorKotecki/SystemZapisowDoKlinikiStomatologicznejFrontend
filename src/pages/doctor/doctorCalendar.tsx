@@ -16,14 +16,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { colors } from "../../utils/colors";
-
-interface FreeTime {
-  id: string;
-  start: string;
-  end: string;
-  type: "dayOff" | "break";
-  reason?: string;
-}
+import type { FreeTime } from "../../Interfaces/FreeTime";
 
 export default function DoctorCalendar() {
   const { t } = useTranslation();
@@ -44,8 +37,8 @@ export default function DoctorCalendar() {
             : `${t("doctorFreeDays.break")}${f.reason ? `: ${f.reason}` : ""}`,
         start: f.start,
         end: f.end,
-        backgroundColor: f.type === "dayOff" ? "#c62828" : "#ffb300",
-        borderColor: f.type === "dayOff" ? "#b71c1c" : "#ffa000",
+        backgroundColor: f.type === "dayOff" ? colors.calenderDayOff : colors.calenderNotDayOff,
+        borderColor: f.type === "dayOff" ? colors.calenderBorderDayOff : colors.calenderBorderNotDayOff,
         textColor: "#fff",
       })),
     [freeTimes, t]

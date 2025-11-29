@@ -11,30 +11,14 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import React, { useEffect, useState } from "react"
 import type { JSX } from "react";
 import api from '../api/axios';
-
-interface ServiceDTO {
-  id: number;
-  name: string;
-  description: string;
-  lowPrice: number;
-  highPrice: number;
-  minTime: number;
-  languageCode: string;
-  category: string;
-}
+import { colors } from "../utils/colors";
+import type { Service } from "../Interfaces/Service";
 
 export default function Services() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [services, setServices] = useState<ServiceDTO[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const colors = {
-    color1: "#003141",
-    color3: "#007987",
-    color4: "#00b2b9",
-    white: "#ffffff",
-  }
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -42,7 +26,7 @@ export default function Services() {
       try {
         const lang = i18n.language || 'pl';
         const response = await api.get(`api/Service/UserServices?lang=${lang}`)
-        const data: ServiceDTO[] = response.data;
+        const data: Service[] = response.data;
 
         const randomized = data.length > 3 ? [...data].sort(() => Math.random() - 0.5).slice(0, 3) : data;
         setServices(randomized)
@@ -60,7 +44,7 @@ export default function Services() {
     if (!acc[service.category]) acc[service.category] = [];
     acc[service.category].push(service);
     return acc;
-  }, {} as Record<string, ServiceDTO[]>);
+  }, {} as Record<string, Service[]>);
 
   const categoryIcons: Record<string, JSX.Element> = {
     "Higiena": <MedicalServicesIcon sx={{ fontSize: 50, color: "#007987" }} />,
@@ -167,7 +151,8 @@ export default function Services() {
 
         <Grid container spacing={4}>
           {Object.keys(grouped).map((categoryName, index) => (
-            <Grid item xs={12} md={6} lg={4} key={index}>
+            // <Grid item xs={12} md={6} lg={4} key={index}>
+            <Grid key={index} size={{ xs: 12, md: 6, lg: 4}} component="div">
               <Card sx={{ borderRadius: 3, boxShadow: 2, height: "100%" }}>
                 <CardContent sx={{ p: 4 }}>
                   <Box sx={{ mb: 2, fontSize: 40, color: colors.color3 }}>

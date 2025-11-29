@@ -14,25 +14,8 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
 // import api from "../../api/axios"; 
-
-const colors = {
-  color1: "#003141",
-  color2: "#004f5f",
-  color3: "#007987",
-  color4: "#00b2b9",
-  color5: "#00faf1",
-  white: "#ffffff",
-};
-
-interface Appointment {
-  id: number;
-  patientFirstName: string;
-  patientLastName: string;
-  doctorName: string;
-  serviceName: string;
-  date: string; // ISO format
-  time: string; // HH:mm
-}
+import { colors } from "../../utils/colors";
+import type { Appointment } from "../../Interfaces/Appointment";
 
 const ReceptionistCalendar: React.FC = () => {
   const { t } = useTranslation();

@@ -12,30 +12,15 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import api from '../api/axios';
+import { colors } from '../utils/colors';
+import type { TeamMembers } from '../Interfaces/TeamMembers';
 
-interface teamDTO {
-    id: number;
-    name: string;
-    surename: string;
-    email: string;
-    phoneNumber: string;
-    roleName: string;
-    specializationPl: string;
-    specializationEn: string;
-}
 
 export default function Team() {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
-    const [team, setTeam] = useState<teamDTO[]>([]);
+    const [team, setTeam] = useState<TeamMembers[]>([]);
     const [loading, setLoading] = useState(true);
-
-    const colors = {
-        color1: '#003141',
-        color3: '#007987',
-        color4: '#00b2b9',
-        white: '#ffffff'
-    };
 
     useEffect(() => {
         const featchTeam = async () => {
@@ -43,7 +28,7 @@ export default function Team() {
             try {
                 console.log("wysłane")
                 const response = await api.get(`api/Team/TeamMembers`);
-                const data: teamDTO[] = response.data;
+                const data: TeamMembers[] = response.data;
                 setTeam(data)
             } catch (error) {
                 console.error('Error feating team ', error)
@@ -83,7 +68,6 @@ export default function Team() {
                         alignItems: 'flex-start',
                     }}
                 >
-                    {/* Information displayed at about "Team" */}
                     <Box
                         sx={{
                             flex: 1,
@@ -101,7 +85,6 @@ export default function Team() {
 
                     </Box>
 
-                    {/* Buttons for information */}
                     <Box
                         sx={{
                             flex: 1,
@@ -155,7 +138,8 @@ export default function Team() {
                 ) : (
                     <Grid container spacing={4} justifyContent="center">
                         {team.map((member, i) => (
-                            <Grid item xs={12} sm={6} md={4} key={member.id}>
+                            // <Grid item xs={12} sm={6} md={4} key={member.id}>
+                            <Grid key={member.id} size={{ xs: 12, md: 4, sm: 4 }} component="div">
                                 <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
                                     
                                     <CardMedia

@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import api from '../api/axios';
 import { da } from 'date-fns/locale';
 import Grid from '@mui/material/Grid';
+import { colors } from '../utils/colors';
 
 export default function Appointment() {
     const { t, i18n } = useTranslation();
@@ -150,16 +151,6 @@ export default function Appointment() {
         fetchTimeBlocks();
     }, [date]);
 
-    const colors = {
-        color1: '#003141',
-        color2: '#004f5f',
-        color3: '#007987',
-        color4: '#00b2b9',
-        color5: '#00faf1',
-        white: '#ffffff',
-        black: '#000000'
-    };
-
     return (
         <Box
             sx={{
@@ -261,7 +252,8 @@ export default function Appointment() {
                     </FormControl>
 
                     <Grid container spacing={2} sx={{ mt: 2 }}>
-                        <Grid item xs={12} sm={6}>
+                        {/* <Grid item xs={12} sm={6}> */}
+                        <Grid size={{ xs: 12, md: 6 }} component="div">
                             <TextField
                                 name="firstName"
                                 label={t('appointment.firstName')}
@@ -271,7 +263,8 @@ export default function Appointment() {
                                 sx={{ backgroundColor: colors.white, borderRadius: 1 }}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        {/* <Grid item xs={12} sm={6}> */}
+                        <Grid size={{ xs: 12, md: 6 }} component="div">
                             <TextField
                                 name="lastName"
                                 label={t('appointment.lastName')}
@@ -281,7 +274,8 @@ export default function Appointment() {
                                 sx={{ backgroundColor: colors.white, borderRadius: 1 }}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        {/* <Grid item xs={12} sm={6}> */}
+                        <Grid size={{ xs: 12, md: 6 }} component="div">
                             <TextField
                                 name="email"
                                 label={t('appointment.email')}
@@ -292,7 +286,8 @@ export default function Appointment() {
                                 sx={{ backgroundColor: colors.white, borderRadius: 1 }}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        {/* <Grid item xs={12} sm={6}> */}
+                        <Grid size={{ xs: 12, md: 6 }} component="div">
                             <TextField
                                 name="phone"
                                 label={t('appointment.phone')}

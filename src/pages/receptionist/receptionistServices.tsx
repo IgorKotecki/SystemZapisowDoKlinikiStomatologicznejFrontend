@@ -9,21 +9,8 @@ import UserNavigation from "../../components/userComponents/userNavigation";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 // import api from "../../api/axios";
-
-const colors = {
-  color1: "#003141",
-  color2: "#004f5f",
-  color3: "#007987",
-  color4: "#00b2b9",
-  color5: "#00faf1",
-  white: "#ffffff",
-};
-
-interface Service {
-  id: number;
-  name: string;
-  price: number;
-}
+import { colors } from "../../utils/colors";
+import type { Service } from "../../Interfaces/Service";
 
 const ReceptionistServices: React.FC = () => {
   const { t } = useTranslation();
@@ -38,10 +25,10 @@ const ReceptionistServices: React.FC = () => {
         // setServices(response.data);
 
         setServices([
-          { id: 1, name: "Wybielanie zębów", price: 300 },
-          { id: 2, name: "Czyszczenie kamienia", price: 150 },
-          { id: 3, name: "Leczenie kanałowe", price: 500 },
-          { id: 4, name: "Plomba kompozytowa", price: 200 },
+          { id: 1, name: "Wybielanie zębów", lowPrice: 300 , highPrice: 12312, minTime:2, description: "dsds" },
+          { id: 2, name: "Czyszczenie kamienia", lowPrice: 150 , highPrice: 12312, minTime:2, description: "dsds"},
+          { id: 3, name: "Leczenie kanałowe",lowPrice: 500, highPrice: 12312, minTime:2, description: "dsds"},
+          { id: 4, name: "Plomba kompozytowa", lowPrice: 200 , highPrice: 12312, minTime:2, description: "dsds"},
         ]);
       } catch (error) {
         console.error("Error fetching services:", error);
@@ -139,7 +126,7 @@ const ReceptionistServices: React.FC = () => {
                       >
                         <td style={{ padding: "16px", color: colors.white }}>{service.id}</td>
                         <td style={{ padding: "16px", color: colors.white }}>{service.name}</td>
-                        <td style={{ padding: "16px", color: colors.white }}>{service.price} zł</td>
+                        <td style={{ padding: "16px", color: colors.white }}>{service.lowPrice} zł</td>
                       </tr>
                     ))}
                   </tbody>

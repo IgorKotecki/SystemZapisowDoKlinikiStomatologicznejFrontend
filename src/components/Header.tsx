@@ -13,7 +13,7 @@ export default function Header() {
   const { t, i18n } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [userAnchor, setUserAnchor] = React.useState<null | HTMLElement>(null);
-  const { isLoggedIn, setLoggedIn } = useAuth();
+  const { isLoggedIn, logout, claims } = useAuth();
   const navigate = useNavigate();
 
 
@@ -23,21 +23,17 @@ export default function Header() {
   //   return () => window.removeEventListener("storage", handleStorageChange);
   // }, []);
 
-  const getUserRole = () => {
-    const token = storage.getToken();
-    if (!token) return "Unregistered_user";
-    try {
-      const claims: any = jwtDecode(token);
-      return (
-        claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
-        claims.role ||
-        claims.Role ||
-        claims.roles?.[0] ||
-        "Unregistered_user"
-      );
-    } catch {
-      return "Unregistered_user";
-    }
+    const getUserRole = () => {
+    if (!claims) return "Unregistered_user";
+    return (
+      claims[
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+      ] ||
+      claims.role ||
+      claims.Role ||
+      claims.roles?.[0] ||
+      "Unregistered_user"
+    );
   };
 
 
@@ -65,26 +61,25 @@ export default function Header() {
     handleUserClose();
     switch (role) {
       case "Receptionist":
-      navigate("/receptionist/profile");
-      break;
+        navigate("/receptionist/profile");
+        break;
       case "Registered_user":
-      navigate("/user/profile");
-      break;
+        navigate("/user/profile");
+        break;
       case "Admin":
-      navigate("/admin");
-      break;
+        navigate("/admin");
+        break;
       case "Doctor":
-      navigate("/doctor/profile");
-      break;
+        navigate("/doctor/profile");
+        break;
       default:
-      navigate("/");
+        navigate("/");
     }
   };
 
 
   const handleLogout = () => {
-    storage.clearAll();
-    setLoggedIn(false);
+    logout();
     handleUserClose();
     navigate('/');
   };

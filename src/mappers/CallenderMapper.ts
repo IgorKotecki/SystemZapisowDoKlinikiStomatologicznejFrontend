@@ -1,6 +1,7 @@
 import type { ApiDaySchedule } from "../Interfaces/ApiDaySchedule";
 import type { CalendarDaySchedule } from "../Interfaces/CalendarDaySchedule";
 import { formatISO, startOfWeek, addDays, setHours, setMinutes } from "date-fns";
+import { colors } from "../utils/colors";
 
 export class CalendarMapper {
     static toCalendar(apiData: ApiDaySchedule[]): CalendarDaySchedule[] {
@@ -37,9 +38,9 @@ export class CalendarMapper {
         title: t("doctorDaySchedule.scheduledTime"),
         start: formatISO(startDate),
         end: formatISO(endDate),
-        backgroundColor: "#4caf50",
-        borderColor: "#388e3c",
-        textColor: "#fff",
+        backgroundColor: colors.greenTooth,
+        borderColor: colors.claenderBorder,
+        textColor: colors.white,
       };
     });
   }

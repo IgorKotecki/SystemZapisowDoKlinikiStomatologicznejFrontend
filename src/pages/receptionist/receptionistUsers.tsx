@@ -11,24 +11,12 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { ro } from "date-fns/locale";
 // import api from "../../api/axios";
-
-const colors = {
-  color1: "#003141",
-  color2: "#004f5f",
-  color3: "#007987",
-  color4: "#00b2b9",
-  color5: "#00faf1",
-  white: "#ffffff",
-};
-
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  phone: string;
-}
+import { colors } from "../../utils/colors";
+import type { User } from "../../Interfaces/User";
+import { useAuth } from "../../context/AuthContext";
 
 const ReceptionistUsers: React.FC = () => {
+  const {userRole} = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
@@ -39,9 +27,9 @@ const ReceptionistUsers: React.FC = () => {
       try {
 
         setUsers([
-          { id: 1, firstName: "Jan", lastName: "Kowalski", phone: "+48 600 111 222" },
-          { id: 2, firstName: "Anna", lastName: "Nowak", phone: "+48 600 333 444" },
-          { id: 3, firstName: "Piotr", lastName: "Wiśniewski", phone: "+48 600 555 666" },
+          { id: 1, firstName: "Jan", lastName: "Kowalski", phone: "+48 600 111 222", email: "dsdsd" },
+          { id: 2, firstName: "Anna", lastName: "Nowak", phone: "+48 600 333 444", email: "dsdsd" },
+          { id: 3, firstName: "Piotr", lastName: "Wiśniewski", phone: "+48 600 555 666", email: "dsdsd" },
         ]);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -53,8 +41,8 @@ const ReceptionistUsers: React.FC = () => {
   }, []);
 
   const handleUserClick = (userId: number) => {
-    const claims = jwtDecode(localStorage.getItem("token"));
-    const role  = claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+    // const claims = jwtDecode(localStorage.getItem("token"));
+    const role  = userRole; //claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
     if(role == "Doctor"){
       navigate(`/doctor/users/${userId}`);
     }else if (role == "Receptionist"){

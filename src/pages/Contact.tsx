@@ -8,6 +8,7 @@ import PhoneIcon from "@mui/icons-material/Phone"
 import EmailIcon from "@mui/icons-material/Email"
 import AccessTimeIcon from "@mui/icons-material/AccessTime"
 import { useState } from "react"
+import { colors } from "../utils/colors"
 
 export default function Contact() {
   const { t } = useTranslation()
@@ -18,13 +19,6 @@ export default function Contact() {
     phone: "",
     message: "",
   })
-
-  const colors = {
-    color1: "#003141",
-    color3: "#007987",
-    color4: "#00b2b9",
-    white: "#ffffff",
-  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -128,13 +122,15 @@ export default function Contact() {
       <Box sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: "#f5f5f5" }}>
         <Grid container spacing={6}>
           {/* Contact Information */}
-          <Grid item xs={12} md={6}>
+          {/* <Grid item xs={12} md={6}> */}
+          <Grid size={{ xs: 12, md: 6 }} component="div">
             <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
               Informacje kontaktowe
             </Typography>
 
             <Grid container spacing={3}>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}> */}
+              <Grid size={{ xs: 12, md: 5 }} component="div">
                 <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
                   <CardContent sx={{ display: "flex", alignItems: "center", p: 3 }}>
                     <LocationOnIcon sx={{ color: colors.color3, fontSize: "2rem", mr: 2 }} />
@@ -152,7 +148,8 @@ export default function Contact() {
                 </Card>
               </Grid>
 
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}> */}
+              <Grid size={{ xs: 12, md: 5 }} component="div">
                 <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
                   <CardContent sx={{ display: "flex", alignItems: "center", p: 3 }}>
                     <PhoneIcon sx={{ color: colors.color3, fontSize: "2rem", mr: 2 }} />
@@ -170,7 +167,8 @@ export default function Contact() {
                 </Card>
               </Grid>
 
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}> */}
+              <Grid size={{ xs: 12, md: 5 }} component="div">
                 <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
                   <CardContent sx={{ display: "flex", alignItems: "center", p: 3 }}>
                     <EmailIcon sx={{ color: colors.color3, fontSize: "2rem", mr: 2 }} />
@@ -188,7 +186,8 @@ export default function Contact() {
                 </Card>
               </Grid>
 
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}> */}
+              <Grid size={{ xs: 12, md: 5 }} component="div">
                 <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
                   <CardContent sx={{ display: "flex", alignItems: "center", p: 3 }}>
                     <AccessTimeIcon sx={{ color: colors.color3, fontSize: "2rem", mr: 2 }} />
@@ -211,7 +210,8 @@ export default function Contact() {
           </Grid>
 
           {/* Contact Form */}
-          <Grid item xs={12} md={6}>
+          {/* <Grid item xs={12} md={6}> */}
+          <Grid size={{ xs: 12, md: 5 }} component="div">
             <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
               Napisz do nas
             </Typography>
@@ -219,7 +219,8 @@ export default function Contact() {
             <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 2 }}>
               <form onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
-                  <Grid item xs={12}>
+                  {/* <Grid item xs={12}> */}
+                  <Grid size={{ xs: 12 }} component="div">
                     <TextField
                       fullWidth
                       label="Imię i nazwisko"
@@ -239,7 +240,8 @@ export default function Contact() {
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  {/* <Grid item xs={12}> */}
+                  <Grid size={{ xs: 12 }} component="div">
                     <TextField
                       fullWidth
                       label="Email"
@@ -260,7 +262,8 @@ export default function Contact() {
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  {/* <Grid item xs={12}> */}
+                  <Grid size={{ xs: 12 }} component="div">
                     <TextField
                       fullWidth
                       label="Telefon"
@@ -279,7 +282,8 @@ export default function Contact() {
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  {/* <Grid item xs={12}> */}
+                  <Grid size={{ xs: 12 }} component="div">
                     <TextField
                       fullWidth
                       label="Wiadomość"
@@ -301,7 +305,8 @@ export default function Contact() {
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  {/* <Grid item xs={12}> */}
+                  <Grid size={{ xs: 12, md: 5 }} component="div">
                     <Button
                       type="submit"
                       variant="contained"

@@ -15,15 +15,8 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { colors } from "../../utils/colors";
+import type { Appointment } from "../../Interfaces/Appointment";
 
-interface Appointment {
-  id: number;
-  patientFirstName: string;
-  patientLastName: string;
-  serviceName: string;
-  date: string;
-  time: string;
-}
 
 const DoctorAppointments: React.FC = () => {
   const { t } = useTranslation();
@@ -110,8 +103,7 @@ const DoctorAppointments: React.FC = () => {
                 <Typography sx={{ mt: 3 }}>{t("doctorCalendar.selectTeeth")}</Typography>
                 <Grid container spacing={1} sx={{ mt: 1 }}>
                   {Array.from({ length: 32 }, (_, i) => i + 1).map((num) => (
-                    // @ts-ignore
-                    <Grid item xs={2} key={num}>
+                    <Grid size={{ xs: 2, md: 5 }} key={num} component="div">
                       <Button
                         variant={selectedTeeth.includes(num) ? "contained" : "outlined"}
                         onClick={() => handleToothClick(num)}

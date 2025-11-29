@@ -18,6 +18,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useTranslation } from "react-i18next";
 import api from "../../api/axios";
 import UserNavigation from "../../components/userComponents/userNavigation";
+import { colors } from "../../utils/colors";
 
 export default function ReceptionistAppointment() {
   const { t, i18n } = useTranslation();
@@ -34,16 +35,6 @@ export default function ReceptionistAppointment() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const colors = {
-    color1: "#003141",
-    color2: "#004f5f",
-    color3: "#007987",
-    color4: "#00b2b9",
-    color5: "#00faf1",
-    white: "#ffffff",
-  };
-
-  // 🔹 Pobranie użytkowników z backendu
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -56,7 +47,7 @@ export default function ReceptionistAppointment() {
     fetchUsers();
   }, []);
 
-  // 🔹 Pobranie usług
+
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -71,7 +62,6 @@ export default function ReceptionistAppointment() {
     fetchServices();
   }, [i18n.language]);
 
-  // 🔹 Pobranie bloków czasowych po wyborze daty
   useEffect(() => {
     if (!date) return;
     const fetchTimeBlocks = async () => {
@@ -103,7 +93,6 @@ export default function ReceptionistAppointment() {
     fetchTimeBlocks();
   }, [date]);
 
-  // 🔹 Zapis wizyty
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedUser || !service || !doctor || !hour) {
@@ -141,10 +130,10 @@ export default function ReceptionistAppointment() {
         backgroundColor: colors.color1,
       }}
     >
-      {/* 🔹 Lewa nawigacja */}
+    
       <UserNavigation />
 
-      {/* 🔹 Główna zawartość */}
+     
       <Box
         component="main"
         sx={{
@@ -174,7 +163,7 @@ export default function ReceptionistAppointment() {
             }}
           >
             <form onSubmit={handleSubmit}>
-              {/* Wybór użytkownika */}
+        
               <Autocomplete
                 options={users}
                 getOptionLabel={(u) => `${u.name} ${u.surname} (${u.email})`}
@@ -190,8 +179,6 @@ export default function ReceptionistAppointment() {
                   />
                 )}
               />
-
-              {/* Data */}
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                   label={t("receptionistAppointment.date")}
@@ -208,7 +195,6 @@ export default function ReceptionistAppointment() {
                 />
               </LocalizationProvider>
 
-              {/* Usługa */}
               <FormControl fullWidth margin="normal" disabled={!selectedUser}>
                 <InputLabel sx={{ color: colors.white }}>
                   {t("receptionistAppointment.service")}
@@ -226,7 +212,6 @@ export default function ReceptionistAppointment() {
                 </Select>
               </FormControl>
 
-              {/* Lekarz */}
               <FormControl fullWidth margin="normal" disabled={!selectedUser || !date}>
                 <InputLabel sx={{ color: colors.white }}>
                   {t("receptionistAppointment.doctor")}
@@ -244,7 +229,6 @@ export default function ReceptionistAppointment() {
                 </Select>
               </FormControl>
 
-              {/* Godzina */}
               <FormControl fullWidth margin="normal" disabled={!selectedUser || !doctor}>
                 <InputLabel sx={{ color: colors.white }}>
                   {t("receptionistAppointment.hour")}
