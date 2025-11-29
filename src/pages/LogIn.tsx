@@ -12,18 +12,11 @@ import {
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from 'jwt-decode';
 import api from '../api/axios';
-import { storage } from '../utils/storage';
+// import { storage } from '../utils/storage';
 import { useAuth } from '../context/AuthContext';
-
-const colors = {
-  color1: "#003141",
-  color3: "#007987",
-  color4: "#00b2b9",
-  white: "#ffffff",
-}
-
+import { colors } from '../utils/colors';
 
 export default function LogIn() {
   const { t, i18n } = useTranslation();
@@ -34,7 +27,7 @@ export default function LogIn() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { setLoggedIn } = useAuth();
+  const { login, userRole } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -49,30 +42,20 @@ export default function LogIn() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError(null);
 
     try {
       const response = await api.post('/api/login', formData);
       const { accessToken, refreshToken } = response.data;
 
-      storage.setToken(accessToken);
-      storage.setRefreshToken(refreshToken);
+      login(accessToken, refreshToken);
 
-      const claims = jwtDecode(accessToken);
+      const decoded = jwtDecode(accessToken);
+      const role = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 
-      localStorage.setItem('claims', JSON.stringify(claims));
-      console.log('Claims:', claims);
-      const role = claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-      console.log('User role:', role);
-      setLoggedIn(true);
-
-      if (role == "Registered_user") {
-        navigate('/user/profile');
-      } else if (role == "Receptionist") {
-        navigate('/receptionist/profile');
-      } else if (role == "Doctor") {
-        navigate('/doctor/profile');
-      }
+      if (role === "Registered_user") navigate('/user/profile');
+      if (role === "Receptionist") navigate('/receptionist/profile');
+      if (role === "Doctor") navigate('/doctor/profile');
 
     } catch (err: any) {
       if (err.response?.status === 401) {
@@ -82,9 +65,9 @@ export default function LogIn() {
       }
     } finally {
       setLoading(false);
-
     }
   };
+
 
   const colors = {
     color1: '#003141',
@@ -133,8 +116,8 @@ export default function LogIn() {
               sx={{ backgroundColor: colors.white, borderRadius: 1 }}
             />
             <Link underline="hover"
-                  sx={{ color: colors.color3, cursor: 'pointer' }}
-                  onClick={() => navigate('/resetpassword')}>
+              sx={{ color: colors.color3, cursor: 'pointer' }}
+              onClick={() => navigate('/resetpassword')}>
               {t('login.forgotPassword')}
             </Link>
 

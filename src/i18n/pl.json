@@ -34,6 +34,10 @@
     "errorDoctor": "Wybierz lekarza",
     "errorHour": "Wybierz godzinę"
   },
+  "footer": {
+    "contact": "Kontakt",
+    "address": "Adres"
+  },
   "home": {
     "welcomeTitle": "Witamy w naszym gabinecie dentystycznym",
     "welcomeText": "Profesjonalna opieka stomatologiczna dla Ciebie i Twojej rodziny",
@@ -127,17 +131,17 @@
     "state": "Status"
   },
   "userMakeAppointment": {
-  "title": "Umów wizytę",
-  "subtitle": "Wybierz usługę, lekarza oraz termin wizyty.",
-  "date": "Data",
-  "service": "Usługa",
-  "doctor": "Lekarz",
-  "hour": "Godzina",
-  "submit": "Zarezerwuj wizytę",
-  "success": "Wizyta została pomyślnie zarezerwowana!",
-  "errorFields": "Uzupełnij wszystkie pola.",
-  "errorOccurred": "Wystąpił błąd podczas rezerwacji."
-},
+    "title": "Umów wizytę",
+    "subtitle": "Wybierz usługę, lekarza oraz termin wizyty.",
+    "date": "Data",
+    "service": "Usługa",
+    "doctor": "Lekarz",
+    "hour": "Godzina",
+    "submit": "Zarezerwuj wizytę",
+    "success": "Wizyta została pomyślnie zarezerwowana!",
+    "errorFields": "Uzupełnij wszystkie pola.",
+    "errorOccurred": "Wystąpił błąd podczas rezerwacji."
+  },
   "dentalChart": {
     "back": "Powrót",
     "title": "Karta stomatologiczna pacjenta",

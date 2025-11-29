@@ -23,15 +23,15 @@ export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth }:
     const getToothColor = (state: ToothData["status"]["categoryId"]) => {
         switch (state) {
             case 1:
-                return "#4CAF50";
+                return colors.greenTooth;
             case 2:
-                return "#F44336";
+                return colors.redTooth;
             case 3:
-                return "#9E9E9E";
+                return colors.grayTooth;
             case 4:
-                return "#FFC107";
+                return colors.yellowTooth;
             case 5:
-                return "#3F51B5";
+                return colors.blueTooth;
             default:
                 return colors.white;
         }

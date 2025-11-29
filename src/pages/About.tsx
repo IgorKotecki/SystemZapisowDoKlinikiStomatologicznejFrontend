@@ -7,17 +7,11 @@ import StarIcon from "@mui/icons-material/Star";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import SecurityIcon from "@mui/icons-material/Security";
+import { colors } from "../utils/colors";
 
 export default function About() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-
-  const colors = {
-    color1: "#003141",
-    color3: "#007987",
-    color4: "#00b2b9",
-    white: "#ffffff",
-  }
 
   const values = [
     {
@@ -155,10 +149,10 @@ export default function About() {
         </Box>
       </Box>
 
-      {/* Our Story Section */}
       <Box sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: colors.color1 }}>
         <Grid container spacing={6} alignItems="center">
-          <Grid item xs={12} md={6} >
+          {/* <Grid item xs={12} md={6} > */}
+          <Grid size={{ xs: 12, md: 6 }} component="div">
             <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
               {t('about.ourStroy')}
             </Typography>
@@ -177,7 +171,8 @@ export default function About() {
               umiejętności i inwestujemy w nowoczesny sprzęt, aby zapewnić naszym pacjentom najlepszą możliwą opiekę.
             </Typography>
           </Grid>
-          <Grid item xs={12} md={6}>
+          {/* <Grid item xs={12} md={6}> */}
+          <Grid size={{ xs: 12, md: 6 }} component="div">
             <Box
               sx={{
                 width: "100%",
@@ -193,14 +188,14 @@ export default function About() {
         </Grid>
       </Box>
 
-      {/* Values Section */}
       <Box sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: colors.white }}>
         <Typography variant="h4" textAlign="center" gutterBottom sx={{ mb: 6 }}>
           {t('about.ourValues')}
         </Typography>
         <Grid container spacing={4}>
           {values.map((value, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
+            // <Grid item xs={12} sm={6} md={3} key={index}>
+              <Grid key={index} size={{ xs: 12, md: 5 }} component="div">
               <Card sx={{ borderRadius: 3, boxShadow: 2, height: "100%", textAlign: "center" }}>
                 <CardContent sx={{ p: 4 }}>
                   <Box sx={{ mb: 2 }}>{value.icon}</Box>
@@ -217,14 +212,14 @@ export default function About() {
         </Grid>
       </Box>
 
-      {/* Achievements Section */}
       <Box sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: colors.color1, color: colors.white }}>
         <Typography variant="h4" textAlign="center" gutterBottom sx={{ mb: 6 }}>
           {t('about.ourAchievements')}
         </Typography>
         <Grid container spacing={4}>
           {achievements.map((achievement, index) => (
-            <Grid item xs={6} md={3} key={index}>
+            // <Grid item xs={6} md={3} key={index}>
+            <Grid key={index} size={{ xs: 12, md: 5 }} component="div">
               <Box sx={{ textAlign: "center" }}>
                 <Typography variant="h2" sx={{ fontWeight: "bold", color: colors.color4 }}>
                   {achievement.number}
@@ -236,14 +231,14 @@ export default function About() {
         </Grid>
       </Box>
 
-      {/* Testimonials Section */}
       <Box sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: "#f5f5f5" }}>
         <Typography variant="h4" textAlign="center" gutterBottom sx={{ mb: 6 }}>
           {t('about.whatPSay')}
         </Typography>
         <Grid container spacing={4}>
           {testimonials.map((testimonial, index) => (
-            <Grid item xs={12} md={4} key={index}>
+            // <Grid item xs={12} md={4} key={index}>
+            <Grid key={index}  size={{ xs: 12, md: 4 }} component="div">
               <Card sx={{ borderRadius: 3, boxShadow: 2, height: "100%" }}>
                 <CardContent sx={{ p: 4 }}>
                   <Box sx={{ display: "flex", mb: 2 }}>
@@ -267,7 +262,6 @@ export default function About() {
         </Grid>
       </Box>
 
-      {/* CTA Section */}
       <Box
         sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: colors.color3, color: colors.white, textAlign: "center" }}
       >

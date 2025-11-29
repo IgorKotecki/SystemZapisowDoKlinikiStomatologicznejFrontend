@@ -12,30 +12,14 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import api from '../api/axios';
-
-interface ServiceDTO {
-  id: number;
-  name: string;
-  description: string;
-  lowPrice: number;
-  highPrice: number;
-  minTime: number;
-  languageCode: string;
-  category: string;
-}
+import { colors } from '../utils/colors';
+import type { Service } from '../Interfaces/Service';
 
 export default function Home() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [services, setServices] = useState<ServiceDTO[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const colors = {
-    color1: '#003141',
-    color3: '#007987',
-    color4: '#00b2b9',
-    white: '#ffffff'
-  };
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -43,7 +27,7 @@ export default function Home() {
       try {
         const lang = i18n.language || 'pl';
         const response = await api.get(`api/Service/UserServices?lang=${lang}`)
-        const data: ServiceDTO[] = response.data;
+        const data: Service[] = response.data;
 
         const randomized = data.length > 3 ? [...data].sort(() => Math.random() - 0.5).slice(0, 3) : data;
         setServices(randomized)
@@ -117,7 +101,8 @@ export default function Home() {
         ) : (
           <Grid container spacing={4} justifyContent="center">
             {services.map((service, i) => (
-              <Grid item xs={12} sm={6} md={4} key={service.id}>
+              // <Grid item xs={12} sm={6} md={4} key={service.id}>
+              <Grid key={service.id} size={{ xs: 12, md: 4, sm: 6 }} component="div">
                 <Card
                   sx={{
                     borderRadius: 3,

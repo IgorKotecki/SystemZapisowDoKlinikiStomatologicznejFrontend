@@ -14,73 +14,42 @@ import {
 import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import api from "../../api/axios";
-import { storage } from "../../utils/storage";
 import { colors } from "../../utils/colors";
+import { useAuth } from "../../context/AuthContext";
+import type { Appointment } from "../../Interfaces/Appointment";
 
-interface ServiceDTO {
-  id: number;
-  name: string;
-  lowPrice: number;
-  highPrice: number;
-  minTime: number;
-  description: string | null;
-}
-
-interface UserDTO {
-  id: number;
-  name: string;
-  surname: string;
-  email: string;
-  phoneNumber: string;
-}
-
-interface TimeBlockDto {
-  doctorBlockId: number;
-  timeStart: string;
-  timeEnd: string;
-  isAvailable: boolean;
-  user: UserDTO;
-}
-
-interface AppointmentDto {
-  id: number;
-  user: UserDTO;
-  doctorBlock: TimeBlockDto;
-  services: ServiceDTO[];
-  status: string;
-}
-
-function decodeJwt(token: string) {
-  try {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
-    );
-    return JSON.parse(jsonPayload);
-  } catch {
-    return null;
-  }
-}
+// function decodeJwt(token: string) {
+//   try {
+//     const base64Url = token.split(".")[1];
+//     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+//     const jsonPayload = decodeURIComponent(
+//       atob(base64)
+//         .split("")
+//         .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+//         .join("")
+//     );
+//     return JSON.parse(jsonPayload);
+//   } catch {
+//     return null;
+//   }
+// }
 
 export default function VisitsHistoryPage() {
+  const {userRole, userId} = useAuth();
   const { t, i18n } = useTranslation();
-  const [appointments, setAppointments] = useState<AppointmentDto[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const token = localStorage.getItem("token");
-        console.log(token);
-        if (!token) return "Unregistered";
+        // const token = localStorage.getItem("token");
+        // console.log(token);
+        // if (!token) return "Unregistered";
 
-        const claims = decodeJwt(token);
-        const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+        // const claims = decodeJwt(token);
+        // const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
         
         setLoading(true);
         setError(null);

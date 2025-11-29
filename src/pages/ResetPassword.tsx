@@ -13,15 +13,10 @@ import React, { use, useEffect, useState } from "react";
 import api from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { colors } from '../utils/colors';
+
 
 type Status = { type: "idle" | "loading" | "success" | "error"; message?: string };
-
-const colors = {
-    color1: '#003141',
-    color3: '#007987',
-    color4: '#00b2b9',
-    white: '#ffffff'
-};
 
 const styles: Record<string, React.CSSProperties> = {
     background: {

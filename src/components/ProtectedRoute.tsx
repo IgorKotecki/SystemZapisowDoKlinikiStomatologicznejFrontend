@@ -1,6 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { storage } from "../utils/storage";
-import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../context/AuthContext";
 
 type UserRole =
   | "Doctor"
@@ -15,23 +14,13 @@ interface Props {
 }
 
 export default function ProtectedRoute({ children, allowedRoles }: Props) {
-  const token = storage.getToken();
-
-  if (!token) {
-    return <Navigate to="/login" replace />;
+  const { isLoggedIn, claims, initialized, userRole} = useAuth();
+   console.log("ProtectedRoute context:", { initialized, isLoggedIn, claims, userRole });
+  if (!initialized) {
+    return null; 
   }
 
-  let claims: any = null;
-
-  try {
-    claims = jwtDecode(token);
-  } catch {
-    const claimsString = localStorage.getItem("claims");
-    claims = claimsString ? JSON.parse(claimsString) : null;
-  }
-
-  if (!claims) {
-    console.warn("Brak danych użytkownika — przekierowanie do logowania");
+  if (!isLoggedIn || !claims) {
     return <Navigate to="/login" replace />;
   }
 
@@ -39,10 +28,10 @@ export default function ProtectedRoute({ children, allowedRoles }: Props) {
     claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
     claims.role ||
     claims.Role ||
-    claims.roles?.[0];
+    claims.roles?.[0] ||
+    "Unregistered_user";
 
   if (allowedRoles && !allowedRoles.includes(role)) {
-    console.warn(`Brak dostępu: rola ${role} nie jest w ${allowedRoles}`);
     return <Navigate to="/" replace />;
   }
 

@@ -63,7 +63,7 @@ export default function DoctorProfile() {
             p: 4,
             borderRadius: 3,
             backgroundColor: colors.color2,
-            width: "100%", // 🔹 Wypełnia całą szerokość
+            width: "100%", 
             boxSizing: "border-box",
           }}
         >

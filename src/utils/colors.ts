@@ -1,9 +1,23 @@
+import { green } from "@mui/material/colors";
+
 export const colors = {
     color1: "#003141",
     color2: "#004f5f",
     color3: "#007987",
     color4: "#00b2b9",
     color5: "#00faf1",
+    color6: '#77767c',
     white: "#ffffff",
     black: "#000000",
+    greenTooth: "#4CAF50",
+    grayTooth: "#9E9E9E",
+    yellowTooth: "#FFC107",
+    blueTooth: "#3F51B5",
+    redTooth: "#F44336",
+    claenderBorder: "#388e3c",
+    calenderDayOff: "#c62828",
+    calenderNotDayOff: "#ffb300",
+    calenderBorderDayOff: "#b71c1c",
+    calenderBorderNotDayOff: "#ffa000",
+    gold: "#D4AF37",
 };

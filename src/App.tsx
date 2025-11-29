@@ -26,13 +26,10 @@ import DoctorProfile from "./pages/doctor/doctorProfile";
 import DoctorAppointments from "./pages/doctor/doctorAppointments";
 import DoctorCalendar from "./pages/doctor/doctorCalendar";
 import ResetPassword from "./pages/ResetPassword";
-import { storage } from './utils/storage';
-
 import ProtectedRoute from "./components/ProtectedRoute";
 import DoctorDaySchedule from "./pages/doctor/doctorDaySchedule";
 
 const App = () => {
-  storage.clearAll();
   return (
     <Router>
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>

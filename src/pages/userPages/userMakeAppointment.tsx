@@ -17,30 +17,9 @@ import { useTranslation } from "react-i18next";
 import api from "../../api/axios";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { colors } from "../../utils/colors";
-
-interface ServiceDTO {
-  id: number;
-  name: string;
-  lowPrice: number;
-  highPrice: number;
-  minTime: number;
-  description: string | null;
-  category: string | null;
-}
-
-interface DoctorDTO {
-  id: number;
-  name: string;
-  surname: string;
-}
-
-interface TimeBlockDTO {
-  doctorBlockId: number;
-  timeStart: string;
-  timeEnd: string;
-  isAvailable: boolean;
-  user: DoctorDTO;
-}
+import type { Service } from "../../Interfaces/Service";
+import type { Doctor } from "../../Interfaces/Doctor";
+import type { TimeBlock } from "../../Interfaces/TimeBlock";
 
 export default function UserAppointmentPage() {
   const { t, i18n } = useTranslation();
@@ -49,9 +28,9 @@ export default function UserAppointmentPage() {
   const [doctorId, setDoctorId] = useState<number | "">("");
   const [timeBlocksIds, setTimeBlocksIds] = useState<Set<number>>(new Set())
   const [timeBlockId, setTimeBlockId] = useState<number | "">("");
-  const [services, setServices] = useState<ServiceDTO[]>([]);
-  const [doctors, setDoctors] = useState<DoctorDTO[]>([]);
-  const [timeBlocks, setTimeBlocks] = useState<TimeBlockDTO[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [timeBlocks, setTimeBlocks] = useState<TimeBlock[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadingDoctors, setLoadingDoctors] = useState(false);
   const [loadingBlocks, setLoadingBlocks] = useState(false);

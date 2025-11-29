@@ -13,23 +13,8 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import UserNavigation from "../../components/userComponents/userNavigation";
 // import api from "../../api/axios";
-
-const colors = {
-  color1: "#003141",
-  color2: "#004f5f",
-  color3: "#007987",
-  color4: "#00b2b9",
-  color5: "#00faf1",
-  white: "#ffffff",
-};
-
-interface ServiceData {
-  id: number;
-  name: string;
-  price: number;
-  duration: number;
-  description: string;
-}
+import { colors } from "../../utils/colors";
+import type { Service } from "../../Interfaces/Service";
 
 const EditService: React.FC = () => {
   const { t } = useTranslation();
@@ -37,7 +22,7 @@ const EditService: React.FC = () => {
   const { id } = useParams();
   const serviceId = Number(id);
 
-  const [serviceData, setServiceData] = useState<ServiceData | null>(null);
+  const [serviceData, setServiceData] = useState<Service | null>(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -162,12 +147,13 @@ const EditService: React.FC = () => {
           >
             <Grid container spacing={3}>
               {["name", "price", "duration", "description"].map((field) => (
-                <Grid item xs={12} sm={field === "description" ? 12 : 6} key={field}>
+                <Grid key={field}  size={{ xs: 12, md: 6,  sm: (field==="description" ? 12 : 6)}} component="div">
+                {/* <Grid item xs={12} sm={field === "description" ? 12 : 6} key={field}> */}
                   <TextField
                     fullWidth
                     name={field}
                     label={t(`editService.${field}`)}
-                    value={serviceData[field as keyof ServiceData]}
+                    value={serviceData[field as keyof Service]}
                     onChange={handleChange}
                     disabled={!isEditing}
                     multiline={field === "description"}

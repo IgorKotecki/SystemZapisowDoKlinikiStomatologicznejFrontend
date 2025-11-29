@@ -13,31 +13,18 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import UserNavigation from "../../components/userComponents/userNavigation";
-
-const colors = {
-  color1: "#003141",
-  color2: "#004f5f",
-  color3: "#007987",
-  color4: "#00b2b9",
-  color5: "#00faf1",
-  white: "#ffffff",
-};
-
-interface UserData {
-  id: number;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  email: string;
-}
+import { colors } from "../../utils/colors";
+import type { User } from "../../Interfaces/User";
+import { useAuth } from "../../context/AuthContext";
 
 const EditUser: React.FC = () => {
+  const { login , userRole} = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
   const userId = Number(id);
 
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [userData, setUserData] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -132,8 +119,8 @@ const EditUser: React.FC = () => {
           <Button
             startIcon={<ArrowLeft />}
             onClick={() => {
-              const claims = jwtDecode(localStorage.getItem("token"));
-              const role = claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+              // const claims = jwtDecode(localStorage.getItem("token"))
+              const role = userRole  //claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
               if (role == "Doctor") {
                 navigate(`/doctor/users`);
               } else if (role == "Receptionist") {
@@ -167,12 +154,13 @@ const EditUser: React.FC = () => {
           >
             <Grid container spacing={3}>
               {["firstName", "lastName", "email", "phone"].map((field) => (
-                <Grid item xs={12} sm={6} key={field}>
+                // <Grid item xs={12} sm={6} key={field}>
+                <Grid key={field} size={{xs: 12, sm: 6}}>
                   <TextField
                     fullWidth
                     name={field}
                     label={t(`editUser.${field}`)}
-                    value={userData[field as keyof UserData]}
+                    value={userData[field as keyof User]}
                     onChange={handleChange}
                     disabled={!isEditing}
                     sx={{
