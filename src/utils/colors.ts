@@ -1,5 +1,3 @@
-import { green } from "@mui/material/colors";
-
 export const colors = {
     color1: "#003141",
     color2: "#004f5f",

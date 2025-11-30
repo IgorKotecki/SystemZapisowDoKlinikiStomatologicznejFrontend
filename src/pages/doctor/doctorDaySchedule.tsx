@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import {
     Box,
     Typography,
@@ -29,6 +29,7 @@ export default function DoctorDaySchedule() {
     const [daySchedule, setDaySchedule] = useState<DaySchedule[]>([]);
     const [openModal, setOpenModal] = useState(false);
     const [selectedRange, setSelectedRange] = useState<{ start: string; end: string, dayOfWeek: string } | null>(null);
+    const calendarRef = useRef<any>(null);
 
     useEffect(() => {
         const fetchWeekScheme = async () => {
@@ -56,13 +57,17 @@ export default function DoctorDaySchedule() {
         }
     };
 
-
-
-
     const events = useMemo(
         () => CalendarMapper.DayScheduletoEvents(daySchedule, t),
         [daySchedule, t]
     );
+
+    useEffect(() => {
+        if (!calendarRef.current) return;
+        if (!events || events.length === 0) return;
+
+        calendarRef.current.getApi().gotoDate(events[0].start);
+    }, [events]);
 
     const handleSelect = (info: any) => {
         if (info.start.getDay() != info.end.getDay()) {
@@ -121,6 +126,7 @@ export default function DoctorDaySchedule() {
                 ) : (
                     <Box sx={{ backgroundColor: colors.white, color: colors.black, borderRadius: 3, p: 2 }}>
                         <FullCalendar
+                            ref={calendarRef}
                             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                             initialView="timeGridWeek"
                             allDaySlot={false}
@@ -142,7 +148,7 @@ export default function DoctorDaySchedule() {
                             slotLabelInterval={{ minutes: 30 }}
                             slotDuration="00:30:00"
                             slotLabelFormat={{ hour: 'numeric', minute: '2-digit' }}
-                            hiddenDays={[7, 0]}
+                            hiddenDays={[0]}
                             headerToolbar={{
                                 left: "",
                                 center: "",

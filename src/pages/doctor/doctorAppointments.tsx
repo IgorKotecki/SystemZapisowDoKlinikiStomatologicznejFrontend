@@ -43,7 +43,7 @@ const DoctorAppointments: React.FC = () => {
     };
 
     fetchDoctorsAppointemtAsync(currentWeekStart);
-  }, [currentWeekStart, t ]);
+  }, [currentWeekStart, t]);
 
   const events = useMemo(
     () => appointments.map((a) => ({
@@ -51,6 +51,7 @@ const DoctorAppointments: React.FC = () => {
       title: `${a.patientFirstName} ${a.patientLastName}`,
       start: `${a.date}T${a.timeStart}`,
       end: `${a.date}T${a.timeEnd}`,
+      description: a.servicesName,
       extendedProps: a,
     })),
     [appointments]
@@ -85,6 +86,22 @@ const DoctorAppointments: React.FC = () => {
                 mouseLeaveInfo.el.style.cursor = 'default';
               }}
               events={events}
+              eventContent={(arg) => {
+                return (
+                  <div style={{ fontSize: '0.8em', lineHeight: '1.1em' }}>
+                    <div><b>{arg.timeText}</b></div>
+                    <div>{arg.event.title}</div>
+                    <div style={{ fontSize: '0.73em' }}>
+                      {arg.event.extendedProps.description}
+                    </div>
+                  </div>
+                );
+              }}
+              eventDidMount={(info) => {
+                const appointment = info.event.extendedProps;
+                const tooltipText = `${appointment.description ?? ''}\nPacjent: ${appointment.patientFirstName} ${appointment.patientLastName}\nEmail: ${appointment.patientEmail}\nTelefon: ${appointment.patienPhoneNumber ?? ''}`;
+                info.el.setAttribute('title', tooltipText);
+              }}
               height="auto"
               locale={i18n.language === 'pl' ? plLocale : enLocale}
               slotMinTime="08:00:00"
@@ -100,8 +117,10 @@ const DoctorAppointments: React.FC = () => {
                 right: "prev next"
               }}
               datesSet={(dateInfo) => {
-                  const startDate = dateInfo.start.toISOString().split("T")[0];
-                  setCurrentWeekStart(startDate);
+                const startDateObj = new Date(dateInfo.start);
+                startDateObj.setDate(startDateObj.getDate() + 1);
+                const startDate = startDateObj.toISOString().split("T")[0];
+                setCurrentWeekStart(startDate);
               }}
             />
           </Box>

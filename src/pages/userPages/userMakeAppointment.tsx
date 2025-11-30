@@ -26,7 +26,6 @@ export default function UserAppointmentPage() {
   const [date, setDate] = useState<Date | null>(null);
   const [servicesIds, setServicesIds] = useState<number[]>([]);
   const [doctorId, setDoctorId] = useState<number | "">("");
-  const [timeBlocksIds, setTimeBlocksIds] = useState<Set<number>>(new Set())
   const [timeBlockId, setTimeBlockId] = useState<number | "">("");
   const [services, setServices] = useState<Service[]>([]);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
@@ -107,52 +106,26 @@ export default function UserAppointmentPage() {
   const submitAppointment = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    var startTime = timeBlocks.find(t => t.doctorBlockId == timeBlockId)?.timeStart;
+
+    var serv = services.filter(s => servicesIds.includes(s.id));
+
+    var duration = 0;
+    serv.forEach(s => duration += s.minTime);
+
     setError(null);
     try {
-    if (!servicesIds || !doctorId || !timeBlockId || !date) {
-      setError(t("userMakeAppointment.errorFields"));
-      return;
-    }
-
-    setLoading(true);
-
-    let timeBlockCounter = 0;
-    servicesIds.forEach(s => {
-      const service = services.find(sdto => sdto.id == s);
-      if (service) {
-        timeBlockCounter += service.minTime;
+      if (!servicesIds || !doctorId || !timeBlockId || !date) {
+        setError(t("userMakeAppointment.errorFields"));
+        return;
       }
-    }
-    );
-    console.log(timeBlockCounter);
-    console.log(timeBlocks);
-    
-    var baseTimeBlock = timeBlocks.find(tb => tb.doctorBlockId == timeBlockId)
-    for (let index = 0; index < timeBlockCounter; index++) {
-      var curTimeBlock = timeBlocks.find(tb => tb.doctorBlockId == timeBlockId + index)
-      console.log(timeBlockId + index)
-      if(curTimeBlock){
-        if(curTimeBlock.isAvailable){
-          if(baseTimeBlock?.timeStart.split("T")[0] == curTimeBlock.timeStart.split("T")[0]){
-          setTimeBlocksIds(prev => new Set(prev).add(timeBlockId + index))
-          }else{
-        throw new Error(`wymagany czas dla danych usług (${timeBlockCounter * 30} minut) przekracza czas pracy lekarza`)
-          }
-        }else{
-          throw new Error(`nie dostępne terminy dla usług o czasie trwania (${timeBlockCounter * 30} minut)`)
-        }
-      }else{
-        throw new Error(`nie isnieje block czasowy odpowidni aby pomiescic ilosc usług`)
-      }
-      
-    }
-    console.log(timeBlocks);
-    console.log(timeBlocksIds)
-      const token = localStorage.getItem("token");
-      if (!token) return;
+
+      setLoading(true);
 
       await api.post(`/api/Appointment/user/book`, {
-        doctorBlocksIds : timeBlocksIds,
+        doctorId,
+        startTime,
+        duration,
         servicesIds,
       });
 

@@ -18,22 +18,6 @@ import { colors } from "../../utils/colors";
 import { useAuth } from "../../context/AuthContext";
 import type { Appointment } from "../../Interfaces/Appointment";
 
-// function decodeJwt(token: string) {
-//   try {
-//     const base64Url = token.split(".")[1];
-//     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-//     const jsonPayload = decodeURIComponent(
-//       atob(base64)
-//         .split("")
-//         .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-//         .join("")
-//     );
-//     return JSON.parse(jsonPayload);
-//   } catch {
-//     return null;
-//   }
-// }
-
 export default function VisitsHistoryPage() {
   const {userRole, userId} = useAuth();
   const { t, i18n } = useTranslation();
@@ -150,15 +134,15 @@ export default function VisitsHistoryPage() {
 
                   <TableBody>
                     {appointments.map((a) => {
-                      const date = new Date(a.doctorBlock.timeStart);
+                      const date = new Date(a.startTime);
                       const price = a.services.reduce(
-                        (sum, s) => sum + (s.lowPrice || 0),
+                        (sum, s) => sum + (s.highPrice || 0),
                         0
                       );
 
                       return (
                         <TableRow
-                          key={a.id}
+                          key={a.appointmentGroupId}
                           sx={{
                             "&:nth-of-type(odd)": {
                               backgroundColor: colors.color3 + "22",
@@ -184,7 +168,7 @@ export default function VisitsHistoryPage() {
                           </TableCell>
 
                           <TableCell sx={{ color: colors.white }}>
-                            {a.doctorBlock.user.name} {a.doctorBlock.user.surname}
+                            {a.doctor.name} {a.doctor.surname}
                           </TableCell>
 
                           <TableCell sx={{ color: colors.white }}>
@@ -201,7 +185,7 @@ export default function VisitsHistoryPage() {
                                     : "#fff68a",
                             }}
                           >
-                            {t(`appointmentStatus.${a.status}`)}
+                            {a.status}
                           </TableCell>
                         </TableRow>
                       );
