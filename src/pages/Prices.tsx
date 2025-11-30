@@ -61,7 +61,7 @@ export default function Pricing() {
           sx={{
             width: "100%",
             minHeight: "100vh",
-            backgroundColor: colors.color3,
+            backgroundColor: colors.white,
             py: 8,
             px: { xs: 2, md: 4 },
           }}
@@ -70,7 +70,7 @@ export default function Pricing() {
             <Typography
               variant="h2"
               sx={{
-                color: colors.white,
+                color: colors.black,
                 mb: 3,
                 fontWeight: "300",
                 letterSpacing: "0.2em",
@@ -84,7 +84,7 @@ export default function Pricing() {
             <Typography
               variant="h6"
               sx={{
-                color: colors.white,
+                color: colors.black,
                 opacity: 0.8,
                 maxWidth: "600px",
                 mx: "auto",
@@ -104,13 +104,13 @@ export default function Pricing() {
                 component="div"
                 sx={{ textAlign: "center" }}
               >
-                <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
+                <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 , color: colors.black}} >
                   {categoryName}
                 </Typography>
 
                 {servicesList.map((service) => (
                   <Box key={service.id} sx={{ mb: 1.5, textAlign: "center" }}>
-                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                    <Typography variant="body1" sx={{ fontWeight: 500 , color: colors.black}}>
                       {service.name}
                     </Typography>
 
@@ -123,22 +123,11 @@ export default function Pricing() {
             ))}
           </Grid>
 
-
           <Box sx={{ textAlign: "center", py: 8 }}>
             <Button
-              variant="contained"
-              size="large"
-              sx={{
-                backgroundColor: colors.gold,
-                color: "#000",
-                px: 6,
-                py: 2,
-                fontSize: "1.2rem",
-                fontWeight: "bold",
-                textTransform: "none",
-                borderRadius: 0,
-                "&:hover": { backgroundColor: "#B8941F" },
-              }}
+              fullWidth
+              variant="outlined"
+              sx={{ mt: "auto", borderColor: colors.color1, color: colors.color1, "&:hover": { backgroundColor: colors.color2, color: colors.white, }, textTransform: "none", }}
               onClick={() => navigate("/appointment")}
             >
               {t("prices.cta") || "Umów konsultację"}
