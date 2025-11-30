@@ -2,22 +2,25 @@ import { Box, Typography, Button, Grid, Card, CardContent, CardMedia, Chip, Pape
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
-import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
-import BuildIcon from "@mui/icons-material/Build";
-import ChildCareIcon from "@mui/icons-material/ChildCare";
-import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
+import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
+import VaccinesIcon from "@mui/icons-material/Vaccines";
+import BiotechIcon from "@mui/icons-material/Biotech";
+import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
+import MonitorHeartIcon from "@mui/icons-material/MonitorHeart";
+import EmojiNatureIcon from "@mui/icons-material/EmojiNature";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 import type { JSX } from "react";
 import api from '../api/axios';
 import { colors } from "../utils/colors";
 import type { Service } from "../Interfaces/Service";
+import { Category } from "@mui/icons-material";
 
 export default function Services() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [services, setServices] = useState<Service[]>([]);
+  const [groupedServices, setGroupedServices] = useState<Record<string, Service[]>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,12 +28,9 @@ export default function Services() {
       setLoading(true);
       try {
         const lang = i18n.language || 'pl';
-        const response = await api.get(`api/Service/UserServices?lang=${lang}`)
-        const data: Service[] = response.data;
-
-        const randomized = data.length > 3 ? [...data].sort(() => Math.random() - 0.5).slice(0, 3) : data;
-        setServices(randomized)
-        console.log(randomized)
+        const response = await api.get(`api/Service/AllServices?lang=${lang}`)
+        const data = response.data;
+        setGroupedServices(data.servicesByCategory);
       } catch (error) {
         console.error('Error featchins services ', error);
       } finally {
@@ -40,21 +40,39 @@ export default function Services() {
     fetchServices();
   }, [i18n.language]);
 
-  const grouped = services.reduce((acc, service) => {
-    if (!acc[service.category]) acc[service.category] = [];
-    acc[service.category].push(service);
-    return acc;
-  }, {} as Record<string, Service[]>);
-
-  const categoryIcons: Record<string, JSX.Element> = {
-    "Higiena": <MedicalServicesIcon sx={{ fontSize: 50, color: "#007987" }} />,
-    "Estetyka": <AutoFixHighIcon sx={{ fontSize: 50, color: "#007987" }} />,
-    "Chirurgia": <BuildIcon sx={{ fontSize: 50, color: "#007987" }} />,
-    "Dziecięca": <ChildCareIcon sx={{ fontSize: 50, color: "#007987" }} />,
-    "Diagnostyka": <LocalHospitalIcon sx={{ fontSize: 50, color: "#007987" }} />,
-    "Psychologia": <PsychologyIcon sx={{ fontSize: 50, color: "#007987" }} />,
+  const formatPrice = (low: number | null, high: number | null) => {
+    if (low === null && high !== null) {
+      return `${high} zł`;
+    }
+    if (low !== null && high === null) {
+      return `od ${low} zł`;
+    }
+    if (low !== null && high !== null) {
+      return `${low} - ${high} zł`;
+    }
+    return "—";
   };
 
+  const dentalIcons = [
+    <MedicalServicesIcon sx={{ fontSize: 50, color: colors.color3 }} />,
+    <HealthAndSafetyIcon sx={{ fontSize: 50, color: colors.color3 }} />,
+    <VaccinesIcon sx={{ fontSize: 50, color: colors.color3 }} />,
+    <BiotechIcon sx={{ fontSize: 50, color: colors.color3 }} />,
+    <CleaningServicesIcon sx={{ fontSize: 50, color: colors.color3 }} />,
+    <MonitorHeartIcon sx={{ fontSize: 50, color: colors.color3 }} />,
+    <EmojiNatureIcon sx={{ fontSize: 50, color: colors.color3 }} />,
+    <PsychologyIcon sx={{ fontSize: 50, color: colors.color3 }} />,
+  ];
+
+  const getRandomIcon = () => dentalIcons[Math.floor(Math.random() * dentalIcons.length)];
+
+  const randomIcon = useMemo(() => {
+    const icons: Record<string, JSX.Element> = {};
+    Object.keys(groupedServices).forEach(category => {
+      icons[category] = getRandomIcon();
+    })
+    return icons;
+  }, [Object.keys(groupedServices).length])
 
   return (
     <Box sx={{ width: "100vw", minHeight: "100vh", backgroundColor: colors.white }}>
@@ -149,73 +167,49 @@ export default function Services() {
           {t("services.categories")}
         </Typography>
 
-        <Grid container spacing={4}>
-          {Object.keys(grouped).map((categoryName, index) => (
-            // <Grid item xs={12} md={6} lg={4} key={index}>
-            <Grid key={index} size={{ xs: 12, md: 6, lg: 4}} component="div">
-              <Card sx={{ borderRadius: 3, boxShadow: 2, height: "100%" }}>
-                <CardContent sx={{ p: 4 }}>
+        <Grid container spacing={4} justifyContent={"center"}>
+          {Object.entries(groupedServices).map(([categoryName, servicesList], index) => (
+            <Grid key={index} size={{ xs: 12, md: 5 }} component="div">
+              <Card sx={{ borderRadius: 10, boxShadow: 2, height: "100%" }}>
+                <CardContent sx={{ p: 4, display: "flex", flexDirection: "column", flexGrow: 1 }}>
+
                   <Box sx={{ mb: 2, fontSize: 40, color: colors.color3 }}>
-                    {categoryIcons[categoryName] ?? <HelpOutlineIcon sx={{ fontSize: 50, color: "#007987" }} />}
+                    {randomIcon[categoryName] ?? (
+                      <HelpOutlineIcon sx={{ fontSize: 50, color: colors.color3 }} />
+                    )}
                   </Box>
+
                   <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
                     {categoryName}
                   </Typography>
-                  {grouped[categoryName].map((service) => (
+
+                  {servicesList.map((service) => (
                     <Box key={service.id} sx={{ mb: 1.5 }}>
                       <Typography variant="body1" sx={{ fontWeight: 500 }}>
                         {service.name}
                       </Typography>
+
                       <Typography variant="body2" color="text.secondary">
-                        {service.lowPrice} - {service.highPrice} zł
+                        {formatPrice(service.lowPrice, service.highPrice)}
                       </Typography>
                     </Box>
                   ))}
 
                   <Button
+                    fullWidth
                     variant="outlined"
-                    size="large"
-                    sx={{
-                      mt: 3,
-                      borderColor: colors.color3,
-                      color: colors.color3,
-                      "&:hover": {
-                        backgroundColor: colors.color3,
-                        color: colors.white,
-                      },
-                      textTransform: "none",
-                    }}
+                    sx={{ mt: "auto", borderColor: colors.color3, color: colors.color3, "&:hover": { backgroundColor: colors.color3, color: colors.white, }, textTransform: "none", }}
                     onClick={() => navigate("/appointment")}
                   >
-                    {t("book")}
+                    Umów wizytę
                   </Button>
+
                 </CardContent>
               </Card>
             </Grid>
           ))}
         </Grid>
       </Box>
-
-      {/* <Box sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: colors.color1, color: colors.white }}>
-        <Typography variant="h4" textAlign="center" gutterBottom sx={{ mb: 6 }}>
-          Jak przebiega leczenie?
-        </Typography>
-        <Grid container spacing={4}>
-          {processSteps.map((step, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Box sx={{ textAlign: "center" }}>
-                <Typography variant="h2" sx={{ fontWeight: "bold", color: colors.color4, mb: 2 }}>
-                  {step.step}
-                </Typography>
-                <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold" }}>
-                  {step.title}
-                </Typography>
-                <Typography variant="body1">{step.description}</Typography>
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
-      </Box> */}
 
       <Box
         sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: colors.color3, color: colors.white, textAlign: "center" }}

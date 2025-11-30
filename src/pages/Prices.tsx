@@ -1,4 +1,4 @@
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Grid } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -10,116 +10,38 @@ export default function Pricing() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
-  const [services, setServices] = useState<Service[]>([]);
+  const [groupedServices, setGroupedServices] = useState<Record<string, Service[]>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchServices = async () => {
       setLoading(true);
       try {
-        const lang = i18n.language || "pl";
-        const res = await api.get(`api/Service/UserServices?lang=${lang}`);
-        setServices(res.data);
-      } catch (e) {
-        console.error(e);
+        const lang = i18n.language || 'pl';
+        const response = await api.get(`api/Service/AllServices?lang=${lang}`)
+        const data = response.data;
+        setGroupedServices(data.servicesByCategory);
+      } catch (error) {
+        console.error('Error featchins services ', error);
       } finally {
         setLoading(false);
       }
     };
-
-    fetchData();
+    fetchServices();
   }, [i18n.language]);
 
-  const grouped = services.reduce((acc, s) => {
-    if (!acc[s.category]) acc[s.category] = [];
-    acc[s.category].push(s);
-    return acc;
-  }, {} as Record<string, Service[]>);
-
-  const ServiceSection = ({
-    title,
-    items,
-  }: {
-    title: string;
-    items: Service[];
-  }) => (
-    <Box sx={{ mb: 8 }}>
-      <Typography
-        variant="h4"
-        sx={{
-          color: colors.white,
-          textAlign: "center",
-          mb: 4,
-          fontWeight: "bold",
-          letterSpacing: "0.1em",
-          textTransform: "uppercase",
-        }}
-      >
-        {title}
-      </Typography>
-
-      <Box sx={{ maxWidth: "800px", mx: "auto" }}>
-        {items.map((service, index) => (
-          <Box
-            key={service.id}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              py: 2,
-              px: 3,
-              borderBottom:
-                index < items.length - 1
-                  ? "1px solid rgba(255,255,255,0.1)"
-                  : "none",
-              "&:hover": { backgroundColor: "rgba(255,255,255,0.05)" },
-            }}
-          >
-            <Typography variant="body1" sx={{ color: colors.white, flex: 1 }}>
-              {service.name}
-            </Typography>
-
-            <Box
-              sx={{
-                flex: 1,
-                height: "1px",
-                background:
-                  "repeating-linear-gradient(to right, transparent, transparent 4px, rgba(255,255,255,0.3) 4px, rgba(255,255,255,0.3) 8px)",
-                mx: 2,
-              }}
-            />
-
-            <Typography
-              variant="body1"
-              sx={{ color: colors.white, fontWeight: "bold" }}
-            >
-              {service.lowPrice} zł
-            </Typography>
-          </Box>
-        ))}
-      </Box>
-
-      <Box sx={{ textAlign: "center", mt: 4 }}>
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: colors.gold,
-            color: "#000",
-            px: 4,
-            py: 1.5,
-            fontSize: "1rem",
-            fontWeight: "bold",
-            textTransform: "none",
-            borderRadius: 0,
-            "&:hover": { backgroundColor: "#B8941F" },
-          }}
-          onClick={() => navigate("/appointment")}
-        >
-          {t("book") || "Umów wizytę"}
-        </Button>
-      </Box>
-    </Box>
-  );
+  const formatPrice = (low: number | null, high: number | null) => {
+    if (low === null && high !== null) {
+      return `${high} zł`;
+    }
+    if (low !== null && high === null) {
+      return `od ${low} zł`;
+    }
+    if (low !== null && high !== null) {
+      return `${low} - ${high} zł`;
+    }
+    return "—";
+  };
 
   return (
     <Box sx={{ width: "100vw", minHeight: "100vh" }}>
@@ -139,7 +61,7 @@ export default function Pricing() {
           sx={{
             width: "100%",
             minHeight: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            backgroundColor: colors.color3,
             py: 8,
             px: { xs: 2, md: 4 },
           }}
@@ -174,9 +96,33 @@ export default function Pricing() {
             </Typography>
           </Box>
 
-          {Object.keys(grouped).map((cat) => (
-            <ServiceSection key={cat} title={cat} items={grouped[cat]} />
-          ))}
+          <Grid container spacing={4} justifyContent="center">
+            {Object.entries(groupedServices).map(([categoryName, servicesList], index) => (
+              <Grid
+                key={index}
+                size={{ xs: 12, md: 12 }}
+                component="div"
+                sx={{ textAlign: "center" }}
+              >
+                <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
+                  {categoryName}
+                </Typography>
+
+                {servicesList.map((service) => (
+                  <Box key={service.id} sx={{ mb: 1.5, textAlign: "center" }}>
+                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                      {service.name}
+                    </Typography>
+
+                    <Typography variant="body2" color="text.secondary">
+                      {formatPrice(service.lowPrice, service.highPrice)}
+                    </Typography>
+                  </Box>
+                ))}
+              </Grid>
+            ))}
+          </Grid>
+
 
           <Box sx={{ textAlign: "center", py: 8 }}>
             <Button

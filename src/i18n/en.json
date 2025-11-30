@@ -93,6 +93,11 @@
     "ourStory": "Our story",
     "": ""
   },
+  "prices": {
+    "title": "Prices",
+    "subtitle": "Our prices are transparent and competitive. We offer the highest quality dental services at affordable prices.",
+    "cta": "Appointment"
+  },
   "userNavigation": {
     "panel": "User Panel",
     "role": "Role",
@@ -301,6 +306,6 @@
     "scheduledTime": "Scheduled Time",
     "addScheduledTime": "Add Scheduled Time",
     "saveChanges": "Save Changes",
-    "remove" : "Do You wont to remove day schedule?"
+    "remove": "Do You wont to remove day schedule?"
   }
 }

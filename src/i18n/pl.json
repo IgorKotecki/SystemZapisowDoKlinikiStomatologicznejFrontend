@@ -99,6 +99,11 @@
     "ourAchievements": "Our achievements",
     "whatPSay": "What our patients say"
   },
+  "prices": {
+    "title" : "Cennik",
+    "subtitle" : "Nasze ceny są przejrzyste i konkurencyjne. Oferujemy najwyższą jakość usług stomatologicznych w przystępnych cenach.",
+    "cta" : "Umów wizytę"
+  },
   "userNavigation": {
     "panel": "Panel Użytkownika",
     "role": "Rola",
