@@ -16,14 +16,15 @@ import { CalendarMapper } from "../../mappers/CallenderMapper";
 import i18n from "../../i18n";
 import enLocale from '@fullcalendar/core/locales/en-gb';
 import plLocale from '@fullcalendar/core/locales/pl';
+import { useNavigate } from "react-router-dom";
 
 
 const DoctorAppointments: React.FC = () => {
   const { t } = useTranslation();
   const [appointments, setAppointments] = useState<IDoctorAppointment[]>([]);
-  const [selectedAppointment, setSelectedAppointment] = useState<IDoctorAppointment | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentWeekStart, setCurrentWeekStart] = useState<string>(new Date().toISOString().split("T")[0]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDoctorsAppointemtAsync = async (date: string) => {
@@ -58,7 +59,7 @@ const DoctorAppointments: React.FC = () => {
   );
 
   const handleEventClick = (info: any) => {
-    setSelectedAppointment(info.event.extendedProps);
+    navigate(`/doctor/appointmentConsole/${info.event.id}`, { state: { appointment: info.event.extendedProps as IDoctorAppointment} });
   };
 
   return (

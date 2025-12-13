@@ -17,27 +17,27 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// api.interceptors.response.use(
-//   (response) => response,
-//   async (error) => {
-//     const originalRequest = error.config;
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
     
-//     if (error.response?.status === 401 && !originalRequest._retry) {
-//       originalRequest._retry = true;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
 
-//       const success = await refreshTokenFlow();
+      const success = await refreshTokenFlow();
 
-//       if (success) {
-//         const newToken = storage.getToken();
-//         originalRequest.headers.Authorization = `Bearer ${newToken}`;
+      if (success) {
+        const newToken = storage.getToken();
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
 
-//         return api(originalRequest);
-//       }
-//     }
+        return api(originalRequest);
+      }
+    }
 
-//     return Promise.reject(error);
-//   }
-// );
+    return Promise.reject(error);
+  }
+);
 
 export default api;
 

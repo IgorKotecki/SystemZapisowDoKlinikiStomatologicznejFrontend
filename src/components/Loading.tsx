@@ -8,7 +8,7 @@ export default function LoadingScreen() {
       sx={{
         minHeight: "100vh",
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: colors.color1,

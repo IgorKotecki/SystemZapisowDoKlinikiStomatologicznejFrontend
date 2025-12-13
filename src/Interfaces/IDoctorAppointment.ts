@@ -1,6 +1,7 @@
 export interface IDoctorAppointment {
 
     id: string;
+    patientId: number;
     patientFirstName: string;
     patientLastName: string;
     servicesName: string[];
