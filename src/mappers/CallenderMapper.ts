@@ -49,6 +49,7 @@ export class CalendarMapper {
   private static ApiAppointmentToDoctorAppointment(apiAppointment: Appointment): IDoctorAppointment {
     return {
       id: apiAppointment.appointmentGroupId,
+      patientId: apiAppointment.user.id,
       patientFirstName: apiAppointment.user.name,
       patientLastName: apiAppointment.user.surname,
       servicesName: apiAppointment.services.map((s: any) => s.name),

@@ -10,25 +10,25 @@ import UserNavigation from "../../components/userComponents/userNavigation";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import TeethModel from "../../components/TeethModel";
-import { useParams } from "react-router-dom";
 import i18n from "../../i18n";
 import api from "../../api/axios";
 import type { ToothData }  from "../../Interfaces/ToothData"
 import { colors } from "../../utils/colors";
+import { useAuth } from "../../context/AuthContext";
+
 
 const DentalChartPage: React.FC = () => {
+  const {userId} = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { userId } = useParams<{ userId: string }>();
   const [teeth, setTeeth] = useState<ToothData[]>([]);
   const [loading, setLoading] = useState(true);
-  //const [selectedTooth, setSelectedTooth] = useState<ToothData | null>(null);
 
   useEffect(() => {
     const fetchTeethData = async () => {
       try {
         const response = await api.post("/api/Tooth/ToothModel", {
-          userId: 5,
+          userId: userId,
           Language: i18n.language.toLowerCase()
         });
         console.log("Dane o zębach:", response.data);
@@ -41,7 +41,7 @@ const DentalChartPage: React.FC = () => {
     };
 
     fetchTeethData();
-  }, [userId, t]);
+  }, [t]);
 
   if (loading) {
     return (

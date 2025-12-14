@@ -1,5 +1,5 @@
 const TOKEN_KEY = 'token';
-const REFRESH_TOKEN = 'refresh';
+const REFRESH_TOKEN = 'refreshToken';
 const USER_KEY = 'user';
 
 export const storage = {

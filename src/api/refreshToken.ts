@@ -5,7 +5,7 @@ export async function refreshTokenFlow() {
   if (!refreshToken) return false;
 
   try {
-    const res = await fetch("http://localhost:5114/auth/refresh", {
+    const res = await fetch("http://localhost:5114/api/refresh", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refreshToken }),
@@ -17,12 +17,15 @@ export async function refreshTokenFlow() {
 
     const { accessToken, refreshToken: newRefresh } = data;
 
-    window.localStorage.removeItem("token")
-    window.localStorage.removeItem("refresh")
-    window.localStorage.setItem("token", accessToken);
-    window.localStorage.setItem("refresh", newRefresh);
+    console.log(data);
 
-    console.log("Token refreshed!");
+    storage.removeToken();
+    storage.removeRefreshToken();
+
+    storage.setToken(accessToken);
+    storage.setRefreshToken(newRefresh);
+
+    console.log("🔄 Token refreshed!");
 
     return true;
   } catch (err) {

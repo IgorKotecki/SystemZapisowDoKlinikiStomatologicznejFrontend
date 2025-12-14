@@ -71,7 +71,7 @@ export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth }:
                                         height: 48,
                                         backgroundColor: getToothColor(tooth.status.categoryId),
                                         borderRadius: 5,
-                                        border: selectedTooth?.toothNumber === tooth.toothNumber ? "2px solid #FFD700" : "2px solid transparent",
+                                        border: selectedTooth?.toothNumber === tooth.toothNumber ? "2px solid #ff00eaff" : "2px solid transparent",
                                         cursor: "pointer",
                                         transition: "transform 0.2s, box-shadow 0.2s",
                                         "&:hover": {
@@ -101,7 +101,7 @@ export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth }:
                                         height: 48,
                                         backgroundColor: getToothColor(tooth.status.categoryId),
                                         borderRadius: 5,
-                                        border: selectedTooth?.toothNumber === tooth.toothNumber ? "2px solid #FFD700" : "2px solid transparent",
+                                        border: selectedTooth?.toothNumber === tooth.toothNumber ? "2px solid #ff00eaff" : "2px solid transparent",
                                         cursor: "pointer",
                                         transition: "transform 0.2s, box-shadow 0.2s",
                                         "&:hover": {

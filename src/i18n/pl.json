@@ -320,5 +320,37 @@
     "addScheduledTime": "Dodaj zaplanowany czas",
     "saveChanges": "Zapisz zmiany",
     "remove" : "Czy chcesz usunąć plan dnia?"
+  },
+  "appointmentInfo": {
+    "title": "Informacje o wizycie : ",
+    "patient": "Pacjent",
+    "doctor": "Lekarz",
+    "service": "Usługa",
+    "date": "Data",
+    "time": "Godzina",
+    "price": "Cena",
+    "notes": "Notatki",
+    "phone": "Telefon",
+    "email": "Email"
+  },
+  "addInfo" : {
+    "title": "Dodatkowe informacje : ",
+    "noInfo": "Brak dodatkowych informacji.",
+    "newInfoLabelPl": "Nowa informacja (PL)",
+    "newInfoLabelEn": "Nowa informacja (EN)",
+    "addInfoButton": "Dodaj informację",
+    "infoAdded": "Nowa informacja została dodana.",
+    "infoRemoved": "Informacja została usunięta.",
+    "removeConfirm": "Czy na pewno chcesz usunąć tę informację?",
+    "addInfoTitle": "Dodaj nową informację"
+  },
+  "doctorAppointmentConsole": {
+    "title": "Konsola wizyty lekarskiej",
+    "selectTooth": "Wybierz ząb, aby zobaczyć lub edytować jego stan",
+    "additionalInfo": "Dodatkowe informacje",
+    "selectAdditionalInfo": "Wybierz dodatkowe informacje do dodania do wizyty",
+    "saveChanges": "Zapisz zmiany",
+    "saveSuccess": "Zmiany zostały pomyślnie zapisane.",
+    "saveError": "Wystąpił błąd podczas zapisywania zmian."
   }
 }

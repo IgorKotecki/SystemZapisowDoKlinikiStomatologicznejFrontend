@@ -314,5 +314,37 @@
     "addScheduledTime": "Add Scheduled Time",
     "saveChanges": "Save Changes",
     "remove": "Do You wont to remove day schedule?"
+  },
+  "appointmentInfo": {
+    "title": "Appointment Information : ",
+    "patient": "Patient",
+    "doctor": "Doctor",
+    "service": "Service",
+    "date": "Date",
+    "time": "Time",
+    "price": "Price",
+    "notes": "Notes",
+    "phone": "Phone",
+    "email": "Email"
+  },
+  "addInfo": {
+    "title": "Additional Information : ",
+    "noInfo": "No additional information available.",
+    "newInfoLabelPl": "New information (Polish)",
+    "newInfoLabelEn": "New information (English)",
+    "addInfoButton": "Add information",
+    "infoAdded": "New information has been added.",
+    "infoRemoved": "Information has been removed.",
+    "removeConfirm": "Are you sure you want to remove this information?",
+    "addInfoTitle": "Add new information"
+  },
+  "doctorAppointmentConsole": {
+    "title": "Appointment Console",
+    "selectTooth": "Select a tooth to update its status",
+    "additionalInfo": "Additional Information",
+    "saveChanges": "Save Changes",
+    "loading": "Loading appointment data...",
+    "saveSuccess": "Changes have been saved successfully!",
+    "saveError": "An error occurred while saving changes."
   }
 }

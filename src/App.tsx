@@ -28,6 +28,7 @@ import DoctorCalendar from "./pages/doctor/doctorCalendar";
 import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DoctorDaySchedule from "./pages/doctor/doctorDaySchedule";
+import DoctorAppointmentsConsole from "./pages/doctor/doctorAppointmentConsole";
 
 const App = () => {
   return (
@@ -188,6 +189,14 @@ const App = () => {
               element={
                 <ProtectedRoute allowedRoles={["Doctor"]}>
                   <DoctorDaySchedule />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/doctor/appointmentConsole/:guid"
+              element={
+                <ProtectedRoute allowedRoles={["Doctor"]}>
+                  <DoctorAppointmentsConsole />
                 </ProtectedRoute>
               }
             />
