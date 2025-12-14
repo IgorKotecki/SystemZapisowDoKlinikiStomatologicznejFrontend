@@ -17,12 +17,12 @@ export async function refreshTokenFlow() {
 
     const { accessToken, refreshToken: newRefresh } = data;
 
+    window.localStorage.removeItem("token")
+    window.localStorage.removeItem("refresh")
     window.localStorage.setItem("token", accessToken);
-    window.localStorage.setItem("refreshToken", newRefresh);
+    window.localStorage.setItem("refresh", newRefresh);
 
-    storage.setToken(accessToken);
-
-    console.log("🔄 Token refreshed!");
+    console.log("Token refreshed!");
 
     return true;
   } catch (err) {

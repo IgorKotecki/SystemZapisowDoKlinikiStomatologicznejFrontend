@@ -7,58 +7,71 @@ import {
   Grid,
   Paper,
   CircularProgress,
+  InputLabel,
+  MenuItem,
+  Select,
+  FormControl
 } from "@mui/material";
 import { ArrowLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import UserNavigation from "../../components/userComponents/userNavigation";
-// import api from "../../api/axios";
+import api from "../../api/axios";
 import { colors } from "../../utils/colors";
 import type { Service } from "../../Interfaces/Service";
+import type { ServiceCategory } from "../../Interfaces/ServiceCategory";
+import type { ServiceEdit } from "../../Interfaces/ServiceEdit";
 
 const EditService: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
   const serviceId = Number(id);
 
-  const [serviceData, setServiceData] = useState<Service | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [serviceData, setServiceData] = useState<ServiceEdit | null>(null);
+  const [categories, setCategories] = useState<ServiceCategory[]>([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const canSave = !!serviceData && serviceData.serviceCategoryIds.length === 1 && serviceData.namePl.trim().length > 0 && serviceData.nameEn.trim().length > 0;
 
   useEffect(() => {
-    const fetchService = async () => {
+    const fetchData = async () => {
       try {
-        // const response = await api.get(`/api/services/${serviceId}`);
-        // setServiceData(response.data);
+        const [serviceRes, categoriesRes] = await Promise.all([
+          api.get(`/api/Service/edit/${serviceId}`),
+          api.get(`/api/Service/serviceCategories`)
+        ]);
 
-        setServiceData({
-          id: serviceId,
-          name: "Wybielanie zębów",
-          price: 300,
-          duration: 60,
-          description: "Profesjonalne wybielanie zębów z użyciem lampy LED.",
-        });
-      } catch (error) {
-        console.error("Error fetching service:", error);
+        setServiceData(serviceRes.data);
+        setCategories(categoriesRes.data);
+      } catch (e) {
+        console.error(e);
       } finally {
         setLoading(false);
       }
     };
-    fetchService();
+
+    fetchData();
   }, [serviceId]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (serviceData) {
-      setServiceData({ ...serviceData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setServiceData(prev =>
+      prev ? { ...prev, [name]: value } : prev
+    );
+  };
+
+  const handleSave = async () => {
+    try {
+      await api.put(`/api/Service/editService/${serviceId}`, serviceData);
+      setIsEditing(false);
+    } catch (e) {
+      console.error(e);
     }
   };
 
-  const handleSave = () => {
-    // await api.put(`/api/services/${serviceId}`, serviceData);
-    alert(t("editService.saved"));
-    setIsEditing(false);
-  };
 
   if (loading) {
     return (
@@ -146,17 +159,17 @@ const EditService: React.FC = () => {
             }}
           >
             <Grid container spacing={3}>
-              {["name", "price", "duration", "description"].map((field) => (
-                <Grid key={field}  size={{ xs: 12, md: 6,  sm: (field==="description" ? 12 : 6)}} component="div">
-                {/* <Grid item xs={12} sm={field === "description" ? 12 : 6} key={field}> */}
+              {["lowPrice", "highPrice", "minTime", "namePl", "nameEn", "descriptionPl", "descriptionEn"].map((field) => (
+                <Grid key={field} size={{ xs: 12, md: 6, sm: (field === "description" ? 12 : 6) }} component="div">
+                  {/* <Grid item xs={12} sm={field === "description" ? 12 : 6} key={field}> */}
                   <TextField
                     fullWidth
                     name={field}
                     label={t(`editService.${field}`)}
-                    value={serviceData[field as keyof Service]}
+                    value={serviceData[field as keyof ServiceEdit]}
                     onChange={handleChange}
                     disabled={!isEditing}
-                    multiline={field === "description"}
+                    multiline={field.includes("description")}
                     rows={field === "description" ? 4 : 1}
                     sx={{
                       backgroundColor: colors.white,
@@ -166,51 +179,121 @@ const EditService: React.FC = () => {
                   />
                 </Grid>
               ))}
+              <Grid size={{ xs: 12 }} component="div">
+                <FormControl fullWidth sx={{ backgroundColor: colors.white, borderRadius: 1, "& .MuiInputBase-input": { color: colors.color1 }, }} >
+                  <InputLabel>{t("editService.category")}</InputLabel>
+                  <Select
+                    value={serviceData.serviceCategoryIds[0] ?? ""}
+                    disabled={!isEditing}
+                    onChange={(e) =>
+                      setServiceData(prev =>
+                        prev ? { ...prev, serviceCategoryIds: [Number(e.target.value)] } : prev
+                      )
+                    }
+                  >
+                    {categories.map(c => (
+                      <MenuItem key={c.id} value={c.id}>
+                        {i18n.language === "pl" ? c.namePl : c.nameEn}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
             </Grid>
 
-            <Box sx={{ mt: 4, display: "flex", gap: 2, justifyContent: "flex-end" }}>
+            <Box
+              sx={{
+                mt: 4,
+                display: "flex",
+                gap: 2,
+                justifyContent: "flex-end",
+                flexWrap: "wrap",
+              }}
+            >
               {!isEditing ? (
-                <Button
-                  variant="contained"
-                  sx={{
-                    backgroundColor: colors.color3,
-                    color: colors.white,
-                    "&:hover": { backgroundColor: colors.color4 },
-                  }}
-                  onClick={() => setIsEditing(true)}
-                >
-                  {t("editService.edit")}
-                </Button>
+                <>
+                  <Button
+                    variant="contained"
+                    onClick={() => setIsEditing(true)}
+                    sx={{
+                      backgroundColor: colors.color5,
+                      color: colors.color1,
+                      fontWeight: 600,
+                      px: 3,
+                      py: 1,
+                      borderRadius: 2,
+                      textTransform: "none",
+                      "&:hover": {
+                        backgroundColor: colors.color4,
+                      },
+                    }}
+                  >
+                    {t("editService.edit")}
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => setDeleteOpen(true)}
+                    sx={{
+                      color: "#d32f2f",
+                      borderColor: "#d32f2f",
+                      fontWeight: 600,
+                      px: 3,
+                      py: 1,
+                      borderRadius: 2,
+                      textTransform: "none",
+                      "&:hover": {
+                        backgroundColor: "rgba(211,47,47,0.08)",
+                        borderColor: "#b71c1c",
+                      },
+                    }}
+                  >
+                    {t("editService.delete")}
+                  </Button>
+                </>
               ) : (
                 <>
                   <Button
                     variant="contained"
-                    sx={{
-                      backgroundColor: colors.color3,
-                      color: colors.white,
-                      "&:hover": { backgroundColor: colors.color4 },
-                    }}
                     onClick={handleSave}
+                    sx={{
+                      backgroundColor: colors.color5,
+                      color: colors.color1,
+                      fontWeight: 600,
+                      px: 3,
+                      py: 1,
+                      borderRadius: 2,
+                      textTransform: "none",
+                      "&:hover": {
+                        backgroundColor: colors.color4,
+                      },
+                    }}
                   >
                     {t("editService.save")}
                   </Button>
+
+                  {/* CANCEL */}
                   <Button
                     variant="outlined"
+                    onClick={() => setIsEditing(false)}
                     sx={{
-                      borderColor: colors.color3,
-                      color: colors.white,
+                      color: colors.color5,
+                      borderColor: colors.color5,
+                      fontWeight: 600,
+                      px: 3,
+                      py: 1,
+                      borderRadius: 2,
+                      textTransform: "none",
                       "&:hover": {
-                        backgroundColor: colors.color4,
-                        borderColor: colors.color4,
+                        backgroundColor: "rgba(255,255,255,0.06)",
                       },
                     }}
-                    onClick={() => setIsEditing(false)}
                   >
                     {t("editService.cancel")}
                   </Button>
                 </>
               )}
             </Box>
+
           </Paper>
         </Box>
       </Box>

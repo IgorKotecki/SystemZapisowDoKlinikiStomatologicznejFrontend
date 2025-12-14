@@ -77,7 +77,7 @@ export default function UserNavigation() {
     const receptionistTranslated = [
       { href: "/receptionist/profile", label: t("receptionistNavigation.profile"), icon: User, roles: ["Receptionist"] },
       { href: "/receptionist/calendar", label: t("receptionistNavigation.visits"), icon: Calendar, roles: ["Receptionist"] },
-      { href: "/receptionist/users", label: t("receptionistNavigation.users"), icon: Users, roles: ["Receptionist"] },
+      // { href: "/receptionist/users", label: t("receptionistNavigation.users"), icon: Users, roles: ["Receptionist"] },
       { href: "/receptionist/appointment", label: t("receptionistNavigation.scheduleVisit"), icon: CalendarPlus, roles: ["Receptionist"] },
       { href: "/receptionist/services", label: t("receptionistNavigation.editServices"), icon: Settings2, roles: ["Receptionist"] },
     ];
