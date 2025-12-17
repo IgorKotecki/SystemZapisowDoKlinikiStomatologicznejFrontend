@@ -11,13 +11,12 @@ import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { colors } from "../../utils/colors";
 import type { IDoctorAppointment } from "../../Interfaces/IDoctorAppointment";
-import api from "../../api/axios";
 import { CalendarMapper } from "../../mappers/CallenderMapper";
 import i18n from "../../i18n";
 import enLocale from '@fullcalendar/core/locales/en-gb';
 import plLocale from '@fullcalendar/core/locales/pl';
 import { useNavigate } from "react-router-dom";
-
+import get from "../../api/get";
 
 const DoctorAppointments: React.FC = () => {
   const { t } = useTranslation();
@@ -30,13 +29,8 @@ const DoctorAppointments: React.FC = () => {
     const fetchDoctorsAppointemtAsync = async (date: string) => {
       const language = i18n.language;
       try {
-        const res = await api.get("/api/DoctorAppointments", {
-          params: {
-            lang: language,
-            date: date,
-          },
-        });
-        setAppointments(CalendarMapper.ApiAppointmentsToDoctorAppointments(res.data));
+        const response = await get.getDoctorAppointments(language, date);
+        setAppointments(CalendarMapper.ApiAppointmentsToDoctorAppointments(response));
         setLoading(false);
       } catch (err) {
         console.error(err);

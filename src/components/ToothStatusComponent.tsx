@@ -10,7 +10,7 @@ import Item from '@mui/material/Grid';
 interface TabPanelProps {
     statuses?: Status[];
     selectedStatus: Status | null;
-    onStatusChange: (status : Status) => void;
+    onStatusChange: (status: Status) => void;
     index: number;
     value: number;
 }
@@ -32,6 +32,9 @@ function TabPanel(props: TabPanelProps) {
                 boxSizing: 'border-box',
                 borderTopRightRadius: 8,
                 borderBottomRightRadius: 8,
+                minHeight: "300px",
+                maxHeight: "300px",
+                height: "300px",
             }}
         >
             {value === index && (
@@ -113,7 +116,9 @@ export default function ToothStatusComponent({ statusesByCategories, selectedSta
                 display: 'flex',
                 borderRadius: 8,
                 margin: 0,
-                height: 339,
+                minHeight: "300px",
+                maxHeight: "300px",
+                boxSizing: 'border-box',
             }}
         >
             <Tabs

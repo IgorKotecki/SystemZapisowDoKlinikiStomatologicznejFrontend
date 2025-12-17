@@ -149,7 +149,8 @@
     "tooth": "Tooth",
     "state": "Condition",
     "notes": "Notes",
-    "close": "Close"
+    "close": "Close",
+    "noTeethData": "No teeth data available for this user (Probably unregistered)."
   },
   "receptionistNavigation": {
     "profile": "Profile",

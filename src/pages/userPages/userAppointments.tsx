@@ -15,11 +15,11 @@ import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import api from "../../api/axios";
 import { colors } from "../../utils/colors";
-import { useAuth } from "../../context/AuthContext";
 import type { Appointment } from "../../Interfaces/Appointment";
+import get from "../../api/get"
 
 export default function VisitsHistoryPage() {
-  const {userRole, userId} = useAuth();
+
   const { t, i18n } = useTranslation();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,23 +28,10 @@ export default function VisitsHistoryPage() {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        // const token = localStorage.getItem("token");
-        // console.log(token);
-        // if (!token) return "Unregistered";
-
-        // const claims = decodeJwt(token);
-        // const userId = claims["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-        
         setLoading(true);
-        setError(null);
-        if (!userId) {
-          setError("Brak ID użytkownika");
-          setLoading(false);
-          return;
-        }
         const lang = i18n.language || "pl";
-        const response = await api.get(`/api/Appointment/User/${userId}?lang=${lang}`);
-        setAppointments(response.data);
+        const response = await get.getUserAppointments(lang);
+        setAppointments(response);
       } catch (err) {
         setError("Nie udało się pobrać wizyt.");
       } finally {

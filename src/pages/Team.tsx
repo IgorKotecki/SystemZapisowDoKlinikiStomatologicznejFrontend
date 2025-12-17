@@ -14,7 +14,7 @@ import React, { useEffect, useState } from 'react';
 import api from '../api/axios';
 import { colors } from '../utils/colors';
 import type { TeamMembers } from '../Interfaces/TeamMembers';
-
+import get from '../api/get';
 
 export default function Team() {
     const { t, i18n } = useTranslation();
@@ -27,8 +27,7 @@ export default function Team() {
             setLoading(true);
             try {
                 console.log("wysłane")
-                const response = await api.get(`api/Team/TeamMembers`);
-                const data: TeamMembers[] = response.data;
+                const data: TeamMembers[] = await get.getTeamMembers();
                 setTeam(data)
             } catch (error) {
                 console.error('Error feating team ', error)

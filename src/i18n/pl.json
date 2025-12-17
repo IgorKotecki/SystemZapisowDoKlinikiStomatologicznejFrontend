@@ -155,7 +155,8 @@
     "tooth": "Ząb",
     "state": "Stan",
     "notes": "Uwagi",
-    "close": "Zamknij"
+    "close": "Zamknij",
+    "noTeethData": "Brak danych o zębach dla tego użytkownika (Prawdopodobnie niezarejestrowany)."
   },
   "receptionistNavigation": {
     "profile": "Profil",

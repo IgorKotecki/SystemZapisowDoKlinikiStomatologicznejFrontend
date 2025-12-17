@@ -14,10 +14,10 @@ import { useNavigate } from 'react-router-dom';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
-import api from '../api/axios';
+import post from '../api/post';
 
 export default function Register() {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -78,13 +78,14 @@ export default function Register() {
 
         setLoading(true);
         try {
-            await api.post('/api/register', {
+            const payload = {
                 name: formData.firstName,
                 surname: formData.lastName,
                 email: formData.email,
                 phoneNumber: formData.phoneNumber,
                 password: formData.password
-            });
+            }
+            await post.registerUser(payload);
 
             navigate('/login');
         } catch (err: any) {

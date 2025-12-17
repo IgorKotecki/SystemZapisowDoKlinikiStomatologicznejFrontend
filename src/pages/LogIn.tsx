@@ -17,6 +17,7 @@ import api from '../api/axios';
 // import { storage } from '../utils/storage';
 import { useAuth } from '../context/AuthContext';
 import { colors } from '../utils/colors';
+import post from '../api/post';
 
 export default function LogIn() {
   const { t, i18n } = useTranslation();
@@ -45,8 +46,8 @@ export default function LogIn() {
     setError(null);
 
     try {
-      const response = await api.post('/api/login', formData);
-      const { accessToken, refreshToken } = response.data;
+      const response = await post.loginUser(formData);
+      const { accessToken, refreshToken } = response;
 
       login(accessToken, refreshToken);
 

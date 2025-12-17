@@ -16,6 +16,7 @@ import api from '../api/axios';
 import { colors } from "../utils/colors";
 import type { Service } from "../Interfaces/Service";
 import { Category } from "@mui/icons-material";
+import get from "../api/get";
 
 export default function Services() {
   const { t, i18n } = useTranslation();
@@ -28,8 +29,7 @@ export default function Services() {
       setLoading(true);
       try {
         const lang = i18n.language || 'pl';
-        const response = await api.get(`api/Service/AllServices?lang=${lang}`)
-        const data = response.data;
+        const data = await get.getAllServices(lang);
         setGroupedServices(data.servicesByCategory);
       } catch (error) {
         console.error('Error featchins services ', error);

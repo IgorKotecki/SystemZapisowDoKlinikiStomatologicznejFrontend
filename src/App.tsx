@@ -47,7 +47,7 @@ const App = () => {
             <Route path="/prices" element={<Pricing />} />
             <Route path="/contacts" element={<Contact />} />
             <Route path="/resetpassword" element={<ResetPassword />} />
-            
+
             {/* USER */}
 
             <Route
@@ -84,7 +84,7 @@ const App = () => {
             />
 
             {/* RECETIONIST */}
-            
+
             <Route
               path="/receptionist/profile"
               element={
@@ -143,7 +143,7 @@ const App = () => {
             />
 
             {/* DOCTOR */}
-            
+
             <Route
               path="/doctor/profile"
               element={

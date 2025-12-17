@@ -20,5 +20,11 @@ export const storage = {
 
   isLoggedIn: () => !!localStorage.getItem(TOKEN_KEY),
 
-  clearAll: () => localStorage.clear()
+  clearAll: () => localStorage.clear(),
+
+  clear: () => {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN);
+    localStorage.removeItem(USER_KEY);
+  }
 };

@@ -11,14 +11,13 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import TeethModel from "../../components/TeethModel";
 import i18n from "../../i18n";
-import api from "../../api/axios";
-import type { ToothData }  from "../../Interfaces/ToothData"
+import type { ToothData } from "../../Interfaces/ToothData"
 import { colors } from "../../utils/colors";
 import { useAuth } from "../../context/AuthContext";
-
+import get from "../../api/get";
 
 const DentalChartPage: React.FC = () => {
-  const {userId} = useAuth();
+  const { userId } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [teeth, setTeeth] = useState<ToothData[]>([]);
@@ -27,12 +26,12 @@ const DentalChartPage: React.FC = () => {
   useEffect(() => {
     const fetchTeethData = async () => {
       try {
-        const response = await api.post("/api/Tooth/ToothModel", {
-          userId: userId,
-          Language: i18n.language.toLowerCase()
-        });
-        console.log("Dane o zębach:", response.data);
-        setTeeth(response.data.teeth);
+        const lang = i18n.language;
+        if (!userId)
+          return;
+        const response = await get.getTeethModel(userId, lang);
+        console.log("Dane o zębach:", response);
+        setTeeth(response);
       } catch (error) {
         console.error("Błąd pobierania danych o zębach:", error);
       } finally {
@@ -98,7 +97,7 @@ const DentalChartPage: React.FC = () => {
         <Typography variant="subtitle1" sx={{ mb: 4 }}>
           {t("dentalChart.subtitle")}
         </Typography>
-        <TeethModel teeth={teeth}/>
+        <TeethModel teeth={teeth} />
       </Box>
     </Box>
   );

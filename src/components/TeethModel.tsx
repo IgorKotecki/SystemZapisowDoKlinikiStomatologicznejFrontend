@@ -12,7 +12,7 @@ import { colors } from "../utils/colors";
 type TeethModelProps = {
     teeth: ToothData[];
     selectedTooth?: ToothData | null;
-    setSelectedTooth?: (tooth: ToothData) => void;
+    setSelectedTooth?: (tooth: ToothData | null) => void;
 };
 
 export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth }: TeethModelProps) {
@@ -54,17 +54,24 @@ export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth }:
                 <Typography variant="h6" sx={{ mb: 3, color: colors.color5 }}>
                     {t("dentalChart.toothDiagram")}
                 </Typography>
-
+                {teeth.length === 0 && (<Typography color={colors.white}>{t("dentalChart.noTeethData")}</Typography>
+                )}
                 <Grid container justifyContent="center" spacing={1} sx={{ mb: 5 }}>
                     {teeth.slice(0, 16).map((tooth) => (
-                        
+
                         <Grid key={tooth.toothNumber} component='div'>
                             <Tooltip title={<div># {tooth.toothName} <br></br> {tooth.status.statusName} <br></br> {tooth.status.categoryName}</div>} arrow>
                                 <Box
                                     key={tooth.toothNumber}
                                     onClick={() => {
-                                        if (setSelectedTooth)
-                                            setSelectedTooth(tooth)
+                                        if (setSelectedTooth) {
+                                            if (selectedTooth?.toothNumber === tooth.toothNumber) {
+                                                setSelectedTooth(null); // Deselect if the same tooth is clicked
+                                            } else {
+                                                setSelectedTooth(tooth)
+                                            }
+                                        }
+
                                     }}
                                     sx={{
                                         width: 32,
@@ -93,8 +100,13 @@ export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth }:
                                 <Box
                                     key={tooth.toothNumber}
                                     onClick={() => {
-                                        if (setSelectedTooth)
-                                            setSelectedTooth(tooth)
+                                        if (setSelectedTooth) {
+                                            if (selectedTooth?.toothNumber === tooth.toothNumber) {
+                                                setSelectedTooth(null); // Deselect if the same tooth is clicked
+                                            } else {
+                                                setSelectedTooth(tooth)
+                                            }
+                                        }
                                     }}
                                     sx={{
                                         width: 32,

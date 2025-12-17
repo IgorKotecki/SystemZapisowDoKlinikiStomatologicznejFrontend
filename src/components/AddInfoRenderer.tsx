@@ -108,7 +108,7 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
             display: "flex",
             flexDirection: "column",
             '& p': { m: 1 },
-            height: 300,
+            height: "300px",
         }}>
             <h2 style={{ color: colors.black }}>{t('addInfo.title')}</h2>
             <List sx={{ width: '100%', position: "relative", overflow: 'auto', maxHeight: 300, bgcolor: 'background.paper' }}>
