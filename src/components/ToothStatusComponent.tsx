@@ -99,7 +99,7 @@ function a11yProps(index: number) {
 export default function ToothStatusComponent({ statusesByCategories, selectedStatus, onStatusChange }: Props) {
     const [currentTab, setCurrentTab] = useState(0);
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
         setCurrentTab(newValue);
     };
 
@@ -148,7 +148,7 @@ export default function ToothStatusComponent({ statusesByCategories, selectedSta
                     />
                 ))}
             </Tabs>
-            {Array.from(statusesByCategories.entries()).map(([category, statuses], index) => (
+            {Array.from(statusesByCategories.entries()).map(([_ , statuses], index) => (
                 <TabPanel
                     key={index}
                     value={currentTab}

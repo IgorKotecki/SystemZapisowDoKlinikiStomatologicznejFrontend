@@ -19,7 +19,6 @@ import enLocale from '@fullcalendar/core/locales/en-gb';
 import plLocale from '@fullcalendar/core/locales/pl';
 import type { CalendarDaySchedule as DaySchedule } from "../../Interfaces/CalendarDaySchedule";
 import { CalendarMapper } from "../../mappers/CallenderMapper";
-import api from "../../api/axios";
 import { useEffect } from "react";
 import { colors } from "../../utils/colors";
 import get from "../../api/get";

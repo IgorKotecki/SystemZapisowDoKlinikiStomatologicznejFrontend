@@ -10,12 +10,10 @@ import MonitorHeartIcon from "@mui/icons-material/MonitorHeart";
 import EmojiNatureIcon from "@mui/icons-material/EmojiNature";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import React, { useEffect, useState, useMemo } from "react"
+import { useEffect, useState, useMemo } from "react"
 import type { JSX } from "react";
-import api from '../api/axios';
 import { colors } from "../utils/colors";
 import type { Service } from "../Interfaces/Service";
-import { Category } from "@mui/icons-material";
 import get from "../api/get";
 
 export default function Services() {

@@ -11,7 +11,6 @@ import { TextField, Grid } from "@mui/material";
 import post from "../api/post";
 import get from "../api/get";
 import { Alert } from "@mui/material";
-import { set } from "date-fns";
 
 export default function Appointment() {
     const { t, i18n } = useTranslation();

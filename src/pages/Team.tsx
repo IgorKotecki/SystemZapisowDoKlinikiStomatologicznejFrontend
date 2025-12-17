@@ -10,8 +10,7 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
-import api from '../api/axios';
+import { useEffect, useState } from 'react';
 import { colors } from '../utils/colors';
 import type { TeamMembers } from '../Interfaces/TeamMembers';
 import get from '../api/get';

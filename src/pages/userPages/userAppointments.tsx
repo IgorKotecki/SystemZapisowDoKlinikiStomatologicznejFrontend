@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
-import api from "../../api/axios";
 import { colors } from "../../utils/colors";
 import type { Appointment } from "../../Interfaces/Appointment";
 import get from "../../api/get"

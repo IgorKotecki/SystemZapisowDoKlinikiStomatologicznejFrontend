@@ -1,7 +1,7 @@
 import type React from "react"
 
 import { Box, Typography, Button, Grid, Card, CardContent, TextField, Paper } from "@mui/material"
-import { useTranslation } from "react-i18next"
+// import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import LocationOnIcon from "@mui/icons-material/LocationOn"
 import PhoneIcon from "@mui/icons-material/Phone"
@@ -11,7 +11,7 @@ import { useState } from "react"
 import { colors } from "../utils/colors"
 
 export default function Contact() {
-  const { t } = useTranslation()
+  // const { t } = useTranslation()
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
     name: "",

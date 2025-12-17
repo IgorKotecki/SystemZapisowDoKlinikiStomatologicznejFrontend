@@ -1,5 +1,5 @@
 import { colors } from "../utils/colors";
-import { Box, DialogContentText } from "@mui/material";
+import { Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
