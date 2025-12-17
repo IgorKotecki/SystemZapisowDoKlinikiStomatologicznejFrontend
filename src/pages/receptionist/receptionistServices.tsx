@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Box,
   Typography,
@@ -8,36 +8,44 @@ import {
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-// import api from "../../api/axios";
+import api from "../../api/axios";
 import { colors } from "../../utils/colors";
 import type { Service } from "../../Interfaces/Service";
 
 const ReceptionistServices: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [services, setServices] = useState<Service[]>([]);
+  const [groupedServices, setGroupedServices] = useState<Record<string, Service[]>>({});
+  const services: Service[] = useMemo(() => {
+    return Object.values(groupedServices).flat();
+  }, [groupedServices]);
+  
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchServices = async () => {
+      setLoading(true);
       try {
-        // const response = await api.get("/api/services");
-        // setServices(response.data);
-
-        setServices([
-          { id: 1, name: "Wybielanie zębów", lowPrice: 300 , highPrice: 12312, minTime:2, description: "dsds" },
-          { id: 2, name: "Czyszczenie kamienia", lowPrice: 150 , highPrice: 12312, minTime:2, description: "dsds"},
-          { id: 3, name: "Leczenie kanałowe",lowPrice: 500, highPrice: 12312, minTime:2, description: "dsds"},
-          { id: 4, name: "Plomba kompozytowa", lowPrice: 200 , highPrice: 12312, minTime:2, description: "dsds"},
-        ]);
+        const lang = i18n.language || 'pl';
+        const response = await api.get(`api/Service/AllServices?lang=${lang}`)
+        const data = response.data;
+        setGroupedServices(data.servicesByCategory);
       } catch (error) {
-        console.error("Error fetching services:", error);
+        console.error('Error featchins services ', error);
       } finally {
         setLoading(false);
       }
     };
     fetchServices();
-  }, []);
+  }, [i18n.language]);
+
+  const formatPrice = (low: number | null, high: number | null) => {
+    if (low && high) return `${low} - ${high} zł`;
+    if (low) return `od ${low} zł`;
+    if (high) return `${high} zł`;
+    return "—";
+  };
+
 
   const handleServiceClick = (serviceId: number) => {
     navigate(`/receptionist/services/${serviceId}`);
@@ -126,7 +134,8 @@ const ReceptionistServices: React.FC = () => {
                       >
                         <td style={{ padding: "16px", color: colors.white }}>{service.id}</td>
                         <td style={{ padding: "16px", color: colors.white }}>{service.name}</td>
-                        <td style={{ padding: "16px", color: colors.white }}>{service.lowPrice} zł</td>
+                        <td style={{ padding: "16px", color: colors.white }}>{formatPrice(service.lowPrice, service.highPrice)}</td>
+
                       </tr>
                     ))}
                   </tbody>

@@ -28,6 +28,7 @@ export default function Team() {
                 console.log("wysłane")
                 const data: TeamMembers[] = await get.getTeamMembers();
                 setTeam(data)
+                console.log(response)
             } catch (error) {
                 console.error('Error feating team ', error)
             } finally {
@@ -143,7 +144,8 @@ export default function Team() {
                                     <CardMedia
                                         component="img"
                                         height="350"
-                                        image={`/images/doctors/${i + 1}.png`}
+                                        // image={`/images/doctors/${i + 1}.png`}
+                                        image={member.photoURL}
                                         alt={member.name}
                                         sx={{
                                             objectFit: 'cover',
