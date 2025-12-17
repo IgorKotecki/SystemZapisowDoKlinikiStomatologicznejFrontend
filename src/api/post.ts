@@ -50,6 +50,11 @@ export const addService = async (payload: any) => {
     return response.data;
 }
 
+export const bookAppointmentReceptionist = async (payload: any) => {
+    const response = await api.post(`/api/Appointment/receptionist/appointment`, payload);
+    return response.data;
+}
+
 export default {
     bookAppointmentGuest,
     bookAppointmentRegistered,
@@ -61,4 +66,5 @@ export default {
     resetPassword,
     addDoctor,
     addService,
+    bookAppointmentReceptionist,
 };

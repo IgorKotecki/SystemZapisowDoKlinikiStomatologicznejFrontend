@@ -68,6 +68,20 @@ export const getUserDetails = async () => {
   return response.data;
 }
 
+export const getAppointmentsForRecepcionist = async (lang: string, date: string) => {
+  const response = await api.get(`/api/Appointment/receptionist/appointments?lang=${lang}&date=${date}`);
+  return response.data;
+}
+
+export const getReceptionistServices = async (lang: string) => {
+  const response = await api.get(`/api/Service/receptionist-services?lang=${lang}`);
+  return response.data;
+}
+export const getAllUsers = async () => {
+  const response = await api.get(`/api/User/all-users`);
+  return response.data;
+}
+
 export default {
   getUserAppointments,
   getDoctorAppointments,
@@ -81,4 +95,7 @@ export default {
   getTeethModel,
   getToothStatuses,
   getUserDetails,
+  getAppointmentsForRecepcionist,
+  getReceptionistServices,
+  getAllUsers,
 };

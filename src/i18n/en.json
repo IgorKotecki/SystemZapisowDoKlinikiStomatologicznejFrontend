@@ -179,7 +179,10 @@
     "id": "ID",
     "firstName": "First name",
     "lastName": "Last name",
-    "phone": "Phone"
+    "phone": "Phone",
+    "action": "Action",
+    "makeAppointment": "Make Appointment",
+    "viewEdit": "View / Edit"
   },
   "editUser": {
     "title": "Edit Patient Data",
@@ -238,17 +241,6 @@
     "descriptionEn": "Description in english",
     "categories": "Categories",
     "delete" : "Dekete"
-  },
-  "receptionistCalendar": {
-    "title": "Appointment Calendar",
-    "subtitle": "View all scheduled patient appointments",
-    "patient": "Patient",
-    "doctor": "Doctor",
-    "service": "Service",
-    "date": "Date",
-    "cancel": "Cancel appointment",
-    "cancelButton": "Cancel",
-    "details": "Appointment information"
   },
   "doctorProfile": {
     "title": "Doctor Profile",
@@ -347,5 +339,15 @@
     "loading": "Loading appointment data...",
     "saveSuccess": "Changes have been saved successfully!",
     "saveError": "An error occurred while saving changes."
+  },
+  "receptionistCalendar": {
+    "close": "Close",
+    "makeAppointment": "Make New Appointment",
+    "title": "Receptionist's Calendar",
+    "appointmentDetails": "Appointment Details",
+    "patient": "Patient",
+    "doctor": "Doctor",
+    "services": "Services",
+    "date": "Date"
   }
 }

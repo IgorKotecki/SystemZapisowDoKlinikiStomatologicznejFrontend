@@ -1,7 +1,7 @@
 import api from "./axios";
 
 export const updateAditianalInformationToAppointment = async (payload: any) => {
-    const response = await api.put(`/api/Appointment/additional-information`, payload);
+    const response = await api.put(`/api/Appointment/doctor/additional-information`, payload);
     return response.data;
 };
 
@@ -21,7 +21,7 @@ export  const updateUserDetails = async (payload: any) => {
 }
 
 export const updateAppointmentStatus = async (payload: any) => {
-    const response = await api.put(`/api/Appointment/appointement-status`, payload);
+    const response = await api.put(`/api/Appointment/appointment-status`, payload);
     return response.data;
 }
 

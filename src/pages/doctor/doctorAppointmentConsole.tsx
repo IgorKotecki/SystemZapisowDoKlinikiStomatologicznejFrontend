@@ -123,12 +123,16 @@ export default function DoctorAppointmentsConsole() {
                 Id: state?.appointment.id,
                 AddInformationIds: checked.map(info => info.id),
             };
+
+            console.log(appointmentPayload);
+            
+
             await put.updateAditianalInformationToAppointment(appointmentPayload);
             console.log("Dodatkowe informacje zapisane:");
 
             const statusPayload = {
-                appointmentId: state?.appointment.id,
-                status: 3, // Completed
+                "appointmentId": state?.appointment.id,
+                "statusId": 3, // Completed
             };
 
             await put.updateAppointmentStatus(statusPayload);

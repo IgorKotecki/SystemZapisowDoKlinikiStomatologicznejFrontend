@@ -185,7 +185,10 @@
     "id": "ID",
     "firstName": "Imię",
     "lastName": "Nazwisko",
-    "phone": "Telefon"
+    "phone": "Telefon",
+    "action": "Akcja",
+    "makeAppointment": "Umów wizytę",
+    "viewEdit": "Zobacz / Edytuj"
   },
   "editUser": {
     "title": "Edycja danych pacjenta",
@@ -244,17 +247,6 @@
     "descriptionEn": "Opis po angielsku",
     "categories": "Kategorie",
     "delete": "Usuń"
-  },
-  "receptionistCalendar": {
-    "title": "Kalendarz wizyt",
-    "subtitle": "Zobacz wszystkie zaplanowane spotkania pacjentów",
-    "patient": "Pacjent",
-    "doctor": "Lekarz",
-    "service": "Usługa",
-    "date": "Data",
-    "cancel": "Anuluj wizytę",
-    "cancelButton": "Anuluj",
-    "details": "Informacje dotyczące wizyty"
   },
   "doctorProfile": {
     "title": "Profil lekarza",
@@ -353,5 +345,15 @@
     "saveChanges": "Zapisz zmiany",
     "saveSuccess": "Zmiany zostały pomyślnie zapisane.",
     "saveError": "Wystąpił błąd podczas zapisywania zmian."
+  },
+  "receptionistCalendar": {
+    "close": "Zamknij",
+    "makeAppointment": "Umów nową wizytę",
+    "title": "Kalendarz recepcjonisty",
+    "appointmentDetails": "Szczegóły wizyty",
+    "patient": "Pacjent",
+    "doctor": "Lekarz",
+    "services": "Usługi",
+    "date": "Data"
   }
 }
