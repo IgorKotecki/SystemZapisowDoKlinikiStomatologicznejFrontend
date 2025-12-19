@@ -82,6 +82,21 @@ export const getAllUsers = async () => {
   return response.data;
 }
 
+export const getCloudinarySignature = async () => {
+  const response = await api.get(`/api/Cloudinary/signature`);
+  return response.data;
+}
+
+export const getServiceById = async (serviceId: number) => {
+  const response = await api.get(`/api/Service/edit/${serviceId}`);
+  return response.data;
+}
+
+export const getServiceCategories = async () => {
+  const response = await api.get(`/api/Service/serviceCategories`);
+  return response.data;
+}
+
 export default {
   getUserAppointments,
   getDoctorAppointments,
@@ -98,4 +113,7 @@ export default {
   getAppointmentsForRecepcionist,
   getReceptionistServices,
   getAllUsers,
+  getCloudinarySignature,
+  getServiceById,
+  getServiceCategories,
 };

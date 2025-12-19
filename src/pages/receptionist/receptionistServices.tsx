@@ -8,9 +8,9 @@ import {
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import api from "../../api/axios";
 import { colors } from "../../utils/colors";
 import type { Service } from "../../Interfaces/Service";
+import get from "../../api/get";
 
 const ReceptionistServices: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -27,8 +27,8 @@ const ReceptionistServices: React.FC = () => {
       setLoading(true);
       try {
         const lang = i18n.language || 'pl';
-        const response = await api.get(`api/Service/AllServices?lang=${lang}`)
-        const data = response.data;
+        const data = await get.getAllServices(lang);
+        console.log(data)
         setGroupedServices(data.servicesByCategory);
       } catch (error) {
         console.error('Error featchins services ', error);

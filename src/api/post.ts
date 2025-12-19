@@ -1,4 +1,5 @@
 import api from "./axios";
+import get from "./get";
 
 export const bookAppointmentGuest = async (payload: any) => {
     const response = await api.post(`/api/Appointment/guest/appointment`, payload);
@@ -55,6 +56,23 @@ export const bookAppointmentReceptionist = async (payload: any) => {
     return response.data;
 }
 
+export const updatePhoto = async (file: File) =>{
+    const { signature, timestamp, cloudName, apiKey } = await get.getCloudinarySignature();
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("api_key", apiKey);
+    formData.append("timestamp", timestamp.toString());
+    formData.append("signature", signature);
+
+    const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        { method: "POST", body: formData }
+      );
+    if (!response.ok) throw new Error("Cloudinary upload failed");
+    const data = await response.json();
+    return data.secure_url;
+}
+
 export default {
     bookAppointmentGuest,
     bookAppointmentRegistered,
@@ -67,4 +85,5 @@ export default {
     addDoctor,
     addService,
     bookAppointmentReceptionist,
+    updatePhoto ,
 };

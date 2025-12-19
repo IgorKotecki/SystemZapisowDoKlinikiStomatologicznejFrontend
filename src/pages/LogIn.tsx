@@ -3,8 +3,6 @@ import {
   Typography,
   TextField,
   Button,
-  Select,
-  MenuItem,
   Card,
   CardContent,
   Link
@@ -13,10 +11,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
-import api from '../api/axios';
-// import { storage } from '../utils/storage';
 import { useAuth } from '../context/AuthContext';
-import { colors } from '../utils/colors';
+
 import post from '../api/post';
 
 export default function LogIn() {
@@ -47,9 +43,9 @@ export default function LogIn() {
 
     try {
       const response = await post.loginUser(formData);
-      const { accessToken, refreshToken } = response;
-
-      login(accessToken, refreshToken);
+      const { accessToken, refreshToken , photoUrl} = response;
+      console.log(response);
+      login(accessToken, refreshToken, photoUrl);
 
       const decoded = jwtDecode(accessToken);
       const role = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];

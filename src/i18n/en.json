@@ -117,7 +117,8 @@
     "address": "Address",
     "edit": "Edit",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "changePhoto": "Change profile photo"
   },
   "userAppointments": {
     "title": "Appointment history",
