@@ -6,7 +6,8 @@ const api = axios.create({
   baseURL: 'http://localhost:5114',
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  timeout: 10000,
 });
 
 api.interceptors.request.use((config) => {
@@ -22,16 +23,30 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     
+    // Sprawdź czy to błąd 401 (Unauthorized) i nie próbowaliśmy już odświeżyć
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      const success = await refreshTokenFlow();
-
-      if (success) {
-        const newToken = storage.getToken();
-        originalRequest.headers.Authorization = `Bearer ${newToken}`;
-
-        return api(originalRequest);
+      try {
+        // Próbuj odświeżyć token
+        const newToken = await refreshTokenFlow();
+        
+        if (newToken) {
+          // Zaktualizuj nagłówek z nowym tokenem
+          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+          
+          // WYWOŁAJ PONOWNIE ORYGINALNE ŻĄDANIE
+          return api(originalRequest);
+        } else {
+          // Jeśli odświeżenie się nie udało - przekieruj do logowania
+          storage.clear();
+          window.location.href = '/login';
+          return Promise.reject(error);
+        }
+      } catch (refreshError) {
+        storage.clear();
+        window.location.href = '/login';
+        return Promise.reject(refreshError);
       }
     }
 

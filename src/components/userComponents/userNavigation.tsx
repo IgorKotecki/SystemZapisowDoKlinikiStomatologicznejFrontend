@@ -1,18 +1,16 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Box, Typography, ButtonBase, Divider } from "@mui/material";
 import {
   User,
   Users,
   Calendar,
-  Bluetooth as Tooth,
   CalendarPlus,
   ShieldCheck,
   Settings2,
   Smile,
   CalendarCheck
 } from "lucide-react";
-import { jwtDecode } from "jwt-decode";
 import { useTranslation } from "react-i18next";
 import { colors } from "../../utils/colors";
 
@@ -77,8 +75,8 @@ export default function UserNavigation() {
     const receptionistTranslated = [
       { href: "/receptionist/profile", label: t("receptionistNavigation.profile"), icon: User, roles: ["Receptionist"] },
       { href: "/receptionist/calendar", label: t("receptionistNavigation.visits"), icon: Calendar, roles: ["Receptionist"] },
-      // { href: "/receptionist/users", label: t("receptionistNavigation.users"), icon: Users, roles: ["Receptionist"] },
-      { href: "/receptionist/appointment", label: t("receptionistNavigation.scheduleVisit"), icon: CalendarPlus, roles: ["Receptionist"] },
+      { href: "/receptionist/users", label: t("receptionistNavigation.users"), icon: Users, roles: ["Receptionist"] },
+      //{ href: "/receptionist/appointment", label: t("receptionistNavigation.scheduleVisit"), icon: CalendarPlus, roles: ["Receptionist"] },
       { href: "/receptionist/services", label: t("receptionistNavigation.editServices"), icon: Settings2, roles: ["Receptionist"] },
     ];
 

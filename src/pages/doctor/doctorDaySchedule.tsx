@@ -19,9 +19,10 @@ import enLocale from '@fullcalendar/core/locales/en-gb';
 import plLocale from '@fullcalendar/core/locales/pl';
 import type { CalendarDaySchedule as DaySchedule } from "../../Interfaces/CalendarDaySchedule";
 import { CalendarMapper } from "../../mappers/CallenderMapper";
-import api from "../../api/axios";
 import { useEffect } from "react";
 import { colors } from "../../utils/colors";
+import get from "../../api/get";
+import put from "../../api/put";
 
 export default function DoctorDaySchedule() {
     const { t } = useTranslation();
@@ -34,8 +35,8 @@ export default function DoctorDaySchedule() {
     useEffect(() => {
         const fetchWeekScheme = async () => {
             try {
-                const res = await api.get("/api/Doctor/weekScheme");
-                setDaySchedule(CalendarMapper.ApiDayScheduletoCalendar(res.data.daysSchemes));
+                const response = await get.getDoctorWeekSchedule();
+                setDaySchedule(CalendarMapper.ApiDayScheduletoCalendar(response.daysSchemes));
             } catch (err) {
                 console.error(err);
             }
@@ -49,9 +50,9 @@ export default function DoctorDaySchedule() {
             daysSchemes: CalendarMapper.CalendarDayScheduletoApi(daySchedule),
         };
         try {
-            const response = await api.put("/api/Doctor/weekSchemeUpdate", payload);
+            const response = await put.updateDoctorWeekSchedule(payload);
 
-            console.log("Week scheme updated:", response.data);
+            console.log("Week scheme updated:", response);
         } catch (error: any) {
             console.error("Error updating week scheme:", error.response?.data || error.message);
         }

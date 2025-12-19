@@ -1,4 +1,3 @@
-import { Paper } from "@mui/material";
 import type { IDoctorAppointment } from "../Interfaces/IDoctorAppointment"
 import { colors } from "../utils/colors";
 import { Box } from "@mui/material";
@@ -13,6 +12,7 @@ export default function AppointemtInfoRenderer({ appointment }: AppointemtInfoRe
 
     return (
         <Box sx={{
+            height: "300px",
             p: 4,
             pt: 1,
             borderRadius: 3,
@@ -21,7 +21,7 @@ export default function AppointemtInfoRenderer({ appointment }: AppointemtInfoRe
             display: "flex",
             flexDirection: "column",
             '& p': { m: 0.5 },
-            height: 300,
+            overflowY: 'auto'
         }}>
 
             <h2 style={{ color: colors.black }}>{t('appointmentInfo.title')}</h2>

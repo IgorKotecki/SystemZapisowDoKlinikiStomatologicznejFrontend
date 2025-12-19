@@ -2,9 +2,9 @@ import { Box, Typography, Button, Grid } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import api from "../api/axios";
 import { colors } from "../utils/colors";
 import type { Service } from "../Interfaces/Service";
+import get from "../api/get";
 
 export default function Pricing() {
   const { t, i18n } = useTranslation();
@@ -18,8 +18,7 @@ export default function Pricing() {
       setLoading(true);
       try {
         const lang = i18n.language || 'pl';
-        const response = await api.get(`api/Service/AllServices?lang=${lang}`)
-        const data = response.data;
+        const data = await get.getAllServices(lang);
         setGroupedServices(data.servicesByCategory);
       } catch (error) {
         console.error('Error featchins services ', error);

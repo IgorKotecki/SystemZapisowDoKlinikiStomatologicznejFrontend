@@ -1,19 +1,13 @@
 import {
-    Box,
     Typography,
     TextField,
     Button,
-    Select,
-    MenuItem,
-    Card,
-    CardContent,
-    Link
 } from '@mui/material';
-import React, { use, useEffect, useState } from "react";
-import api from "../api/axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { colors } from '../utils/colors';
+import post from '../api/post';
 
 
 type Status = { type: "idle" | "loading" | "success" | "error"; message?: string };
@@ -96,9 +90,11 @@ export default function ResetPassword() {
             return;
         }
         try {
-            await api.post("/api/forgotPassword", {
+            const payload = {
                 email: email
-            });
+            };
+
+            await post.forgotPassword(payload);
 
             setEmail("");
             setSentTo(email);
@@ -124,10 +120,13 @@ export default function ResetPassword() {
             return;
         }
         try {
-            var res = await api.post("/api/resetPassword", {
+
+            const payload = {
                 token: token,
                 newPassword: newPassword
-            });
+            };
+
+            var res = await post.resetPassword(payload);
 
             setStatus({ type: "success", message: "Password changed successfully. You may now log in." });
             setNewPassword("");

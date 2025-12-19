@@ -1,5 +1,5 @@
 import { colors } from "../utils/colors";
-import { Box, DialogContentText } from "@mui/material";
+import { Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -108,7 +108,7 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
             display: "flex",
             flexDirection: "column",
             '& p': { m: 1 },
-            height: 300,
+            height: "300px",
         }}>
             <h2 style={{ color: colors.black }}>{t('addInfo.title')}</h2>
             <List sx={{ width: '100%', position: "relative", overflow: 'auto', maxHeight: 300, bgcolor: 'background.paper' }}>

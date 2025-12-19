@@ -4,19 +4,19 @@ import {
   Typography,
   Paper,
   CircularProgress,
+  Button,
 } from "@mui/material";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import { ro } from "date-fns/locale";
-// import api from "../../api/axios";
 import { colors } from "../../utils/colors";
 import type { User } from "../../Interfaces/User";
 import { useAuth } from "../../context/AuthContext";
+import get from "../../api/get";
+import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 
 const ReceptionistUsers: React.FC = () => {
-  const {userRole} = useAuth();
+  const { userRole } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
@@ -24,13 +24,10 @@ const ReceptionistUsers: React.FC = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
+      setLoading(true);
       try {
-
-        setUsers([
-          { id: 1, firstName: "Jan", lastName: "Kowalski", phone: "+48 600 111 222", email: "dsdsd" },
-          { id: 2, firstName: "Anna", lastName: "Nowak", phone: "+48 600 333 444", email: "dsdsd" },
-          { id: 3, firstName: "Piotr", lastName: "Wiśniewski", phone: "+48 600 555 666", email: "dsdsd" },
-        ]);
+        const response = await get.getAllUsers();
+        setUsers(response);
       } catch (error) {
         console.error("Error fetching users:", error);
       } finally {
@@ -40,15 +37,63 @@ const ReceptionistUsers: React.FC = () => {
     fetchUsers();
   }, []);
 
+  const columns: GridColDef<(typeof users)[number]>[] = [
+    { field: 'id', headerName: 'ID', flex: 0.5 },
+    {
+      field: 'name',
+      headerName: 'First name',
+      editable: true,
+      flex: 1,
+    },
+    {
+      field: 'surname',
+      headerName: 'Last name',
+      editable: true,
+      flex: 1,
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      editable: true,
+      flex: 1,
+    },
+    {
+      field: 'phoneNumber',
+      headerName: 'Phone number',
+      editable: true,
+      flex: 1,
+    },
+    {
+      field: 'action',
+      headerName: 'Action',
+      flex: 2,
+      sortable: false,
+      editable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
+          <Button variant="contained" sx={{color: colors.white, backgroundColor:colors.color3}} size="small" onClick={() => handleMakeAppointment(params.row as User)}>
+            {t("receptionistUsers.makeAppointment")}
+          </Button>
+          <Button variant="outlined" sx={{color:colors.color1, borderColor: colors.color1}} size="small" onClick={() => handleUserClick(params.row.id)}>
+            {t("receptionistUsers.viewEdit")}
+          </Button>
+        </Box>
+      ),
+    },
+  ];
+
   const handleUserClick = (userId: number) => {
-    // const claims = jwtDecode(localStorage.getItem("token"));
-    const role  = userRole; //claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-    if(role == "Doctor"){
+    const role = userRole;
+    if (role == "Doctor") {
       navigate(`/doctor/users/${userId}`);
-    }else if (role == "Receptionist"){
+    } else if (role == "Receptionist") {
       navigate(`/receptionist/users/${userId}`);
     }
   };
+  const handleMakeAppointment = (user : User) => {
+    navigate(`/receptionist/appointment`, { state: { user: user } });
+  }
 
   return (
     <Box
@@ -76,11 +121,34 @@ const ReceptionistUsers: React.FC = () => {
       >
         <Box sx={{ width: "100%", maxWidth: 1500 }}>
           <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
-           {t("receptionistUsers.title")}
+            {t("receptionistUsers.title")}
           </Typography>
           <Typography variant="subtitle1" sx={{ mb: 3 }}>
             {t("receptionistUsers.subtitle")}
           </Typography>
+
+          <DataGrid
+            rows={users}
+            columns={columns}
+            loading={loading}
+            sx={{
+              width: '100%',
+              flex: 0,
+              height: '480px',
+              backgroundColor: colors.white,
+              color: colors.black,
+            }}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 7,
+                },
+              },
+            }}
+            pageSizeOptions={[7]}
+            disableRowSelectionOnClick
+            disableColumnResize
+          />
 
           {loading ? (
             <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
@@ -96,49 +164,7 @@ const ReceptionistUsers: React.FC = () => {
               }}
             >
               <Box sx={{ overflowX: "auto" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                  <thead>
-                    <tr style={{ backgroundColor: colors.color3 }}>
-                      {["id", "firstName", "lastName", "phone"].map((key) => (
-                        <th
-                          key={key}
-                          style={{
-                            padding: "16px",
-                            textAlign: "left",
-                            color: colors.white,
-                            fontWeight: 600,
-                          }}
-                        >
-                          {t(`receptionistUsers.${key}`)}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {users.map((user) => (
-                      <tr
-                        key={user.id}
-                        onClick={() => handleUserClick(user.id)}
-                        style={{
-                          cursor: "pointer",
-                          transition: "all 0.2s ease",
-                          backgroundColor: colors.color2,
-                        }}
-                        onMouseEnter={(e) =>
-                          (e.currentTarget.style.backgroundColor = colors.color3)
-                        }
-                        onMouseLeave={(e) =>
-                          (e.currentTarget.style.backgroundColor = colors.color2)
-                        }
-                      >
-                        <td style={{ padding: "16px", color: colors.white }}>{user.id}</td>
-                        <td style={{ padding: "16px", color: colors.white }}>{user.firstName}</td>
-                        <td style={{ padding: "16px", color: colors.white }}>{user.lastName}</td>
-                        <td style={{ padding: "16px", color: colors.white }}>{user.phone}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+
               </Box>
             </Paper>
           )}

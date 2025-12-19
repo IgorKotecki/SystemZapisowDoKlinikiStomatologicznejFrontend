@@ -7,7 +7,6 @@ import type { Status } from "../../Interfaces/Status";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "../../i18n";
-import api from "../../api/axios";
 import ToothStatusComponent from "../../components/ToothStatusComponent";
 import type { ToothData } from "../../Interfaces/ToothData"
 import TeethModel from "../../components/TeethModel";
@@ -19,6 +18,10 @@ import type { AddInfo } from "../../Interfaces/AddInfo";
 import { Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import Alert from '@mui/material/Alert';
+import put from "../../api/put";
+import get from "../../api/get";
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from "@mui/material/IconButton";
 
 export default function DoctorAppointmentsConsole() {
     const location = useLocation();
@@ -59,15 +62,20 @@ export default function DoctorAppointmentsConsole() {
         setSelectedTooth(null);
     };
 
+    const goBack = () => {
+        window.history.back();
+    }
+
     useEffect(() => {
+
+        const lang = i18n.language || "pl";
+
         const fetchStatusesAsync = async () => {
             try {
-                const lang = i18n.language || "pl";
-                const response = await api.get(`/api/Tooth/Statuses?language=${lang}`);
-                const res = response.data['statusesByCategories'];
+                const response = await get.getToothStatuses(lang);
                 const map = new Map<string, Status[]>();
-                for (const key in res) {
-                    map.set(key, res[key]);
+                for (const key in response) {
+                    map.set(key, response[key]);
                 }
                 setStatusesByCategories(map);
             } catch (err) {
@@ -76,22 +84,18 @@ export default function DoctorAppointmentsConsole() {
         };
         const fetchTeethData = async () => {
             try {
-                const response = await api.post("/api/Tooth/ToothModel", {
-                    userId: state?.appointment.patientId,
-                    Language: i18n.language.toLowerCase()
-                });
-                console.log("Dane o zębach:", response.data);
-                setTeeth(response.data.teeth);
+                if (!state) return;
+                const response = await get.getTeethModel(state.appointment.patientId, lang)
+                setTeeth(response);
             } catch (error) {
                 console.error("Błąd pobierania danych o zębach:", error);
             }
         };
+
         const fetchAddInfoData = async () => {
             try {
-                const lang = i18n.language || "pl";
-                const response = await api.get(`/api/Appointment/AddInfo?lang=${lang}`);
-                console.log("Dane o dodatkowych informacjach:", response.data);
-                setAddInfo(response.data);
+                const response = await get.getAdditionalInformation(lang);
+                setAddInfo(response);
             } catch (error) {
                 console.error("Błąd pobierania danych o dodatkowych informacjach:", error);
             }
@@ -112,16 +116,28 @@ export default function DoctorAppointmentsConsole() {
                     statusId: tooth.status ? tooth.status.statusId : null,
                 })),
             };
-            await api.put("/api/Tooth/UpdateToothModel", payload);
+            await put.updateTeethModel(payload);
             console.log("Zmiany zebów zapisane:");
 
             const appointmentPayload = {
                 Id: state?.appointment.id,
                 AddInformationIds: checked.map(info => info.id),
             };
-            await api.put("/api/Appointment/AddInfoToAppointment", appointmentPayload);
-            console.log("Dodatkowe informacje zapisane:");
+
+            console.log(appointmentPayload);
             
+
+            await put.updateAditianalInformationToAppointment(appointmentPayload);
+            console.log("Dodatkowe informacje zapisane:");
+
+            const statusPayload = {
+                "appointmentId": state?.appointment.id,
+                "statusId": 3, // Completed
+            };
+
+            await put.updateAppointmentStatus(statusPayload);
+            console.log("Status wizyty zapisany:");
+
             setAlert({ type: 'success', message: t('doctorAppointmentConsole.saveSuccess') });
         } catch (error) {
             console.error("Błąd zapisywania zmian:", error);
@@ -142,17 +158,36 @@ export default function DoctorAppointmentsConsole() {
     }
 
     return (
-        <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, minHeight: "100vh", backgroundColor: colors.color1 }}>
+        <Box sx={
+            {
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                minHeight: "100vh",
+                backgroundColor: colors.color1
+            }
+        }>
             <UserNavigation />
-            <Grid container sx={{ padding: 2}} spacing={2}>
+            <Grid container
+                sx={{
+                    padding: 4,
+                    alignContent: 'flex-start'
+                }}
+                rowSpacing={2}
+                columnSpacing={2}
+            >
                 <Grid size={12}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
-                        {t("doctorAppointmentConsole.title")}
-                    </Typography>
-                    <Button onClick={saveChanges}>
-                        {t("doctorAppointmentConsole.saveChanges")}
-                    </Button>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+                            <IconButton onClick={goBack} color="inherit">
+                                <CloseIcon sx={{ color: colors.color5, height: 40, width: 40 }} />
+                            </IconButton>
+                            <Typography variant="h4" sx={{ color: colors.color5 }}>
+                                {t("doctorAppointmentConsole.title")}
+                            </Typography>
+                        </Box>
+                        <Button onClick={saveChanges}>
+                            {t("doctorAppointmentConsole.saveChanges")}
+                        </Button>
                     </Box>
                 </Grid>
                 <Grid size={12}>
@@ -162,7 +197,7 @@ export default function DoctorAppointmentsConsole() {
                     <AppointemtInfoRenderer appointment={state.appointment} />
                 </Grid>
                 <Grid size={4}>
-                    <AddInfoRenderer addInfo={addInfo} checked={checked} setChecked={setChecked} setAddInfo={setAddInfo}/>
+                    <AddInfoRenderer addInfo={addInfo} checked={checked} setChecked={setChecked} setAddInfo={setAddInfo} />
                 </Grid>
                 <Grid size={4}>
                     <ToothStatusComponent statusesByCategories={statusesByCategories} selectedStatus={selectedStatus} onStatusChange={onStatusChange} />

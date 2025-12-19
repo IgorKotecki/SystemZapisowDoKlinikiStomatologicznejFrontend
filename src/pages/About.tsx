@@ -1,7 +1,5 @@
 import { Box, Typography, Button, Grid, Card, CardContent, Avatar } from "@mui/material";
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
 import VerifiedIcon from "@mui/icons-material/Verified";

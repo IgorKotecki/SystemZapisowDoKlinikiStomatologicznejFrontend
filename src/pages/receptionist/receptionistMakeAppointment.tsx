@@ -1,120 +1,148 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
-  TextField,
   MenuItem,
   Button,
   FormControl,
   InputLabel,
   Select,
-  Autocomplete,
-  CircularProgress,
   Paper,
+  CircularProgress,
 } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useTranslation } from "react-i18next";
-import api from "../../api/axios";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { colors } from "../../utils/colors";
+import type { Service } from "../../Interfaces/Service";
+import type { Doctor } from "../../Interfaces/Doctor";
+import type { TimeBlock } from "../../Interfaces/TimeBlock";
+import post from "../../api/post";
+import get from "../../api/get";
+import type { User } from "../../Interfaces/User";
+import { useLocation } from "react-router-dom";
 
 export default function ReceptionistAppointment() {
   const { t, i18n } = useTranslation();
-
-  const [selectedUser, setSelectedUser] = useState<any>(null);
-  const [users, setUsers] = useState<any[]>([]);
-  const [services, setServices] = useState<{ id: string; name: string }[]>([]);
-  const [doctors, setDoctors] = useState<{ id: string; name: string; surname: string }[]>([]);
-  const [availableTimeBlocks, setAvailableTimeBlocks] = useState<any[]>([]);
+  const location = useLocation();
+  const state = location.state as { user: User } | null;
   const [date, setDate] = useState<Date | null>(null);
-  const [service, setService] = useState("");
-  const [doctor, setDoctor] = useState("");
-  const [hour, setHour] = useState("");
+  const [servicesIds, setServicesIds] = useState<number[]>([]);
+  const [doctorId, setDoctorId] = useState<number | "">("");
+  const [timeBlockId, setTimeBlockId] = useState<number | "">("");
+  const [services, setServices] = useState<Service[]>([]);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [timeBlocks, setTimeBlocks] = useState<TimeBlock[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingDoctors, setLoadingDoctors] = useState(false);
+  const [loadingBlocks, setLoadingBlocks] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await api.get("/api/User");
-        setUsers(res.data);
-      } catch (err) {
-        console.error("Błąd pobierania użytkowników:", err);
-      }
-    };
-    fetchUsers();
-  }, []);
 
+    const lang = i18n.language || "pl";
 
-  useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await api.get(`/api/Service/UserServices`, {
-          params: { lang: i18n.language },
-        });
-        setServices(res.data);
+        const response = await get.getReceptionistServices(lang);
+        console.log("Usługi:", response);
+        setServices(response);
       } catch (err) {
         console.error("Błąd pobierania usług:", err);
+        setServices([]);
       }
     };
+
     fetchServices();
   }, [i18n.language]);
 
   useEffect(() => {
-    if (!date) return;
-    const fetchTimeBlocks = async () => {
-      try {
-        const res = await api.get("/api/TimeBlocks", {
-          params: {
-            Year: date.getFullYear(),
-            Month: date.getMonth() + 1,
-            Day: date.getDate(),
-          },
-        });
-        const blocks = res.data;
-        setAvailableTimeBlocks(blocks);
-        const uniqueDoctors = Array.from(
-          new Map(
-            blocks
-              .filter((b: any) => b.user && b.user.id != null)
-              .map((b: any) => [
-                String(b.user.id),
-                { id: String(b.user.id), name: b.user.name, surname: b.user.surname },
-              ])
-          ).values()
-        );
-        setDoctors(uniqueDoctors);
-      } catch (err) {
-        console.error("Błąd pobierania bloków czasowych:", err);
-      }
-    };
-    fetchTimeBlocks();
-  }, [date]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedUser || !service || !doctor || !hour) {
-      setError(t("receptionistAppointment.errorFillAll") || "Uzupełnij wszystkie pola.");
+    if (!servicesIds) {
+      setDoctors([]);
       return;
     }
-    setLoading(true);
+
+    const fetchDoctors = async () => {
+      setLoadingDoctors(true);
+      try {
+        const response = await get.getDoctors();
+        setDoctors(response);
+      } catch (err) {
+        console.error("Błąd pobierania lekarzy:", err);
+        setDoctors([]);
+      } finally {
+        setLoadingDoctors(false);
+      }
+    };
+
+    fetchDoctors();
+  }, [servicesIds]);
+
+  useEffect(() => {
+    if (!doctorId || !date) {
+      setTimeBlocks([]);
+      return;
+    }
+
+    const fetchTimeBlocks = async () => {
+      setLoadingBlocks(true);
+      try {
+        const response = await get.getTimeBlocks(doctorId, date)
+
+        setTimeBlocks(response);
+      } catch (err) {
+        console.error("Błąd pobierania bloków czasowych:", err);
+        setTimeBlocks([]);
+      } finally {
+        setLoadingBlocks(false);
+      }
+    };
+
+    fetchTimeBlocks();
+  }, [doctorId, date]);
+
+  const submitAppointment = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    var startTime = timeBlocks.find(t => t.doctorBlockId == timeBlockId)?.timeStart;
+
+    var serv = services.filter(s => servicesIds.includes(s.id));
+
+    var duration = 0;
+    serv.forEach(s => duration += s.minTime);
+
+    setError(null);
     try {
-      await api.post("/api/Appointment", {
-        userId: selectedUser.id,
-        doctorBlockId: [Number(hour)],
-        service: { id: Number(service) },
-      });
-      alert(t("receptionistAppointment.success"));
-      setSelectedUser(null);
-      setService("");
-      setDoctor("");
-      setHour("");
+      if (!servicesIds || !doctorId || !timeBlockId || !date || !state?.user.id) {
+        setError(t("userMakeAppointment.errorFields"));
+        return;
+      }
+
+      setLoading(true);
+
+      const payload = {
+        userId: state?.user.id,
+        "bookAppointmentRequestDto": {
+          doctorId,
+          startTime,
+          duration,
+          servicesIds,
+        }
+      };
+
+      await post.bookAppointmentReceptionist(payload)
+
+      alert(t("userMakeAppointment.success"));
+
+      setServicesIds([]);
+      setDoctorId("");
+      setTimeBlockId("");
       setDate(null);
     } catch (err: any) {
       console.error(err);
-      setError(err.response?.data?.message || t("receptionistAppointment.errorOccurred"));
+      setError(t("userMakeAppointment.errorOccurred") + err);
     } finally {
       setLoading(false);
     }
@@ -130,10 +158,8 @@ export default function ReceptionistAppointment() {
         backgroundColor: colors.color1,
       }}
     >
-    
       <UserNavigation />
 
-     
       <Box
         component="main"
         sx={{
@@ -146,12 +172,16 @@ export default function ReceptionistAppointment() {
           color: colors.white,
         }}
       >
-        <Box sx={{ width: "100%", maxWidth: 1000 }}>
+        <Box sx={{ width: "100%", maxWidth: 1500 }}>
           <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
-            {t("receptionistAppointment.title")}
+            {t("receptionistMakeAppointment.title")}
           </Typography>
-          <Typography variant="subtitle1" sx={{ mb: 4 }}>
-            {t("receptionistAppointment.subtitle")}
+
+          <Typography variant="subtitle1" sx={{ mb: 1 }}>
+            {t("receptionistMakeAppointment.subtitle")}
+          </Typography>
+          <Typography variant="subtitle2" sx={{ mb: 1 }}>
+            {state?.user.name} {state?.user.surname} - {state?.user.email} - {state?.user.phoneNumber}
           </Typography>
 
           <Paper
@@ -162,47 +192,32 @@ export default function ReceptionistAppointment() {
               backgroundColor: colors.color2,
             }}
           >
-            <form onSubmit={handleSubmit}>
-        
-              <Autocomplete
-                options={users}
-                getOptionLabel={(u) => `${u.name} ${u.surname} (${u.email})`}
-                value={selectedUser}
-                onChange={(_, newValue) => setSelectedUser(newValue)}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label={t("receptionistAppointment.selectUser")}
-                    fullWidth
-                    margin="normal"
-                    sx={{ backgroundColor: colors.white, borderRadius: 1 }}
-                  />
-                )}
-              />
+            <form onSubmit={submitAppointment}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
-                  label={t("receptionistAppointment.date")}
+                  label={t("userMakeAppointment.date")}
                   value={date}
                   onChange={(newDate) => setDate(newDate)}
-                  disabled={!selectedUser}
                   slotProps={{
                     textField: {
                       fullWidth: true,
-                      margin: "normal",
-                      sx: { backgroundColor: colors.white, borderRadius: 1 },
+                      sx: { backgroundColor: colors.white, borderRadius: 1, mt: 2, color: colors.black },
                     },
                   }}
                 />
               </LocalizationProvider>
-
-              <FormControl fullWidth margin="normal" disabled={!selectedUser}>
-                <InputLabel sx={{ color: colors.white }}>
-                  {t("receptionistAppointment.service")}
+              <FormControl fullWidth sx={{ mt: 3 }}>
+                <InputLabel sx={{ color: colors.black }}>
+                  {t("userMakeAppointment.service")}
                 </InputLabel>
                 <Select
-                  value={service}
-                  onChange={(e) => setService(e.target.value)}
-                  sx={{ backgroundColor: colors.white, borderRadius: 1 }}
+                  multiple
+                  value={servicesIds}
+                  onChange={(e) => {
+                    const value = e.target.value
+                    setServicesIds(typeof value === 'string' ? value.split(',').map(Number) : value)
+                  }}
+                  sx={{ backgroundColor: colors.white }}
                 >
                   {services.map((s) => (
                     <MenuItem key={s.id} value={s.id}>
@@ -211,66 +226,87 @@ export default function ReceptionistAppointment() {
                   ))}
                 </Select>
               </FormControl>
-
-              <FormControl fullWidth margin="normal" disabled={!selectedUser || !date}>
-                <InputLabel sx={{ color: colors.white }}>
-                  {t("receptionistAppointment.doctor")}
+              <FormControl
+                fullWidth
+                sx={{ mt: 3 }}
+                disabled={!servicesIds}
+              >
+                <InputLabel sx={{ color: colors.black }}>
+                  {t("userMakeAppointment.doctor")}
                 </InputLabel>
                 <Select
-                  value={doctor}
-                  onChange={(e) => setDoctor(e.target.value)}
-                  sx={{ backgroundColor: colors.white, borderRadius: 1 }}
+                  value={doctorId}
+                  onChange={(e) => setDoctorId(Number(e.target.value))}
+                  sx={{ backgroundColor: colors.white }}
                 >
-                  {doctors.map((d) => (
-                    <MenuItem key={d.id} value={d.id}>
-                      {d.name} {d.surname}
+                  {loadingDoctors ? (
+                    <MenuItem disabled>
+                      <CircularProgress size={20} />
                     </MenuItem>
-                  ))}
+                  ) : (
+                    doctors.map((doc) => (
+                      <MenuItem key={doc.id} value={doc.id}>
+                        {doc.name} {doc.surname}
+                      </MenuItem>
+                    ))
+                  )}
                 </Select>
               </FormControl>
 
-              <FormControl fullWidth margin="normal" disabled={!selectedUser || !doctor}>
-                <InputLabel sx={{ color: colors.white }}>
-                  {t("receptionistAppointment.hour")}
+              <FormControl
+                fullWidth
+                sx={{ mt: 3 }}
+                disabled={!doctorId || !date}
+              >
+                <InputLabel sx={{ color: colors.black }}>
+                  {t("userMakeAppointment.hour")}
                 </InputLabel>
+
                 <Select
-                  value={hour}
-                  onChange={(e) => setHour(e.target.value)}
-                  sx={{ backgroundColor: colors.white, borderRadius: 1 }}
+                  value={timeBlockId}
+                  onChange={(e) => setTimeBlockId(Number(e.target.value))}
+                  sx={{ backgroundColor: colors.white }}
                 >
-                  {availableTimeBlocks
-                    .filter((b) => b.isAvailable && String(b.user.id) === doctor)
-                    .map((b) => {
-                      const start = new Date(b.timeStart);
-                      const formattedTime = start.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      });
-                      return (
-                        <MenuItem key={b.doctorBlockId} value={b.doctorBlockId}>
-                          {formattedTime}
-                        </MenuItem>
-                      );
-                    })}
+                  {loadingBlocks ? (
+                    <MenuItem disabled>
+                      <CircularProgress size={20} />
+                    </MenuItem>
+                  ) : (
+                    timeBlocks
+                      .filter((b) => b.isAvailable)
+                      .map((b) => {
+                        const time = new Date(b.timeStart).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        });
+
+                        return (
+                          <MenuItem key={b.doctorBlockId} value={b.doctorBlockId}>
+                            {time}
+                          </MenuItem>
+                        );
+                      })
+                  )}
                 </Select>
               </FormControl>
-
-              {error && <Typography sx={{ color: "red", mt: 1 }}>{error}</Typography>}
+              {error && (
+                <Typography sx={{ mt: 2, color: "#ff8080" }}>{error}</Typography>
+              )}
 
               <Button
                 type="submit"
+                fullWidth
                 variant="contained"
                 size="large"
-                fullWidth
-                disabled={!selectedUser || loading}
                 sx={{
-                  mt: 3,
+                  mt: 4,
                   backgroundColor: colors.color3,
                   color: colors.white,
                   "&:hover": { backgroundColor: colors.color4 },
                 }}
+                disabled={loading}
               >
-                {loading ? <CircularProgress size={24} color="inherit" /> : t("receptionistAppointment.submit")}
+                {t("userMakeAppointment.submit")}
               </Button>
             </form>
           </Paper>

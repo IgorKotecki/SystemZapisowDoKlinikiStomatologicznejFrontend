@@ -14,12 +14,13 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useTranslation } from "react-i18next";
-import api from "../../api/axios";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { colors } from "../../utils/colors";
 import type { Service } from "../../Interfaces/Service";
 import type { Doctor } from "../../Interfaces/Doctor";
 import type { TimeBlock } from "../../Interfaces/TimeBlock";
+import post from "../../api/post";
+import get from "../../api/get";
 
 export default function UserAppointmentPage() {
   const { t, i18n } = useTranslation();
@@ -36,13 +37,14 @@ export default function UserAppointmentPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+
+    const lang = i18n.language || "pl";
+
     const fetchServices = async () => {
       try {
-        const res = await api.get(`/api/Service/UserServices`, {
-          params: { lang: i18n.language },
-        });
-        console.log("Usługi:", res.data);
-        setServices(res.data);
+        const response = await get.getUserServices(lang);
+        console.log("Usługi:", response);
+        setServices(response);
       } catch (err) {
         console.error("Błąd pobierania usług:", err);
         setServices([]);
@@ -61,8 +63,8 @@ export default function UserAppointmentPage() {
     const fetchDoctors = async () => {
       setLoadingDoctors(true);
       try {
-        const res = await api.get(`/api/Doctor`);
-        setDoctors(res.data);
+        const response = await get.getDoctors();
+        setDoctors(response);
       } catch (err) {
         console.error("Błąd pobierania lekarzy:", err);
         setDoctors([]);
@@ -83,15 +85,9 @@ export default function UserAppointmentPage() {
     const fetchTimeBlocks = async () => {
       setLoadingBlocks(true);
       try {
-        const res = await api.get(`/api/GetTimeBlocks/${doctorId}`, {
-          params: {
-            Year: date.getFullYear(),
-            Month: date.getMonth() + 1,
-            Day: date.getDate(),
-          },
-        });
+        const response = await get.getTimeBlocks(doctorId, date)
 
-        setTimeBlocks(res.data);
+        setTimeBlocks(response);
       } catch (err) {
         console.error("Błąd pobierania bloków czasowych:", err);
         setTimeBlocks([]);
@@ -122,12 +118,14 @@ export default function UserAppointmentPage() {
 
       setLoading(true);
 
-      await api.post(`/api/Appointment/user/book`, {
+      const payload = {
         doctorId,
         startTime,
         duration,
         servicesIds,
-      });
+      };
+
+      await post.bookAppointmentRegistered(payload)
 
       alert(t("userMakeAppointment.success"));
 

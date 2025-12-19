@@ -16,7 +16,7 @@ import Appointments from "./pages/userPages/userAppointments";
 import UserMakeAppointment from "./pages/userPages/userMakeAppointment";
 import DentalChartPage from "./pages/userPages/DentalChartPage";
 import ReceptionistProfile from "./pages/receptionist/receptionistProfile";
-import ReceptionistCalendar from "./pages/receptionist/receptionistAppointments";
+import ReceptionistCalendar from "./pages/receptionist/receptionistCalendar";
 import ReceptionistUsers from "./pages/receptionist/receptionistUsers";
 import EditUser from "./pages/receptionist/receptionistUserInfo";
 import ReceptionistAppointment from "./pages/receptionist/receptionistMakeAppointment";
@@ -47,7 +47,7 @@ const App = () => {
             <Route path="/prices" element={<Pricing />} />
             <Route path="/contacts" element={<Contact />} />
             <Route path="/resetpassword" element={<ResetPassword />} />
-            
+
             {/* USER */}
 
             <Route
@@ -84,7 +84,7 @@ const App = () => {
             />
 
             {/* RECETIONIST */}
-            
+
             <Route
               path="/receptionist/profile"
               element={
@@ -101,14 +101,14 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            {/* <Route
+            <Route
               path="/receptionist/users"
               element={
                 <ProtectedRoute allowedRoles={["Receptionist"]}>
                   <ReceptionistUsers />
                 </ProtectedRoute>
               }
-            /> */}
+            />
             <Route
               path="/receptionist/users/:id"
               element={
@@ -143,7 +143,7 @@ const App = () => {
             />
 
             {/* DOCTOR */}
-            
+
             <Route
               path="/doctor/profile"
               element={
