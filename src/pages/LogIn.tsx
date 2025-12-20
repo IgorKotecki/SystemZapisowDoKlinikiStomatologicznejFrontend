@@ -43,9 +43,9 @@ export default function LogIn() {
 
     try {
       const response = await post.loginUser(formData);
-      const { accessToken, refreshToken , photoUrl} = response;
+      const { accessToken, refreshToken , photoURL} = response;
       console.log(response);
-      login(accessToken, refreshToken, photoUrl);
+      login(accessToken, refreshToken, photoURL);
 
       const decoded = jwtDecode(accessToken);
       const role = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
