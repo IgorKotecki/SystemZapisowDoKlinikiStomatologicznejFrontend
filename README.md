@@ -1,69 +1,86 @@
-# React + TypeScript + Vite
+# 🦷 System Zapisów do Kliniki Stomatologicznej - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+System zarządzania zapisami do kliniki stomatologicznej stworzony jako część pracy inżynierskiej. Aplikacja frontend zbudowana przy użyciu React, TypeScript i Vite.
 
-Currently, two official plugins are available:
+## 📋 Opis projektu
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Nowoczesna aplikacja webowa umożliwiająca zarządzanie wizytami w klinice stomatologicznej. System oferuje intuicyjny interfejs użytkownika z funkcjami rezerwacji wizyt, zarządzania pacjentami oraz administracji personelem medycznym.
 
-## Expanding the ESLint configuration
+## 🚀 Technologie
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React 18.3** - biblioteka do budowy interfejsu użytkownika
+- **TypeScript** - typowany JavaScript
+- **Vite** - szybkie narzędzie do budowania aplikacji
+- **Material-UI (MUI)** - komponenty UI
+- **React Router** - routing w aplikacji
+- **Axios** - komunikacja z API
+- **FullCalendar** - zarządzanie kalendarzem wizyt
+- **i18next** - wielojęzyczność aplikacji
+- **Framer Motion** - animacje
+- **JWT** - autoryzacja użytkowników
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 📁 Struktura projektu
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── api/          # Komunikacja z backend API
+├── components/   # Komponenty React
+├── context/      # Context API (zarządzanie stanem)
+├── i18n/         # Tłumaczenia i konfiguracja językowa
+├── Interfaces/   # Definicje TypeScript
+├── mappers/      # Mapowanie danych
+├── pages/        # Strony aplikacji
+└── utils/        # Funkcje pomocnicze
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Instalacja
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Sklonuj repozytorium:
+```bash
+git clone https://github.com/IgorKotecki/SystemZapisowDoKlinikiStomatologicznejFrontend.git
+cd SystemZapisowDoKlinikiStomatologicznejFrontend
 ```
+
+2. Zainstaluj zależności:
+```bash
+npm install
+```
+
+3. Uruchom aplikację w trybie deweloperskim:
+```bash
+npm run dev
+```
+
+## 📜 Dostępne skrypty
+
+- `npm run dev` - uruchamia serwer deweloperski
+- `npm run build` - buduje aplikację produkcyjną
+- `npm run lint` - sprawdza kod pod kątem błędów
+- `npm run preview` - podgląd zbudowanej aplikacji
+
+## ✨ Funkcjonalności
+
+- 🔐 System logowania i autoryzacji
+- 📅 Kalendarz wizyt z możliwością rezerwacji
+- 👥 Zarządzanie pacjentami
+- 👨‍⚕️ Panel dla personelu medycznego
+- 🌐 Obsługa wielu języków (i18next)
+- 📱 Responsywny design
+- 🎨 Nowoczesny interfejs użytkownika (Material-UI)
+
+## ⚙️ Konfiguracja
+
+Aplikacja wymaga połączenia z backendem. Upewnij się, że masz skonfigurowane odpowiednie endpointy API w plikach konfiguracyjnych w katalogu `src/api/`.
+
+## 👥 Autorzy
+
+- **Igor Kotecki** - [@IgorKotecki](https://github.com/IgorKotecki)
+- **Paweł Szeliga** - [@PawelSzeliga23](https://github.com/PawelSzeliga23)
+
+## 📝 Licencja
+
+Projekt stworzony na potrzeby pracy inżynierskiej.
+
+---
+
+*Frontend systemu zapisów do kliniki stomatologicznej*
