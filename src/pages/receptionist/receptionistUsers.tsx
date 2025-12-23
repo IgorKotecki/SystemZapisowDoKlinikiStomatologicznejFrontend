@@ -57,31 +57,31 @@ const ReceptionistUsers: React.FC = () => {
   }, [t]);
 
   const columns: GridColDef<User>[] = [
-    { field: 'id', headerName: 'ID', flex: 0.5 },
+    { field: 'id', headerName: 'ID', width: 100 },
     {
       field: 'name',
       headerName: t("receptionistUsers.firstName") || 'First name',
-      flex: 1,
+      width: 150,
     },
     {
       field: 'surname',
       headerName: t("receptionistUsers.lastName") || 'Last name',
-      flex: 1,
+      width: 150,
     },
     {
       field: 'email',
       headerName: 'Email',
-      flex: 1.5,
+      width: 200,
     },
     {
       field: 'phoneNumber',
       headerName: t("receptionistUsers.phone") || 'Phone number',
-      flex: 1,
+      width: 150,
     },
     {
       field: 'action',
       headerName: t("receptionistUsers.action") || 'Action',
-      flex: 2.5,
+      width: 300,
       sortable: false,
       renderCell: (params) => (
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
@@ -146,7 +146,6 @@ const ReceptionistUsers: React.FC = () => {
           <Paper
             elevation={6}
             sx={{
-              width: '100%',
               backgroundColor: colors.white,
               borderRadius: 3,
               overflow: 'hidden',
