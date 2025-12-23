@@ -5,6 +5,7 @@ import {
   Paper,
   CircularProgress,
   Button,
+  Alert,
 } from "@mui/material";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { useTranslation } from "react-i18next";
@@ -21,6 +22,20 @@ const ReceptionistUsers: React.FC = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [alert, setAlert] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
+
+  // Efekt dla automatycznego znikania alertów
+  useEffect(() => {
+    if (alert) {
+      const timer = setTimeout(() => {
+        setAlert(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [alert]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -30,52 +45,60 @@ const ReceptionistUsers: React.FC = () => {
         setUsers(response);
       } catch (error) {
         console.error("Error fetching users:", error);
+        setAlert({
+          type: "error",
+          message: t("receptionistUsers.fetchError") || "Błąd podczas pobierania użytkowników"
+        });
       } finally {
         setLoading(false);
       }
     };
     fetchUsers();
-  }, []);
+  }, [t]);
 
-  const columns: GridColDef<(typeof users)[number]>[] = [
+  const columns: GridColDef<User>[] = [
     { field: 'id', headerName: 'ID', flex: 0.5 },
     {
       field: 'name',
-      headerName: 'First name',
-      editable: true,
+      headerName: t("receptionistUsers.firstName") || 'First name',
       flex: 1,
     },
     {
       field: 'surname',
-      headerName: 'Last name',
-      editable: true,
+      headerName: t("receptionistUsers.lastName") || 'Last name',
       flex: 1,
     },
     {
       field: 'email',
       headerName: 'Email',
-      editable: true,
-      flex: 1,
+      flex: 1.5,
     },
     {
       field: 'phoneNumber',
-      headerName: 'Phone number',
-      editable: true,
+      headerName: t("receptionistUsers.phone") || 'Phone number',
       flex: 1,
     },
     {
       field: 'action',
-      headerName: 'Action',
-      flex: 2,
+      headerName: t("receptionistUsers.action") || 'Action',
+      flex: 2.5,
       sortable: false,
-      editable: false,
-      filterable: false,
       renderCell: (params) => (
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-          <Button variant="contained" sx={{color: colors.white, backgroundColor:colors.color3}} size="small" onClick={() => handleMakeAppointment(params.row as User)}>
+          <Button 
+            variant="contained" 
+            sx={{ color: colors.white, backgroundColor: colors.color3, '&:hover': { backgroundColor: colors.color4 } }} 
+            size="small" 
+            onClick={() => handleMakeAppointment(params.row)}
+          >
             {t("receptionistUsers.makeAppointment")}
           </Button>
-          <Button variant="outlined" sx={{color:colors.color1, borderColor: colors.color1}} size="small" onClick={() => handleUserClick(params.row.id)}>
+          <Button 
+            variant="outlined" 
+            sx={{ color: colors.color1, borderColor: colors.color1, '&:hover': { borderColor: colors.color3 } }} 
+            size="small" 
+            onClick={() => handleUserClick(params.row.id)}
+          >
             {t("receptionistUsers.viewEdit")}
           </Button>
         </Box>
@@ -85,26 +108,19 @@ const ReceptionistUsers: React.FC = () => {
 
   const handleUserClick = (userId: number) => {
     const role = userRole;
-    if (role == "Doctor") {
+    if (role === "Doctor") {
       navigate(`/doctor/users/${userId}`);
-    } else if (role == "Receptionist") {
+    } else if (role === "Receptionist") {
       navigate(`/receptionist/users/${userId}`);
     }
   };
-  const handleMakeAppointment = (user : User) => {
+
+  const handleMakeAppointment = (user: User) => {
     navigate(`/receptionist/appointment`, { state: { user: user } });
-  }
+  };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: { xs: "column", md: "row" },
-        width: "100%",
-        minHeight: "100vh",
-        backgroundColor: colors.color1,
-      }}
-    >
+    <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, width: "100%", minHeight: "100vh", backgroundColor: colors.color1 }}>
       <UserNavigation />
 
       <Box
@@ -120,56 +136,68 @@ const ReceptionistUsers: React.FC = () => {
         }}
       >
         <Box sx={{ width: "100%", maxWidth: 1500 }}>
-          <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
+          <Typography variant="h4" gutterBottom sx={{ color: colors.color5, fontWeight: "bold" }}>
             {t("receptionistUsers.title")}
           </Typography>
-          <Typography variant="subtitle1" sx={{ mb: 3 }}>
+          <Typography variant="subtitle1" sx={{ mb: 4, opacity: 0.9 }}>
             {t("receptionistUsers.subtitle")}
           </Typography>
 
-          <DataGrid
-            rows={users}
-            columns={columns}
-            loading={loading}
+          <Paper
+            elevation={6}
             sx={{
               width: '100%',
-              flex: 0,
-              height: '480px',
               backgroundColor: colors.white,
-              color: colors.black,
+              borderRadius: 3,
+              overflow: 'hidden',
+              p: 2
             }}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 7,
+          >
+            <DataGrid
+              rows={users}
+              columns={columns}
+              loading={loading}
+              autoHeight
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 10,
+                  },
                 },
-              },
-            }}
-            pageSizeOptions={[7]}
-            disableRowSelectionOnClick
-            disableColumnResize
-          />
-
-          {loading ? (
-            <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
-              <CircularProgress sx={{ color: colors.color5 }} />
-            </Box>
-          ) : (
-            <Paper
-              elevation={4}
-              sx={{
-                borderRadius: 3,
-                backgroundColor: colors.color2,
-                overflow: "hidden",
               }}
-            >
-              <Box sx={{ overflowX: "auto" }}>
-
-              </Box>
-            </Paper>
-          )}
+              pageSizeOptions={[5, 10, 20]}
+              disableRowSelectionOnClick
+              sx={{
+                border: 'none',
+                '& .MuiDataGrid-cell:focus': { outline: 'none' },
+                '& .MuiDataGrid-columnHeaders': {
+                  backgroundColor: '#f5f5f5',
+                  color: colors.color1,
+                  fontWeight: 'bold',
+                },
+              }}
+            />
+          </Paper>
         </Box>
       </Box>
+
+      {/* Powiadomienie pozycjonowane na sztywno (zgodnie z Twoją prośbą) */}
+      {alert && (
+        <Alert
+          severity={alert.type}
+          variant="filled"
+          sx={{
+            position: "fixed",
+            bottom: 24,
+            right: 24,
+            zIndex: 2000,
+            minWidth: 300,
+            boxShadow: "0px 4px 12px rgba(0,0,0,0.3)"
+          }}
+        >
+          {alert.message}
+        </Alert>
+      )}
     </Box>
   );
 };

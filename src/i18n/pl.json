@@ -38,6 +38,23 @@
     "contact": "Kontakt",
     "address": "Adres"
   },
+  "header": {
+    "team": "Zespół",
+    "home": "Home",
+    "aboutUs": "O nas",
+    "services": "Zabiegi",
+    "prices": "Cennik",
+    "contact": "Kontakt",
+    "polish": "Polski",
+    "english": "Angielski",
+    "account": "Konto",
+    "logout": "Wyloguj się",
+    "book": "Umów wizytę",
+    "login": "Zaloguj się",
+    "confirmMessage": "Czy na pewno chcesz opuścić system?",
+    "confirmTitle": "Potwierdź wylogowanie",
+    "cancel": "Anuluj"
+  },
   "home": {
     "welcomeTitle": "Witamy w naszym gabinecie dentystycznym",
     "welcomeText": "Profesjonalna opieka stomatologiczna dla Ciebie i Twojej rodziny",
@@ -123,7 +140,8 @@
     "address": "Adres",
     "edit": "Edytuj",
     "save": "Zapisz",
-    "cancel": "Anuluj"
+    "cancel": "Anuluj",
+    "changePhoto": "Edytuj zdjęcie profilowe"
   },
   "userAppointments": {
     "title": "Historia Wizyt",

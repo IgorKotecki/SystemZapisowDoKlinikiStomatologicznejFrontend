@@ -25,10 +25,16 @@ export const updateAppointmentStatus = async (payload: any) => {
     return response.data;
 }
 
+export const updateService = async (payload: any, serviceId: number) => {
+    const response = await api.put(`/api/Service/editService/${serviceId}`, payload);
+    return response.data;
+}
+
 export default {
     updateAditianalInformationToAppointment,
     updateDoctorWeekSchedule,
     updateTeethModel,
     updateUserDetails,
     updateAppointmentStatus,
+    updateService,
 };

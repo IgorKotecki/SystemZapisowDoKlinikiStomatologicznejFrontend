@@ -38,6 +38,23 @@
     "contact": "Contact",
     "address": "Address"
   },
+  "header": {
+    "team": "Team",
+    "home": "Home",
+    "aboutUs": "About us",
+    "services": "Services",
+    "prices": "Prices",
+    "contact": "Contact",
+    "polish": "Polish",
+    "english": "English",
+    "account": "Account",
+    "logout": "Log out",
+    "book": "Book an appointment",
+    "login": "Login",
+    "confirmMessage": "Are you sure you want to reject the system?",
+    "confirmTitle": "Confirm logout",
+    "cancel": "Cancel"
+  },
   "home": {
     "welcomeTitle": "Welcome to Our Dental Office",
     "welcomeText": "Professional dental care for you and your family",
@@ -117,7 +134,8 @@
     "address": "Address",
     "edit": "Edit",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "changePhoto": "Change profile photo"
   },
   "userAppointments": {
     "title": "Appointment history",

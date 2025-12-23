@@ -1,64 +1,40 @@
-import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem, Box } from '@mui/material';
+import React, { useState } from 'react';
+import {AppBar,Toolbar,Typography,Button,IconButton,Menu,MenuItem,Box,Avatar,Dialog,DialogTitle,DialogContent,DialogActions,
+} from '@mui/material';
 import LanguageIcon from '@mui/icons-material/Language';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { storage } from '../utils/storage';
 import { useAuth } from '../context/AuthContext';
-import React from 'react';
-import { ro } from 'date-fns/locale';
-import { jwtDecode } from "jwt-decode";
 
 export default function Header() {
   const { t, i18n } = useTranslation();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [userAnchor, setUserAnchor] = React.useState<null | HTMLElement>(null);
-  const { isLoggedIn, logout, claims } = useAuth();
   const navigate = useNavigate();
+  const { isLoggedIn, logout, userRole, userPhoto } = useAuth();
 
+  const [langAnchor, setLangAnchor] = useState<null | HTMLElement>(null);
+  const [userAnchor, setUserAnchor] = useState<null | HTMLElement>(null);
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
-  //  React.useEffect(() => {
-  //   const handleStorageChange = () => setIsLoggedIn(storage.isLoggedIn());
-  //   window.addEventListener("storage", handleStorageChange);
-  //   return () => window.removeEventListener("storage", handleStorageChange);
-  // }, []);
-
-    const getUserRole = () => {
-    if (!claims) return "Unregistered_user";
-    return (
-      claims[
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-      ] ||
-      claims.role ||
-      claims.Role ||
-      claims.roles?.[0] ||
-      "Unregistered_user"
-    );
+  const handleLangOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setLangAnchor(event.currentTarget);
   };
-
-
-  // handlery do zmiany jezyków
-  const handleLangClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
   const handleLangClose = (lang?: string) => {
     if (lang) i18n.changeLanguage(lang);
-    setAnchorEl(null);
+    setLangAnchor(null);
   };
 
-  //handlery do zarządziania stanem zalogowania 
-  const handleUserClick = (event: React.MouseEvent<HTMLButtonElement>) => setUserAnchor(event.currentTarget);
-  const handleUserClose = () => setUserAnchor(null);
+  const handleUserOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setUserAnchor(event.currentTarget);
+  };
+  const handleUserClose = () => {
+    setUserAnchor(null);
+  };
 
-  // const handleAccount = () => {
-  //   handleUserClose();
-  //   navigate('/user/profile');
-  // };
-  const handleAccount = () => {
-    const role = getUserRole();
-    console.log(role);
+  const handleAccountNavigation = () => {
     handleUserClose();
+    const role = userRole || "Unregistered_user";
+    
     switch (role) {
       case "Receptionist":
         navigate("/receptionist/profile");
@@ -77,109 +53,117 @@ export default function Header() {
     }
   };
 
-
-  const handleLogout = () => {
-    logout();
+  const handleLogoutClick = () => {
     handleUserClose();
+    setLogoutDialogOpen(true);
+  };
+
+  const handleConfirmLogout = () => {
+    logout();
+    setLogoutDialogOpen(false);
     navigate('/');
   };
 
-  //basic guziki
-  const handleAppointmentClick = () => {
-    navigate('/appointment');
-  }
-
-  const handleLogInClick = () => {
-    navigate('/LogIn');
-  }
-
-  const handleTeamClick = () => {
-    navigate('/team');
-  }
-
-  const handleHomeClick = () => {
-    navigate('');
-  }
-
-  const handleAboutUsClick = () => {
-    navigate('/about');
-  }
-
-  const handleServices = () => {
-    navigate('/services');
-  }
-
-  const handlePrices = () => {
-    navigate('/prices');
-  }
-
-  const handleContacts = () => {
-    navigate('/contacts');
-  }
+  const nav = (path: string) => () => navigate(path);
 
   return (
-    <AppBar position="static" color="default" elevation={1}>
-      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Box sx={{ flex: 1 }}>
-          <Typography variant="h6" color="inherit">
-            Logo
+    <>
+      <AppBar position="static" color="default" elevation={1}>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Box sx={{ flex: 1 }}>
+            <Typography 
+              variant="h6" 
+              sx={{ cursor: 'pointer', fontWeight: 'bold', color: 'primary.main' }} 
+              onClick={nav('/')}
+            >
+              LOGO
+            </Typography>
+          </Box>
+          <Box sx={{ flex: 2, display: 'flex', justifyContent: 'center', gap: 1 }}>
+            <Button color="inherit" onClick={nav('/')}>{t('header.home')}</Button>
+            <Button color="inherit" onClick={nav('/about')}>{t('header.aboutUs')}</Button>
+            <Button color="inherit" onClick={nav('/services')}>{t('header.services')}</Button>
+            <Button color="inherit" onClick={nav('/team')}>{t('header.team')}</Button>
+            <Button color="inherit" onClick={nav('/prices')}>{t('header.prices')}</Button>
+            <Button color="inherit" onClick={nav('/contacts')}>{t('header.contact')}</Button>
+          </Box>
+          <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 1 }}>
+            <IconButton onClick={handleLangOpen}>
+              <LanguageIcon />
+            </IconButton>
+            <Menu
+              anchorEl={langAnchor}
+              open={Boolean(langAnchor)}
+              onClose={() => handleLangClose()}
+              disableScrollLock 
+            >
+              <MenuItem onClick={() => handleLangClose('pl')}>Polski</MenuItem>
+              <MenuItem onClick={() => handleLangClose('en')}>English</MenuItem>
+            </Menu>
+
+            <Button variant="outlined" onClick={nav('/appointment')} sx={{ mx: 1 }}>
+              {t('header.book')}
+            </Button>
+
+            {isLoggedIn ? (
+              <>
+                <IconButton onClick={handleUserOpen} sx={{ p: 0.5 }}>
+                  <Avatar 
+                    src={userPhoto || undefined} 
+                    sx={{ width: 40, height: 40, border: '2px solid #ddd' }}
+                  >
+                    <AccountCircle />
+                  </Avatar>
+                </IconButton>
+                <Menu
+                  anchorEl={userAnchor}
+                  open={Boolean(userAnchor)}
+                  onClose={handleUserClose}
+                  disableScrollLock
+                >
+                  <MenuItem onClick={handleAccountNavigation}>{t('header.account')}</MenuItem>
+                  <MenuItem onClick={handleLogoutClick}>{t('header.logout')}</MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <Button variant="contained" color="primary" onClick={nav('/LogIn')}>
+                {t('header.login')}
+              </Button>
+            )}
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <Dialog
+        open={logoutDialogOpen}
+        onClose={() => setLogoutDialogOpen(false)}
+        disableScrollLock 
+        aria-labelledby="logout-dialog-title"
+      >
+        <DialogTitle id="logout-dialog-title">
+          {t('header.confirmTitle')}
+        </DialogTitle>
+        <DialogContent>
+          <Typography>
+            {t('header.confirmMessage')}
           </Typography>
-        </Box>
-
-        <Box
-          sx={{
-            flex: 2,
-            display: 'flex',
-            justifyContent: 'center',
-            gap: 2,
-          }}
-        >
-          <Button color="inherit" onClick={handleHomeClick}>{t('homeText')}</Button>
-          <Button color="inherit" onClick={handleAboutUsClick}>{t('about.about')}</Button>
-          <Button color="inherit" onClick={handleServices}>{t('services')}</Button>
-          <Button color="inherit" onClick={handleTeamClick}>{t('team')}</Button>
-          <Button color="inherit" onClick={handlePrices}>{t('pricing')}</Button>
-          <Button color="inherit" onClick={handleContacts}>{t('contact')}</Button>
-        </Box>
-
-        <Box
-          sx={{
-            flex: 1,
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            gap: 1,
-          }}
-        >
-          <IconButton onClick={handleLangClick}>
-            <LanguageIcon />
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={() => handleLangClose()}
+        </DialogContent>
+        <DialogActions sx={{ p: 2 }}>
+          <Button 
+            onClick={() => setLogoutDialogOpen(false)} 
+            color="inherit"
           >
-            <MenuItem onClick={() => handleLangClose('pl')}>Polski</MenuItem>
-            <MenuItem onClick={() => handleLangClose('en')}>English</MenuItem>
-          </Menu>
-
-          <Button variant="outlined" onClick={handleAppointmentClick}>{t('book')}</Button>
-
-          {isLoggedIn ? (
-            <>
-              <IconButton onClick={handleUserClick}>
-                <AccountCircle />
-              </IconButton>
-              <Menu anchorEl={userAnchor} open={Boolean(userAnchor)} onClose={handleUserClose}>
-                <MenuItem onClick={handleAccount}>{t('account')}</MenuItem>
-                <MenuItem onClick={handleLogout}>{t('logout')}</MenuItem>
-              </Menu>
-            </>
-          ) : (
-            <Button variant="contained" color="primary" onClick={handleLogInClick}>{t('loginText')}</Button>
-          )}
-        </Box>
-      </Toolbar>
-    </AppBar>
+            {t('header.cancel') || "Anuluj"}
+          </Button>
+          <Button 
+            onClick={handleConfirmLogout} 
+            variant="contained" 
+            color="error" 
+            autoFocus
+          >
+            {t('header.logout') || "Wyloguj"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }

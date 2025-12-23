@@ -8,4 +8,5 @@ export interface ServiceEdit {
   nameEn: string;
   descriptionEn: string;
   serviceCategoryIds: number[];
+  photoUrl: string;
 }
