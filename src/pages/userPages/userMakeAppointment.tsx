@@ -9,6 +9,7 @@ import {
   Select,
   Paper,
   CircularProgress,
+  Alert, // Import Alert
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -34,32 +35,40 @@ export default function UserAppointmentPage() {
   const [loading, setLoading] = useState(false);
   const [loadingDoctors, setLoadingDoctors] = useState(false);
   const [loadingBlocks, setLoadingBlocks] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
+  const [notification, setNotification] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
 
   useEffect(() => {
+    if (notification) {
+      const timer = setTimeout(() => {
+        setNotification(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
 
+  useEffect(() => {
     const lang = i18n.language || "pl";
-
     const fetchServices = async () => {
       try {
         const response = await get.getUserServices(lang);
-        console.log("Usługi:", response);
         setServices(response);
       } catch (err) {
         console.error("Błąd pobierania usług:", err);
         setServices([]);
       }
     };
-
     fetchServices();
   }, [i18n.language]);
 
   useEffect(() => {
-    if (!servicesIds) {
+    if (!servicesIds.length) {
       setDoctors([]);
       return;
     }
-
     const fetchDoctors = async () => {
       setLoadingDoctors(true);
       try {
@@ -72,7 +81,6 @@ export default function UserAppointmentPage() {
         setLoadingDoctors(false);
       }
     };
-
     fetchDoctors();
   }, [servicesIds]);
 
@@ -81,12 +89,10 @@ export default function UserAppointmentPage() {
       setTimeBlocks([]);
       return;
     }
-
     const fetchTimeBlocks = async () => {
       setLoadingBlocks(true);
       try {
-        const response = await get.getTimeBlocks(doctorId, date)
-
+        const response = await get.getTimeBlocks(doctorId, date);
         setTimeBlocks(response);
       } catch (err) {
         console.error("Błąd pobierania bloków czasowych:", err);
@@ -95,29 +101,27 @@ export default function UserAppointmentPage() {
         setLoadingBlocks(false);
       }
     };
-
     fetchTimeBlocks();
   }, [doctorId, date]);
 
   const submitAppointment = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    var startTime = timeBlocks.find(t => t.doctorBlockId == timeBlockId)?.timeStart;
+    const startTime = timeBlocks.find((t) => t.doctorBlockId === timeBlockId)?.timeStart;
+    const serv = services.filter((s) => servicesIds.includes(s.id));
+    let duration = 0;
+    serv.forEach((s) => (duration += s.minTime));
 
-    var serv = services.filter(s => servicesIds.includes(s.id));
+    if (!servicesIds.length || !doctorId || !timeBlockId || !date) {
+      setNotification({
+        type: "error",
+        message: t("userMakeAppointment.errorFields"),
+      });
+      return;
+    }
 
-    var duration = 0;
-    serv.forEach(s => duration += s.minTime);
-
-    setError(null);
+    setLoading(true);
     try {
-      if (!servicesIds || !doctorId || !timeBlockId || !date) {
-        setError(t("userMakeAppointment.errorFields"));
-        return;
-      }
-
-      setLoading(true);
-
       const payload = {
         doctorId,
         startTime,
@@ -125,9 +129,11 @@ export default function UserAppointmentPage() {
         servicesIds,
       };
 
-      await post.bookAppointmentRegistered(payload)
-
-      alert(t("userMakeAppointment.success"));
+      await post.bookAppointmentRegistered(payload);
+      setNotification({
+        type: "success",
+        message: t("userMakeAppointment.success"),
+      });
 
       setServicesIds([]);
       setDoctorId("");
@@ -135,7 +141,10 @@ export default function UserAppointmentPage() {
       setDate(null);
     } catch (err: any) {
       console.error(err);
-      setError(t("userMakeAppointment.errorOccurred") + err);
+      setNotification({
+        type: "error",
+        message: t("userMakeAppointment.errorOccurred") + ": " + (err.message || err),
+      });
     } finally {
       setLoading(false);
     }
@@ -191,7 +200,7 @@ export default function UserAppointmentPage() {
                   slotProps={{
                     textField: {
                       fullWidth: true,
-                      sx: { backgroundColor: colors.white, borderRadius: 1, mt: 2, color: colors.black },
+                      sx: { backgroundColor: colors.white, borderRadius: 1, mt: 2 },
                     },
                   }}
                 />
@@ -204,8 +213,8 @@ export default function UserAppointmentPage() {
                   multiple
                   value={servicesIds}
                   onChange={(e) => {
-                    const value = e.target.value
-                    setServicesIds(typeof value === 'string' ? value.split(',').map(Number) : value)
+                    const value = e.target.value;
+                    setServicesIds(typeof value === "string" ? value.split(",").map(Number) : value);
                   }}
                   sx={{ backgroundColor: colors.white }}
                 >
@@ -216,11 +225,7 @@ export default function UserAppointmentPage() {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl
-                fullWidth
-                sx={{ mt: 3 }}
-                disabled={!servicesIds}
-              >
+              <FormControl fullWidth sx={{ mt: 3 }} disabled={!servicesIds.length}>
                 <InputLabel sx={{ color: colors.black }}>
                   {t("userMakeAppointment.doctor")}
                 </InputLabel>
@@ -243,15 +248,10 @@ export default function UserAppointmentPage() {
                 </Select>
               </FormControl>
 
-              <FormControl
-                fullWidth
-                sx={{ mt: 3 }}
-                disabled={!doctorId || !date}
-              >
+              <FormControl fullWidth sx={{ mt: 3 }} disabled={!doctorId || !date}>
                 <InputLabel sx={{ color: colors.black }}>
                   {t("userMakeAppointment.hour")}
                 </InputLabel>
-
                 <Select
                   value={timeBlockId}
                   onChange={(e) => setTimeBlockId(Number(e.target.value))}
@@ -269,7 +269,6 @@ export default function UserAppointmentPage() {
                           hour: "2-digit",
                           minute: "2-digit",
                         });
-
                         return (
                           <MenuItem key={b.doctorBlockId} value={b.doctorBlockId}>
                             {time}
@@ -279,9 +278,6 @@ export default function UserAppointmentPage() {
                   )}
                 </Select>
               </FormControl>
-              {error && (
-                <Typography sx={{ mt: 2, color: "#ff8080" }}>{error}</Typography>
-              )}
 
               <Button
                 type="submit"
@@ -302,6 +298,24 @@ export default function UserAppointmentPage() {
           </Paper>
         </Box>
       </Box>
+
+      {notification && (
+        <Alert
+          severity={notification.type}
+          variant="filled"
+          onClose={() => setNotification(null)}
+          sx={{
+            position: "fixed",
+            bottom: 24,
+            right: 24,
+            zIndex: 2000,
+            minWidth: 300,
+            boxShadow: "0px 4px 12px rgba(0,0,0,0.3)",
+          }}
+        >
+          {notification.message}
+        </Alert>
+      )}
     </Box>
   );
 }

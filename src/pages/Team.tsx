@@ -28,7 +28,7 @@ export default function Team() {
                 console.log("wysłane")
                 const data: TeamMembers[] = await get.getTeamMembers();
                 setTeam(data)
-                console.log(response)
+                // console.log(response)
             } catch (error) {
                 console.error('Error feating team ', error)
             } finally {
@@ -140,17 +140,18 @@ export default function Team() {
                             // <Grid item xs={12} sm={6} md={4} key={member.id}>
                             <Grid key={member.id} size={{ xs: 12, md: 4, sm: 4 }} component="div">
                                 <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
-                                    
+
                                     <CardMedia
                                         component="img"
-                                        height="350"
-                                        // image={`/images/doctors/${i + 1}.png`}
                                         image={member.photoURL}
                                         alt={member.name}
                                         sx={{
-                                            objectFit: 'cover',
+                                            height: 500,
+                                            width: '100%',        
+                                            objectFit: 'cover', 
+                                            objectPosition: 'top', 
                                             borderTopLeftRadius: 12,
-                                            borderTopRightRadius: 12
+                                            borderTopRightRadius: 12,
                                         }}
                                     />
 
