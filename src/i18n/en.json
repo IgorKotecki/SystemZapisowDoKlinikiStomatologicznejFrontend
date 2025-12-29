@@ -237,7 +237,17 @@
     "subtitle": "Browse all available services in the clinic.",
     "id": "ID",
     "name": "Name",
-    "price": "Price"
+    "price": "Price",
+    "addNew": "Add new services",
+    "addNewTitle" : "Add new service",
+    "polishSection" : "Polish",
+    "englishSection" : "English",
+    "technicalDetails" : "Additional informations",
+    "description" : "Description",
+    "category": "Category",
+    "time": "Time",
+    "maxPrice": "Max price",
+    "minPrice": "Min price"
   },
   "editService": {
     "title": "Edit Service",
@@ -258,7 +268,9 @@
     "descriptionPl": "Description in polish",
     "descriptionEn": "Description in english",
     "categories": "Categories",
-    "delete" : "Dekete"
+    "delete" : "Dekete",
+    "deleteService": "Delete service",
+    "deleteConfirmText": "Are you sure you want to delete the service?"
   },
   "doctorProfile": {
     "title": "Doctor Profile",

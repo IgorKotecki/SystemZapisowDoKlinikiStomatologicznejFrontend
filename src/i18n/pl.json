@@ -243,7 +243,17 @@
     "subtitle": "Tutaj możesz przeglądać dostępne usługi kliniki.",
     "id": "ID",
     "name": "Nazwa",
-    "price": "Cena"
+    "price": "Cena",
+    "addNew": "Dodaj nowy serwis",
+    "addNewTitle" : "Dodaj nowy serwis",
+    "polishSection" : "Polski",
+    "englishSection" : "Angielski",
+    "technicalDetails" : "Dodatkowe informacje",
+    "description" : "Opis",
+    "category": "Kategoria",
+    "time": "Czas",
+    "maxPrice": "Maxymalna cena",
+    "minPrice": "Minimalna cena"
   },
   "editService": {
     "title": "Edycja usługi",
@@ -263,8 +273,10 @@
     "minTime": "Minimalny czas trwania",
     "descriptionPl": "Opis po polsku",
     "descriptionEn": "Opis po angielsku",
-    "categories": "Kategorie",
-    "delete": "Usuń"
+    "category": "Kategorie",
+    "delete": "Usuń",
+    "deleteService": "Usuń serwis",
+    "deleteConfirmText": "Czy na pewno chcesz usunąć ten serwis?"
   },
   "doctorProfile": {
     "title": "Profil lekarza",

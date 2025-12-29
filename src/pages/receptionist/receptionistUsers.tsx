@@ -27,7 +27,6 @@ const ReceptionistUsers: React.FC = () => {
     message: string;
   } | null>(null);
 
-  // Efekt dla automatycznego znikania alertów
   useEffect(() => {
     if (alert) {
       const timer = setTimeout(() => {
@@ -180,7 +179,6 @@ const ReceptionistUsers: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Powiadomienie pozycjonowane na sztywno (zgodnie z Twoją prośbą) */}
       {alert && (
         <Alert
           severity={alert.type}

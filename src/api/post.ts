@@ -56,6 +56,11 @@ export const bookAppointmentReceptionist = async (payload: any) => {
     return response.data;
 }
 
+export const addNewService = async (payload: any) => {
+    const response = await api.post(`/api/Service/service`, payload);
+    return response.data;
+}
+
 export const updatePhoto = async (file: File) =>{
     const { signature, timestamp, cloudName, apiKey } = await get.getCloudinarySignature();
     const formData = new FormData();
@@ -86,4 +91,5 @@ export default {
     addService,
     bookAppointmentReceptionist,
     updatePhoto ,
+    addNewService,
 };
