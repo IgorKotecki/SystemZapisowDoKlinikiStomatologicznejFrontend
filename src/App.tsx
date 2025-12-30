@@ -128,7 +128,7 @@ const App = () => {
             <Route
               path="/receptionist/services"
               element={
-                <ProtectedRoute allowedRoles={["Receptionist"]}>
+                <ProtectedRoute allowedRoles={["Receptionist","Doctor"]}>
                   <ReceptionistServices />
                 </ProtectedRoute>
               }
@@ -136,7 +136,7 @@ const App = () => {
             <Route
               path="/receptionist/services/:id"
               element={
-                <ProtectedRoute allowedRoles={["Receptionist"]}>
+                <ProtectedRoute allowedRoles={["Receptionist","Doctor"]}>
                   <EditService />
                 </ProtectedRoute>
               }

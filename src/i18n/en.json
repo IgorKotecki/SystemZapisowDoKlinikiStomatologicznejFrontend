@@ -135,7 +135,10 @@
     "edit": "Edit",
     "save": "Save",
     "cancel": "Cancel",
-    "changePhoto": "Change profile photo"
+    "changePhoto": "Change profile photo",
+    "deleteAccount": "Delete account",
+    "confirmDeleteTitle": "Account deleting process",
+    "confirmDeleteMessage": "Deleting account process is irreversible! Do you still want to proceed?"
   },
   "userAppointments": {
     "title": "Appointment history",

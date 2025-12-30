@@ -33,10 +33,7 @@ function decodeJwt(token: string) {
 function getUserRoleFromToken() {
   const token = localStorage.getItem("token");
   if (!token) return "Unregistered";
-
   const claims = decodeJwt(token);
-  //const claims = jwtDecode(token);
-
   if (!claims) return "Unregistered";
 
   const msRole =

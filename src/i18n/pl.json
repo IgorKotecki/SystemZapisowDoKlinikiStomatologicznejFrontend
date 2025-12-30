@@ -141,7 +141,10 @@
     "edit": "Edytuj",
     "save": "Zapisz",
     "cancel": "Anuluj",
-    "changePhoto": "Edytuj zdjęcie profilowe"
+    "changePhoto": "Edytuj zdjęcie profilowe",
+    "deleteAccount": "Usuń konto",
+    "confirmDeleteTitle": "Usuwanie konta",
+    "confirmDeleteMessage": "Proces usuwania konta jest nie odwracalny! Czy na pewno chcesz usunąć konto?"
   },
   "userAppointments": {
     "title": "Historia Wizyt",

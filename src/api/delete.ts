@@ -5,6 +5,12 @@ export const deleteService = async (serviceId: any) => {
     return response.data;
 }
 
+export const deleteUser = async (userId: any) =>{
+    const response = await api.delete(`/api/User/delete/${userId}`);
+    return response.data;
+}
+
 export default {
     deleteService,
+    deleteUser,
 };

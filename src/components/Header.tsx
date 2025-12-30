@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import {AppBar,Toolbar,Typography,Button,IconButton,Menu,MenuItem,Box,Avatar,Dialog,DialogTitle,DialogContent,DialogActions,
+import {
+  AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem, Box, Avatar, Dialog, DialogTitle, DialogContent, DialogActions,
 } from '@mui/material';
 import LanguageIcon from '@mui/icons-material/Language';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -34,7 +35,7 @@ export default function Header() {
   const handleAccountNavigation = () => {
     handleUserClose();
     const role = userRole || "Unregistered_user";
-    
+
     switch (role) {
       case "Receptionist":
         navigate("/receptionist/profile");
@@ -70,14 +71,22 @@ export default function Header() {
     <>
       <AppBar position="static" color="default" elevation={1}>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Box sx={{ flex: 1 }}>
-            <Typography 
-              variant="h6" 
-              sx={{ cursor: 'pointer', fontWeight: 'bold', color: 'primary.main' }} 
+          <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+            <Box
+              component="img"
+              src="../public\images\Logo.png" 
+              alt="Logo"
               onClick={nav('/')}
-            >
-              LOGO
-            </Typography>
+              sx={{
+                height: 40,             
+                width: 'auto',        
+                cursor: 'pointer',
+                transition: 'transform 0.2s',
+                '&:hover': {
+                  transform: 'scale(1.05)', 
+                },
+              }}
+            />
           </Box>
           <Box sx={{ flex: 2, display: 'flex', justifyContent: 'center', gap: 1 }}>
             <Button color="inherit" onClick={nav('/')}>{t('header.home')}</Button>
@@ -95,7 +104,7 @@ export default function Header() {
               anchorEl={langAnchor}
               open={Boolean(langAnchor)}
               onClose={() => handleLangClose()}
-              disableScrollLock 
+              disableScrollLock
             >
               <MenuItem onClick={() => handleLangClose('pl')}>Polski</MenuItem>
               <MenuItem onClick={() => handleLangClose('en')}>English</MenuItem>
@@ -108,8 +117,8 @@ export default function Header() {
             {isLoggedIn ? (
               <>
                 <IconButton onClick={handleUserOpen} sx={{ p: 0.5 }}>
-                  <Avatar 
-                    src={userPhoto || undefined} 
+                  <Avatar
+                    src={userPhoto || undefined}
                     sx={{ width: 40, height: 40, border: '2px solid #ddd' }}
                   >
                     <AccountCircle />
@@ -136,7 +145,7 @@ export default function Header() {
       <Dialog
         open={logoutDialogOpen}
         onClose={() => setLogoutDialogOpen(false)}
-        disableScrollLock 
+        disableScrollLock
         aria-labelledby="logout-dialog-title"
       >
         <DialogTitle id="logout-dialog-title">
@@ -148,19 +157,19 @@ export default function Header() {
           </Typography>
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
-          <Button 
-            onClick={() => setLogoutDialogOpen(false)} 
+          <Button
+            onClick={() => setLogoutDialogOpen(false)}
             color="inherit"
           >
-            {t('header.cancel') || "Anuluj"}
+            {t('header.cancel')}
           </Button>
-          <Button 
-            onClick={handleConfirmLogout} 
-            variant="contained" 
-            color="error" 
+          <Button
+            onClick={handleConfirmLogout}
+            variant="contained"
+            color="error"
             autoFocus
           >
-            {t('header.logout') || "Wyloguj"}
+            {t('header.logout')}
           </Button>
         </DialogActions>
       </Dialog>
