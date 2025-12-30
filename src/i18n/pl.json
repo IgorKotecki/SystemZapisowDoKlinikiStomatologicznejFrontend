@@ -38,6 +38,17 @@
     "contact": "Kontakt",
     "address": "Adres"
   },
+  "servicesPage": {
+    "title": "Twój uśmiech, nasza pasja",
+    "subtitle": "Od profilaktyki po zaawansowaną metamorfozę. Łączymy precyzję technologii z delikatnością opieki, by zapewnić Ci uśmiech, na który zasługujesz.",
+    "cta": "Znajdź zabieg dla siebie",
+    "help": "Potrzebujesz porady?",
+    "contactUs": "Skontaktuj się z nami, aby dowiedzieć się więcej o naszych usługach i umówić wizytę.",
+    "appointment": "Umów wizytę",
+    "contact": "Skontaktuj się",
+    "prices": "Zobacz cennik",
+    "categories": "Kategorie"
+  },
   "header": {
     "team": "Zespół",
     "home": "Home",
@@ -93,7 +104,7 @@
   },
   "teamPage": {
     "boldInformation": "Główne informacje",
-    "normalInformation": "Somewhere over the rainbow, cos tam cos tam, jedne dzien pawł jest ładny, ładny o tak o taaaaaaak, boze nudne to jest",
+    "normalInformation": "Wierzymy, że leczenie stomatologiczne to nie tylko technologia, ale przede wszystkim relacja. Nasz zespół dba o to, aby każda wizyta przebiegała w bezstresowej atmosferze, z pełnym zrozumieniem Twoich potrzeb i lęków.",
     "doctor": {
       "1": "Paweł Szeliga",
       "2": "Twoja stara",
@@ -111,15 +122,46 @@
     "about": "O nas",
     "aboutOutClinic": "About out clinic",
     "aboutOutClinicText": "More then 15 year of experience in helping your smile. Learn our story....",
-    "ourStroy": "Our stroy",
+    "ourStroy": "Nasza historia",
+    "storyPart1": "Klinika Dental została założona w 2008 roku z misją zapewnienia najwyższej jakości opieki stomatologicznej w przyjaznej i komfortowej atmosferze. Przez lata rozwijaliśmy się, inwestując w najnowsze technologie i poszerzając zespół o najlepszych specjalistów.",
+    "storyPart2": "Dziś jesteśmy jedną z wiodących klinik stomatologicznych w regionie, obsługując tysiące zadowolonych pacjentów. Nasze doświadczenie, połączone z pasją do stomatologii, pozwala nam oferować kompleksowe usługi na najwyższym poziomie.",
+    "storyPart3": "Wierzymy, że każdy zasługuje na piękny i zdrowy uśmiech. Dlatego nieustannie doskonalimy nasze umiejętności i inwestujemy w nowoczesny sprzęt, aby zapewnić naszym pacjentom najlepszą możliwą opiekę.",
     "ourValues": "Our values",
     "ourAchievements": "Our achievements",
-    "whatPSay": "What our patients say"
+    "whatPSay": "What our patients say",
+    "experience": "Lat doświadczenia",
+    "patients": "Zadowolonych pacjentów",
+    "specialists": "Specjalistów",
+    "opinions": "Pozytywnych opinii",
+    "feedback1": "Fantastyczna klinika! Profesjonalna",
+    "feedback2": "Najlepsza klinika stomatologiczna w mieście.",
+    "feedback3": "Bardzo polecam!",
+    "values": {
+      "patientCare": {
+        "title": "Troska o pacjenta",
+        "desc": "Każdy pacjent jest dla nas najważniejszy. Zapewniamy indywidualne podejście i najwyższą jakość opieki."
+      },
+      "professionalism": {
+        "title": "Profesjonalizm",
+        "desc": "Nasz zespół składa się z wykwalifikowanych specjalistów z wieloletnim doświadczeniem."
+      },
+      "security": {
+        "title": "Bezpieczeństwo",
+        "desc": "Stosujemy najnowsze technologie i przestrzegamy najwyższych standardów higieny i bezpieczeństwa."
+      },
+      "excellence": {
+        "title": "Doskonałość",
+        "desc": "Dążymy do perfekcji w każdym aspekcie naszej pracy, od diagnostyki po leczenie."
+      }
+    },
+    "readyForVisit": "Gotowy na wizytę?",
+    "joinThousands": "Dołącz do tysięcy zadowolonych pacjentów i zadbaj o swój uśmiech już dziś!",
+    "bookOnline": "Umów wizytę online"
   },
   "prices": {
-    "title" : "Cennik",
-    "subtitle" : "Nasze ceny są przejrzyste i konkurencyjne. Oferujemy najwyższą jakość usług stomatologicznych w przystępnych cenach.",
-    "cta" : "Umów wizytę"
+    "title": "Cennik",
+    "subtitle": "Nasze ceny są przejrzyste i konkurencyjne. Oferujemy najwyższą jakość usług stomatologicznych w przystępnych cenach.",
+    "cta": "Umów wizytę"
   },
   "userNavigation": {
     "panel": "Panel Użytkownika",
@@ -248,11 +290,11 @@
     "name": "Nazwa",
     "price": "Cena",
     "addNew": "Dodaj nowy serwis",
-    "addNewTitle" : "Dodaj nowy serwis",
-    "polishSection" : "Polski",
-    "englishSection" : "Angielski",
-    "technicalDetails" : "Dodatkowe informacje",
-    "description" : "Opis",
+    "addNewTitle": "Dodaj nowy serwis",
+    "polishSection": "Polski",
+    "englishSection": "Angielski",
+    "technicalDetails": "Dodatkowe informacje",
+    "description": "Opis",
     "category": "Kategoria",
     "time": "Czas",
     "maxPrice": "Maxymalna cena",
@@ -345,7 +387,7 @@
     "scheduledTime": "Zaplanowany czas",
     "addScheduledTime": "Dodaj zaplanowany czas",
     "saveChanges": "Zapisz zmiany",
-    "remove" : "Czy chcesz usunąć plan dnia?"
+    "remove": "Czy chcesz usunąć plan dnia?"
   },
   "appointmentInfo": {
     "title": "Informacje o wizycie : ",
@@ -359,7 +401,7 @@
     "phone": "Telefon",
     "email": "Email"
   },
-  "addInfo" : {
+  "addInfo": {
     "title": "Dodatkowe informacje : ",
     "noInfo": "Brak dodatkowych informacji.",
     "newInfoLabelPl": "Nowa informacja (PL)",

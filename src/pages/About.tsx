@@ -14,51 +14,50 @@ export default function About() {
   const values = [
     {
       icon: <FavoriteIcon sx={{ fontSize: "3rem", color: colors.color3 }} />,
-      title: "Troska o pacjenta",
-      description:
-        "Każdy pacjent jest dla nas najważniejszy. Zapewniamy indywidualne podejście i najwyższą jakość opieki.",
+      title: t("about.values.patientCare.title"),
+      description: t("about.values.patientCare.desc"),
     },
     {
       icon: <VerifiedIcon sx={{ fontSize: "3rem", color: colors.color3 }} />,
-      title: "Profesjonalizm",
-      description: "Nasz zespół składa się z wykwalifikowanych specjalistów z wieloletnim doświadczeniem.",
+      title: t("about.values.professionalism.title"),
+      description: t("about.values.professionalism.desc"),
     },
     {
       icon: <SecurityIcon sx={{ fontSize: "3rem", color: colors.color3 }} />,
-      title: "Bezpieczeństwo",
-      description: "Stosujemy najnowsze technologie i przestrzegamy najwyższych standardów higieny i bezpieczeństwa.",
+      title: t("about.values.security.title"),
+      description: t("about.values.security.desc"),
     },
     {
       icon: <StarIcon sx={{ fontSize: "3rem", color: colors.color3 }} />,
-      title: "Doskonałość",
-      description: "Dążymy do perfekcji w każdym aspekcie naszej pracy, od diagnostyki po leczenie.",
+      title: t("about.values.excellence.title"),
+      description: t("about.values.excellence.desc"),
     },
-  ]
+  ];
 
   const achievements = [
-    { number: "15+", label: "Lat doświadczenia" },
-    { number: "5000+", label: "Zadowolonych pacjentów" },
-    { number: "10+", label: "Specjalistów" },
-    { number: "98%", label: "Pozytywnych opinii" },
-  ]
+    { number: "15+", label: t("about.experience") },
+    { number: "5000+", label: t("about.patients") },
+    { number: "10+", label: t("about.specialists") },
+    { number: "98%", label: t("about.opinions") },
+  ];
 
   const testimonials = [
     {
       name: "Anna Kowalska",
-      text: "Fantastyczna klinika! Profesjonalna",
+      text: t("about.feedback1"),
       rating: 5,
     },
     {
       name: "Piotr Nowak",
-      text: "Najlepsza klinika stomatologiczna w mieście.",
+      text: t("about.feedback2"),
       rating: 5,
     },
     {
       name: "Maria Wiśniewska",
-      text: "Bardzo polecam!",
+      text: t("about.feedback3"),
       rating: 5,
     },
-  ]
+  ];
 
   return (
     <Box sx={{ width: "100vw", minHeight: "100vh", backgroundColor: colors.white }}>
@@ -99,7 +98,7 @@ export default function About() {
             }}
           >
             <Typography variant="h3" gutterBottom>
-             {t('about.aboutOutClinic')}
+              {t('about.aboutOutClinic')}
             </Typography>
             <Typography variant="h6" gutterBottom>
               {t('about.aboutOutClinicText')}
@@ -155,18 +154,15 @@ export default function About() {
               {t('about.ourStroy')}
             </Typography>
             <Typography variant="body1" paragraph sx={{ fontSize: "1.1rem", lineHeight: 1.7 }}>
-              Klinika Dental została założona w 2008 roku z misją zapewnienia najwyższej jakości opieki stomatologicznej
-              w przyjaznej i komfortowej atmosferze. Przez lata rozwijaliśmy się, inwestując w najnowsze technologie i
-              poszerzając zespół o najlepszych specjalistów.
+              {t('about.storyPart1')}
             </Typography>
+
             <Typography variant="body1" paragraph sx={{ fontSize: "1.1rem", lineHeight: 1.7 }}>
-              Dziś jesteśmy jedną z wiodących klinik stomatologicznych w regionie, obsługując tysiące zadowolonych
-              pacjentów. Nasze doświadczenie, połączone z pasją do stomatologii, pozwala nam oferować kompleksowe usługi
-              na najwyższym poziomie.
+              {t('about.storyPart2')}
             </Typography>
+
             <Typography variant="body1" sx={{ fontSize: "1.1rem", lineHeight: 1.7 }}>
-              Wierzymy, że każdy zasługuje na piękny i zdrowy uśmiech. Dlatego nieustannie doskonalimy nasze
-              umiejętności i inwestujemy w nowoczesny sprzęt, aby zapewnić naszym pacjentom najlepszą możliwą opiekę.
+              {t('about.storyPart3')}
             </Typography>
           </Grid>
           {/* <Grid item xs={12} md={6}> */}
@@ -175,7 +171,7 @@ export default function About() {
               sx={{
                 width: "100%",
                 height: "400px",
-                backgroundImage: 'url("/images/clinic-interior.jpg")',
+                backgroundImage: 'url("/images/gabinet.png")',
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 borderRadius: 3,
@@ -193,7 +189,7 @@ export default function About() {
         <Grid container spacing={4}>
           {values.map((value, index) => (
             // <Grid item xs={12} sm={6} md={3} key={index}>
-              <Grid key={index} size={{ xs: 12, md: 5 }} component="div">
+            <Grid key={index} size={{ xs: 12, md: 5 }} component="div">
               <Card sx={{ borderRadius: 3, boxShadow: 2, height: "100%", textAlign: "center" }}>
                 <CardContent sx={{ p: 4 }}>
                   <Box sx={{ mb: 2 }}>{value.icon}</Box>
@@ -236,7 +232,7 @@ export default function About() {
         <Grid container spacing={4}>
           {testimonials.map((testimonial, index) => (
             // <Grid item xs={12} md={4} key={index}>
-            <Grid key={index}  size={{ xs: 12, md: 4 }} component="div">
+            <Grid key={index} size={{ xs: 12, md: 4 }} component="div">
               <Card sx={{ borderRadius: 3, boxShadow: 2, height: "100%" }}>
                 <CardContent sx={{ p: 4 }}>
                   <Box sx={{ display: "flex", mb: 2 }}>
@@ -264,10 +260,11 @@ export default function About() {
         sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: colors.color3, color: colors.white, textAlign: "center" }}
       >
         <Typography variant="h4" gutterBottom>
-          Gotowy na wizytę?
+          {t('about.readyForVisit')}
         </Typography>
+
         <Typography variant="h6" paragraph sx={{ mb: 4 }}>
-          Dołącz do tysięcy zadowolonych pacjentów i zadbaj o swój uśmiech już dziś!
+          {t('about.joinThousands')}
         </Typography>
         <Button
           variant="contained"
@@ -283,7 +280,7 @@ export default function About() {
           }}
           onClick={() => navigate("/appointment")}
         >
-          Umów wizytę online
+          {t('about.bookOnline')}
         </Button>
       </Box>
     </Box>

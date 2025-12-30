@@ -111,11 +111,10 @@ export default function Services() {
             }}
           >
             <Typography variant="h3" gutterBottom>
-              Nasze usługi
+              {t('servicesPage.title')}
             </Typography>
             <Typography variant="h6" gutterBottom>
-              Kompleksowa opieka stomatologiczna na najwyższym poziomie. Odkryj pełen zakres naszych specjalistycznych
-              usług.
+              {t('servicesPage.subtitle')}
             </Typography>
           </Box>
 
@@ -140,7 +139,7 @@ export default function Services() {
               }}
               onClick={() => navigate("/appointment")}
             >
-              Umów wizytę
+              {t('servicesPage.cta')}
             </Button>
             <Button
               variant="contained"
@@ -154,7 +153,7 @@ export default function Services() {
               }}
               onClick={() => navigate("/prices")}
             >
-              Zobacz cennik
+              {t('servicesPage.prices')}
             </Button>
           </Box>
         </Box>
@@ -162,7 +161,7 @@ export default function Services() {
 
       <Box sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: "#f5f5f5" }}>
         <Typography variant="h4" textAlign="center" sx={{ mb: 6 }}>
-          {t("services.categories")}
+          {t("servicesPage.categories")}
         </Typography>
 
         <Grid container spacing={4} justifyContent={"center"}>
@@ -213,10 +212,10 @@ export default function Services() {
         sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: colors.color3, color: colors.white, textAlign: "center" }}
       >
         <Typography variant="h4" gutterBottom>
-          Potrzebujesz porady?
+          {t("servicesPage.help")}
         </Typography>
         <Typography variant="h6" paragraph sx={{ mb: 4 }}>
-          Skontaktuj się z nami, aby dowiedzieć się więcej o naszych usługach i umówić wizytę.
+          {t("servicesPage.contactUs")}
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "center", gap: 2, flexWrap: "wrap" }}>
           <Button
@@ -231,7 +230,7 @@ export default function Services() {
             }}
             onClick={() => navigate("/appointment")}
           >
-            Umów wizytę
+            {t("servicesPage.appointment")}
           </Button>
           <Button
             variant="outlined"
@@ -248,7 +247,7 @@ export default function Services() {
             }}
             onClick={() => navigate("/contact")}
           >
-            Skontaktuj się
+            {t("servicesPage.contact")}
           </Button>
         </Box>
       </Box>
