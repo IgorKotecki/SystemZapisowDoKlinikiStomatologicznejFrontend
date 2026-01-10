@@ -111,7 +111,7 @@ export default function DoctorDaySchedule() {
                     {t("doctorDaySchedule.title")}
                 </Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                    <Typography variant="subtitle1" sx={{ mb: 3 }}>
+                    <Typography variant="subtitle1" sx={{ mb: 1 }}>
                         {t("doctorDaySchedule.subtitle")}
                     </Typography>
                     <Button

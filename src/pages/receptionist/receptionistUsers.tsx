@@ -125,7 +125,7 @@ const ReceptionistUsers: React.FC = () => {
         sx={{
           flex: 1,
           px: { xs: 2, md: 8 },
-          py: 6,
+          py: 4,
           color: colors.white,
           display: "flex",
           flexDirection: "column",
@@ -133,10 +133,10 @@ const ReceptionistUsers: React.FC = () => {
         }}
       >
         <Box sx={{ width: "100%", maxWidth: 1500 }}>
-          <Typography variant="h4" gutterBottom sx={{ color: colors.color5, fontWeight: "bold" }}>
+          <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
             {t("receptionistUsers.title")}
           </Typography>
-          <Typography variant="subtitle1" sx={{ mb: 4, opacity: 0.9 }}>
+          <Typography variant="subtitle1" sx={{ mb: 1, opacity: 0.9 }}>
             {t("receptionistUsers.subtitle")}
           </Typography>
 

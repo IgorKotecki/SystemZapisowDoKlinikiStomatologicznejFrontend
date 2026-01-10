@@ -341,7 +341,9 @@
     "addNote": "Add appointment note",
     "selectTeeth": "Select teeth",
     "save": "Save note",
-    "savedNote": "Note has been saved"
+    "savedNote": "Note has been saved",
+    "workingHours": "Working Hours",
+    "subtitle": "Click on a date to add working hours or delete existing ones"
   },
   "doctorFreeDays": {
     "title": "Doctor's Free Days and Breaks",
@@ -353,7 +355,7 @@
     "reason": "Break reason",
     "save": "Save",
     "cancel": "Cancel",
-    "removeConfirm": "Are you sure you want to remove this free time?"
+    "removeConfirm": "Confirm day off?"
   },
   "doctorNavigation": {
     "profile": "Profile",
@@ -445,5 +447,10 @@
   "BLOCK_NOT_AVAILABLE": "Time block not available",
   "BLOCK_BOOKED": "Time block already booked",
   "NO_APPOINTMENT": "No appointment found",
-  "NO_ADD_INFO": "No additional information"
+  "NO_ADD_INFO": "No additional information",
+  "GENERIC_ERROR": "An error occurred. Please try again.",
+  "DAY_HAS_APPOINTMENTS": "The day has scheduled appointments and cannot be deleted.",
+  "globalAlert": {
+    "errorLoadingData": "Error loading data. Please try again later."
+  }
 }
