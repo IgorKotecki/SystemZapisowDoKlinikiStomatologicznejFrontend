@@ -254,7 +254,21 @@
     "phone": "Telefon",
     "action": "Akcja",
     "makeAppointment": "Umów wizytę",
-    "viewEdit": "Zobacz / Edytuj"
+    "viewEdit": "Zobacz / Edytuj",
+    "fetchError": "Błąd podczas pobierania użytkowników",
+    "noUsers": "Brak pacjentów do wyświetlenia",
+    "search": "Szukaj pacjenta...",
+    "loading": "Ładowanie pacjentów...",
+    "noResults": "Brak wyników wyszukiwania",
+    "viewProfile": "Zobacz profil",
+    "editProfile": "Edytuj profil",
+    "bookAppointment": "Zarezerwuj wizytę",
+    "userDetails": "Szczegóły pacjenta",
+    "close": "Zamknij",
+    "email": "Email",
+    "dateOfBirth": "Data urodzenia",
+    "address": "Adres",
+    "searchPlaceholder": "Wyszukaj według imienia, nazwiska, emailu lub telefonu"
   },
   "editUser": {
     "title": "Edycja danych pacjenta",

@@ -249,7 +249,19 @@
     "phone": "Phone",
     "action": "Action",
     "makeAppointment": "Make Appointment",
-    "viewEdit": "View / Edit"
+    "viewEdit": "View / Edit",
+    "fetchError": "Error fetching users",
+    "noUsers": "No patients found",
+    "search": "Search patients...",
+    "loading": "Loading patients...",
+    "noResults": "No patients match your search.",
+    "errorOccurred": "An error occurred while fetching patients.",
+    "addNew": "Add new patient",
+    "addNewTitle": "Add new patient",
+    "email": "Email",
+    "errorEmptyFields": "All fields must be filled",
+    "errorInvalidEmail": "Invalid email format",
+    "searchPlaceholder": "Search by name, surname, email or phone..."
   },
   "editUser": {
     "title": "Edit Patient Data",

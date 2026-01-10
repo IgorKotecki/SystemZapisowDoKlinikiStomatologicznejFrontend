@@ -82,10 +82,19 @@ export const getReceptionistServices = async (lang: string) => {
   const response = await api.get(`/api/Service/receptionist-services?lang=${lang}`);
   return response.data;
 }
-export const getAllUsers = async () => {
-  const response = await api.get(`/api/User/all-users`);
+export const getAllUsers = async (page: number = 0, pageSize: number = 10, searchTerm?: string) => {
+  const params = new URLSearchParams({
+    page: page.toString(),
+    pageSize: pageSize.toString(),
+  });
+
+  if (searchTerm) {
+    params.append('searchTerm', searchTerm);
+  }
+
+  const response = await api.get(`/api/User/all-users?${params.toString()}`);
   return response.data;
-}
+};
 
 export const getCloudinarySignature = async () => {
   const response = await api.get(`/api/Cloudinary/signature`);

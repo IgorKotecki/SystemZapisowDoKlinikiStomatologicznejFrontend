@@ -114,14 +114,6 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
-              {/* <Route
-              path="/receptionist/users/:id"
-              element={
-                <ProtectedRoute allowedRoles={["Receptionist"]}>
-                  <EditUser />
-                </ProtectedRoute>
-              }
-            /> */}
               <Route
                 path="/receptionist/appointment"
                 element={
