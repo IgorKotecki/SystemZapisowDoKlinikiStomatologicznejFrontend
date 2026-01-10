@@ -267,7 +267,13 @@
     "save": "Zapisz",
     "cancel": "Anuluj",
     "saved": "Dane pacjenta zostały zapisane!",
-    "notFound": "Nie znaleziono pacjenta"
+    "notFound": "Nie znaleziono pacjenta",
+    "fetchError": "Błąd podczas pobierania danych użytkownika",
+    "saveError": "Błąd podczas zapisywania zmian",
+    "saveSuccess": "Dane zostały zaktualizowane pomyślnie",
+    "errorEmptyNames": "Imię i nazwisko nie mogą być puste",
+    "errorInvalidEmail": "Niepoprawny format adresu e-mail",
+    "errorPhoneTooShort": "Numer telefonu musi mieć co najmniej 9 cyfr"
   },
   "receptionistAppointment": {
     "title": "Zapisz użytkownika na wizytę",
@@ -299,7 +305,14 @@
     "category": "Kategoria",
     "time": "Czas",
     "maxPrice": "Maxymalna cena",
-    "minPrice": "Minimalna cena"
+    "minPrice": "Minimalna cena",
+    "errorEmptyFields": "Wszystkie pola nazwy i opisu muszą być wypełnione",
+    "errorPrices": "Wprowadzone ceny muszą być większe niż 1 zł",
+    "errorPriceRange": "Cena minimalna nie może przekraczać ceny maksymalnej",
+    "errorTime": "Czas trwania usługi musi być większy niż 0",
+    "errorCategory": "Musisz wybrać przynajmniej jedną kategorię",
+    "addSuccess": "Usługa została pomyślnie dodana",
+    "addError": "Wystąpił błąd podczas komunikacji z serwerem"
   },
   "editService": {
     "title": "Edycja usługi",

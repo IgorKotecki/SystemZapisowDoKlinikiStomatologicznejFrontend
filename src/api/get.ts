@@ -68,6 +68,11 @@ export const getUserDetails = async () => {
   return response.data;
 }
 
+export const getUserById = async (userId: number) => {
+  const response = await api.get(`/api/User/${userId}`);
+  return response.data;
+}
+
 export const getAppointmentsForRecepcionist = async (lang: string, date: string) => {
   const response = await api.get(`/api/Appointment/receptionist/appointments?lang=${lang}&date=${date}`);
   return response.data;
@@ -125,4 +130,5 @@ export default {
   getServiceById,
   getServiceCategories,
   getDoctorWorkingHours,
+  getUserById,
 };

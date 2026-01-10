@@ -30,6 +30,11 @@ export const updateService = async (payload: any, serviceId: number) => {
     return response.data;
 }
 
+export const updateUserById = async(userId: number, dto: any) => {
+    const response = await api.put(`/api/User/edit/${userId}`, dto);
+    return response.data;
+}
+
 export default {
     updateAditianalInformationToAppointment,
     updateDoctorWeekSchedule,
@@ -37,4 +42,5 @@ export default {
     updateUserDetails,
     updateAppointmentStatus,
     updateService,
+    updateUserById,
 };

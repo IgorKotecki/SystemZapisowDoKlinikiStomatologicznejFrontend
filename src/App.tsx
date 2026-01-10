@@ -18,7 +18,6 @@ import DentalChartPage from "./pages/userPages/DentalChartPage";
 import ReceptionistProfile from "./pages/receptionist/receptionistProfile";
 import ReceptionistCalendar from "./pages/receptionist/receptionistCalendar";
 import ReceptionistUsers from "./pages/receptionist/receptionistUsers";
-import EditUser from "./pages/receptionist/receptionistUserInfo";
 import ReceptionistAppointment from "./pages/receptionist/receptionistMakeAppointment";
 import ReceptionistServices from "./pages/receptionist/receptionistServices";
 import EditService from "./pages/receptionist/receptionistServiceInfo";
@@ -112,18 +111,18 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            <Route
+            {/* <Route
               path="/receptionist/users/:id"
               element={
                 <ProtectedRoute allowedRoles={["Receptionist"]}>
                   <EditUser />
                 </ProtectedRoute>
               }
-            />
+            /> */}
             <Route
               path="/receptionist/appointment"
               element={
-                <ProtectedRoute allowedRoles={["Receptionist"]}>
+                <ProtectedRoute allowedRoles={["Receptionist","Doctor"]}>
                   <ReceptionistAppointment />
                 </ProtectedRoute>
               }
@@ -163,14 +162,14 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            <Route
+            {/* <Route
               path="/doctor/users/:id"
               element={
                 <ProtectedRoute allowedRoles={["Doctor"]}>
                   <EditUser />
                 </ProtectedRoute>
               }
-            />
+            /> */}
             <Route
               path="/doctor/appointment"
               element={
