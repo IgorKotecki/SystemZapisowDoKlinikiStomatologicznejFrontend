@@ -262,7 +262,13 @@
     "save": "Save",
     "cancel": "Cancel",
     "saved": "Patient data has been saved!",
-    "notFound": "Patient not found"
+    "notFound": "Patient not found",
+    "fetchError": "Error fetching user data",
+    "saveError": "Error saving changes",
+    "saveSuccess": "Data updated successfully",
+    "errorEmptyNames": "First and last name cannot be empty",
+    "errorInvalidEmail": "Invalid email format",
+    "errorPhoneTooShort": "Phone number must be at least 9 digits"
   },
   "receptionistAppointment": {
     "title": "Book appointment for user",
@@ -294,14 +300,21 @@
     "category": "Category",
     "time": "Time",
     "maxPrice": "Max price",
-    "minPrice": "Min price"
+    "minPrice": "Min price",
+    "errorEmptyFields": "All name and description fields must be filled",
+    "errorPrices": "Entered prices must be greater than 1 PLN",
+    "errorPriceRange": "Minimum price cannot exceed maximum price",
+    "errorTime": "Service duration must be greater than 0",
+    "errorCategory": "You must select at least one category",
+    "addSuccess": "Service added successfully",
+    "addError": "An error occurred during server communication"
   },
   "editService": {
     "title": "Edit Service",
     "subtitle": "Update the service details and save changes.",
     "goBack": "Back to services list",
-    "namePl": "Nazwa usługi PL",
-    "nameEn": "Nazwa usługi EN",
+    "namePl": "Service name in PL",
+    "nameEn": "Service name in EN",
     "price": "Price",
     "duration": "Duration",
     "edit": "Edit",
@@ -317,7 +330,8 @@
     "categories": "Categories",
     "delete": "Dekete",
     "deleteService": "Delete service",
-    "deleteConfirmText": "Are you sure you want to delete the service?"
+    "deleteConfirmText": "Are you sure you want to delete the service?",
+    "category": "Category"
   },
   "doctorProfile": {
     "title": "Doctor Profile",

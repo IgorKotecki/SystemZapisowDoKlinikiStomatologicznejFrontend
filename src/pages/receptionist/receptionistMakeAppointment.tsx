@@ -207,11 +207,7 @@ export default function ReceptionistAppointment() {
       >
         <Box sx={{ width: "100%", maxWidth: 1500 }}>
           <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
-            {t("receptionistMakeAppointment.title")}
-          </Typography>
-
-          <Typography variant="subtitle1" sx={{ mb: 1 }}>
-            {t("receptionistMakeAppointment.subtitle")}
+            {t("receptionistAppointment.title")}
           </Typography>
           <Typography variant="subtitle2" sx={{ mb: 1 }}>
             {state?.user.name} {state?.user.surname} - {state?.user.email} - {state?.user.phoneNumber}

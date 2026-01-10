@@ -19,6 +19,7 @@ import { Camera } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import api from "../../api/axios";
+import get from "../../api/get";
 import post from "../../api/post";
 import deleteUser from "../../api/delete";
 import { colors } from "../../utils/colors";
@@ -67,6 +68,8 @@ export default function ProfilePage() {
     const fetchUserData = async () => {
       try {
         const response = await api.get(`/api/User/${userId}`);
+        // const response = get.getUserById(userId);
+        // const mappedData = mapUserData(response);
         const mappedData = mapUserData(response.data);
         setUserData(mappedData);
         setOriginalUserData(mappedData);
