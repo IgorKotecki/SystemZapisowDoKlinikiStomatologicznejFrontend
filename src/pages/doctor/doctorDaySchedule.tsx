@@ -34,6 +34,7 @@ export default function DoctorDaySchedule() {
     const calendarRef = useRef<any>(null);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
+    const [nextScheduleTime, setNextScheduleTime] = useState<Date | null>(null);
 
     useEffect(() => {
         const fetchWeekScheme = async () => {
@@ -44,6 +45,16 @@ export default function DoctorDaySchedule() {
                 console.error(err);
             }
         };
+        const fetchNextScheduleDate = async () => {
+            try {
+                const response = await get.getNextScheduleDate();
+                setNextScheduleTime(new Date(response));
+            } catch (err) {
+                console.error(err);
+                showAlert({ type: 'error', message: t('doctorDaySchedule.fetchNextScheduleError') });
+            }
+        };
+        fetchNextScheduleDate();
         fetchWeekScheme();
     }, []);
 
@@ -110,7 +121,7 @@ export default function DoctorDaySchedule() {
                 <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
                     {t("doctorDaySchedule.title")}
                 </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 , gap:2}}>
                     <Typography variant="subtitle1" sx={{ mb: 1 }}>
                         {t("doctorDaySchedule.subtitle")}
                     </Typography>
@@ -125,11 +136,14 @@ export default function DoctorDaySchedule() {
                         {t("doctorDaySchedule.saveChanges")}
                     </Button>
                 </Box>
+                <Typography variant="subtitle2" sx={{ mb: 3, opacity: 0.8 }}>
+                    {nextScheduleTime && `${t("doctorDaySchedule.nextScheduledTime")}: ${nextScheduleTime.toLocaleDateString(i18n.language)} `}
+                </Typography>
 
                 {loading ? (
                     <CircularProgress sx={{ color: colors.color5 }} />
                 ) : (
-                    <Box sx={{ backgroundColor: colors.white, color: colors.black, borderRadius: 3, p: 2 }}>
+                    <Box sx={{ backgroundColor: colors.pureWhite, color: colors.black, borderRadius: 3, p: 2 }}>
                         <FullCalendar
                             ref={calendarRef}
                             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

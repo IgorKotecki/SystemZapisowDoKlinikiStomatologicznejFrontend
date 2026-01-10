@@ -15,6 +15,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
 import post from '../api/post';
+import { colors } from '../utils/colors';
 
 export default function Register() {
     const { t } = useTranslation();
@@ -87,19 +88,12 @@ export default function Register() {
             }
             await post.registerUser(payload);
 
-            navigate('/login');
+            navigate('/register/gratulation');
         } catch (err: any) {
             setError(t('error.errorOccurred'));
         } finally {
             setLoading(false);
         }
-    };
-
-    const colors = {
-        color1: '#003141',
-        color3: '#007987',
-        color4: '#00b2b9',
-        white: '#ffffff'
     };
 
     return (
@@ -117,7 +111,7 @@ export default function Register() {
             <Card sx={{ maxWidth: 500, width: '100%', borderRadius: 3, boxShadow: 5 }}>
                 <CardContent sx={{ p: 4 }}>
                     <form onSubmit={handleSubmit}>
-                        <Typography variant="h5" sx={{ textAlign: 'center', mb: 3, color: colors.color1 }}>
+                        <Typography variant="h5" sx={{ textAlign: 'center', mb: 3, color: colors.black }}>
                             {t('register.title') || 'Rejestracja'}
                         </Typography>
 

@@ -15,7 +15,7 @@ const ReceptionistUsers: React.FC = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Stany dla modalu edycji
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
@@ -27,10 +27,10 @@ const ReceptionistUsers: React.FC = () => {
       setUsers(response);
     } catch (error) {
       console.error("Error fetching users:", error);
-        showAlert({
-          type: "error",
-          message: t("receptionistUsers.fetchError") || "Błąd podczas pobierania użytkowników"
-        });
+      showAlert({
+        type: "error",
+        message: t("receptionistUsers.fetchError") || "Błąd podczas pobierania użytkowników"
+      });
     } finally {
       setLoading(false);
     }
@@ -48,15 +48,15 @@ const ReceptionistUsers: React.FC = () => {
   const columns: GridColDef<User>[] = [
     { field: 'name', headerName: t("receptionistUsers.firstName"), width: 150 },
     { field: 'surname', headerName: t("receptionistUsers.lastName"), width: 150 },
-    { field: 'email', headerName: 'Email', width: 200 },
-    { field: 'phoneNumber', headerName: t("receptionistUsers.phone"), width: 150 },
+    { field: 'email', headerName: 'Email', width: 250 },
+    { field: 'phoneNumber', headerName: t("receptionistUsers.phone"), width: 180 },
     {
       field: 'action',
       headerName: t("receptionistUsers.action"),
-      width: 400,
+      width: 350,
       sortable: false,
       renderCell: (params) => (
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', height: '100%' }}>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', height: '100%' , justifyContent: 'center' }}>
           <Button
             variant="contained"
             sx={{ color: colors.white, backgroundColor: colors.color3, '&:hover': { backgroundColor: colors.color4 } }}
@@ -77,7 +77,7 @@ const ReceptionistUsers: React.FC = () => {
       ),
     },
   ];
-  
+
 
   return (
     <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, width: "100%", minHeight: "100vh", backgroundColor: colors.color1 }}>
@@ -106,7 +106,7 @@ const ReceptionistUsers: React.FC = () => {
           <Paper
             elevation={6}
             sx={{
-              backgroundColor: colors.white,
+              backgroundColor: colors.pureWhite,
               borderRadius: 3,
               overflow: 'hidden',
               p: 2
@@ -142,11 +142,11 @@ const ReceptionistUsers: React.FC = () => {
         </Box>
       </Box>
 
-      <EditUserModal 
-        open={isEditModalOpen} 
-        userId={selectedUserId} 
-        onClose={() => setIsEditModalOpen(false)} 
-        onSuccess={fetchUsers} 
+      <EditUserModal
+        open={isEditModalOpen}
+        userId={selectedUserId}
+        onClose={() => setIsEditModalOpen(false)}
+        onSuccess={fetchUsers}
       />
     </Box>
   );

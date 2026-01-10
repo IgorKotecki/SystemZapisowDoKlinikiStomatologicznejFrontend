@@ -16,6 +16,7 @@ import { useAuth } from '../context/AuthContext';
 import post from '../api/post';
 import { showAlert } from '../utils/GlobalAlert';
 import { Link as RouterLink } from 'react-router-dom';
+import { colors } from '../utils/colors';
 
 export default function LogIn() {
   const { t } = useTranslation();
@@ -63,14 +64,6 @@ export default function LogIn() {
     }
   };
 
-
-  const colors = {
-    color1: '#003141',
-    color3: '#007987',
-    color4: '#00b2b9',
-    white: '#ffffff'
-  };
-
   return (
     <Box
       sx={{
@@ -86,7 +79,7 @@ export default function LogIn() {
       <Card sx={{ maxWidth: 420, width: '100%', borderRadius: 3, boxShadow: 5 }}>
         <CardContent sx={{ p: 4 }}>
 
-          <Typography variant="h5" sx={{ textAlign: 'center', mb: 3, color: colors.color1 }}>
+          <Typography variant="h5" sx={{ textAlign: 'center', mb: 3, color: colors.black }}>
             {t('login.title')}
           </Typography>
 

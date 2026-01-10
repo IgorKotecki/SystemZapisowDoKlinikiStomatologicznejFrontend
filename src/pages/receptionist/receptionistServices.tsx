@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Box, Typography, Paper, Button, CircularProgress } from "@mui/material";
+import { Box, Typography, Paper, Button} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import UserNavigation from "../../components/userComponents/userNavigation";
 import AddServiceModal from "../../components/AddService";
@@ -9,7 +9,7 @@ import { colors } from "../../utils/colors";
 import type { Service } from "../../Interfaces/Service";
 import type { ServiceCategory } from "../../Interfaces/ServiceCategory";
 import get from "../../api/get";
-import { DataGrid, type GridColDef, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 
 const ReceptionistServices: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -51,6 +51,7 @@ const ReceptionistServices: React.FC = () => {
 
   const columns: GridColDef<Service>[] = [
     { field: 'id', headerName: 'ID', width: 90 },
+    // @ts-ignore
     { field: 'name', headerName: t("receptionistServices.name"), flex: 1 },
     {
       field: 'price',
@@ -108,7 +109,7 @@ const ReceptionistServices: React.FC = () => {
             {t("receptionistServices.addNew")}
           </Button>
 
-          <Paper elevation={6} sx={{ backgroundColor: colors.white, borderRadius: 3, p: 2 }}>
+          <Paper elevation={6} sx={{ backgroundColor: colors.pureWhite, borderRadius: 3, p: 2 }}>
             <DataGrid
               rows={services}
               columns={columns}

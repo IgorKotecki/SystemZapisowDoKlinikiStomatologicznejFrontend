@@ -85,6 +85,7 @@ export default function UserNavigation() {
       { href: "/doctor/calendar", label: t("doctorNavigation.visits"), icon: CalendarPlus, roles: ["Doctor"] },
       { href: "/doctor/daySchedule", label: t("doctorNavigation.mySchedule"), icon: CalendarCheck, roles: ["Doctor"] },
       { href: "/receptionist/services", label: t("doctorNavigation.editServices"), icon: Settings2, roles: ["Doctor"] },
+      { href: "/doctor/additionalInfo", label: t("doctorNavigation.additionalInfo"), icon: Settings2, roles: ["Doctor"] },
     ];
 
     // Admin

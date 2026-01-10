@@ -17,9 +17,14 @@ export const deleteWorkingHours = async (date: string) => {
     });
     return response.data;
 }
+export const deleteAdditionalInformation = async (infoId: number) => {
+    const response = await api.delete(`/api/additional-information/${infoId}`);
+    return response.data;
+}
 
 export default {
     deleteService,
     deleteUser,
     deleteWorkingHours,
+    deleteAdditionalInformation
 };

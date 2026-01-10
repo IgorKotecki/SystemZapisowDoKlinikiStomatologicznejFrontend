@@ -22,7 +22,7 @@ import type { WorkingHours } from "../../Interfaces/WorkingHours";
 import type { Appointment } from "../../Interfaces/Appointment";
 import { showAlert } from "../../utils/GlobalAlert";
 import deleteApi from "../../api/delete";
-import { set } from "date-fns";
+import post from "../../api/post";
 
 const DoctorCalendar: React.FC = () => {
   const { t } = useTranslation();
@@ -33,31 +33,33 @@ const DoctorCalendar: React.FC = () => {
   const calendarRef = React.useRef<FullCalendar>(null);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [workingDay, setWorkingDay] = useState<Date | null>(null);
+  const [selectedRange, setSelectedRange] = useState<{ start: string; end: string, dayOfWeek: string } | null>(null);
+  const [addTimeModalOpen, setAddTimeModalOpen] = useState(false);
+
+  const fetchDoctorWorkingHours = async (date: string) => {
+    try {
+      const response = await get.getDoctorWorkingHours(date);
+      setWorkingHours(response);
+      setLoading(false);
+    } catch (err) {
+      showAlert({ type: 'error', message: t('globalAlert.errorLoadingData') });
+      console.error(err);
+    }
+  };
+
+  const fetchAppointments = async (date: string) => {
+    try {
+      const language = i18n.language;
+      const response = await get.getDoctorAppointments(language, date);
+      setAppointments(response);
+      setLoading(false);
+    } catch (err) {
+      showAlert({ type: 'error', message: t('globalAlert.errorLoadingData') });
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
-    const fetchDoctorWorkingHours = async (date: string) => {
-      try {
-        const response = await get.getDoctorWorkingHours(date);
-        setWorkingHours(response);
-        setLoading(false);
-      } catch (err) {
-        showAlert({ type: 'error', message: t('globalAlert.errorLoadingData') });
-        console.error(err);
-      }
-    };
-
-    const fetchAppointments = async (date: string) => {
-      try {
-        const language = i18n.language;
-        const response = await get.getDoctorAppointments(language, date);
-        setAppointments(response);
-        setLoading(false);
-      } catch (err) {
-        showAlert({ type: 'error', message: t('globalAlert.errorLoadingData') });
-        console.error(err);
-      }
-    };
-
     fetchDoctorWorkingHours(currentWeekStart);
     fetchAppointments(currentWeekStart);
   }, [currentWeekStart, t]);
@@ -97,18 +99,53 @@ const DoctorCalendar: React.FC = () => {
     setOpenModal(true);
     setWorkingDay(info.event.start);
   };
+
   const handleDelete = async () => {
     try {
       await deleteApi.deleteWorkingHours(workingDay!.toISOString());
+
+      showAlert({ type: 'success', message: t('doctorCalendar.removeWorkingHoursSuccess') });
+      await fetchDoctorWorkingHours(currentWeekStart);
       setOpenModal(false);
-    } catch (err : any) {
+    } catch (err: any) {
       console.error(err);
       let errorCode = err.response?.data?.title ??
-                err.response?.data?.Title ?? // PascalCase
-                "GENERIC_ERROR";
+        err.response?.data?.Title ?? // PascalCase
+        "GENERIC_ERROR";
       showAlert({ type: 'error', message: t(errorCode) });
     } finally {
       setWorkingDay(null);
+    }
+  };
+
+  const handleSelect = (info: any) => {
+    if (info.start.getDay() != info.end.getDay()) {
+      return;
+    }
+    setSelectedRange({ start: info.startStr, end: info.endStr, dayOfWeek: info.start.getDay() });
+    setAddTimeModalOpen(true);
+  };
+
+  const handleAddWorkingHours = async () => {
+    try {
+      const payload = {
+        startTime: selectedRange?.start,
+        endTime: selectedRange?.end,
+      };
+      await post.createNewWorkingHours(payload);
+
+      showAlert({ type: 'success', message: t('doctorCalendar.addWorkingHoursSuccess') });
+
+      await fetchDoctorWorkingHours(currentWeekStart);
+    } catch (err: any) {
+      console.error(err);
+      let errorCode = err.response?.data?.title ??
+        err.response?.data?.Title ?? // PascalCase
+        "GENERIC_ERROR";
+      showAlert({ type: 'error', message: t(errorCode) });
+    } finally {
+      setSelectedRange(null);
+      setAddTimeModalOpen(false);
     }
   };
 
@@ -120,19 +157,21 @@ const DoctorCalendar: React.FC = () => {
         <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
           {t("doctorCalendar.title")}
         </Typography>
-        <Typography  gutterBottom sx={{ color: colors.white }}>
+        <Typography gutterBottom sx={{ color: colors.white }}>
           {t("doctorCalendar.subtitle")}
         </Typography>
 
         {loading ? (
           <CircularProgress sx={{ color: colors.color5 }} />
         ) : (
-          <Box sx={{ backgroundColor: colors.white, color: colors.black, borderRadius: 3, p: 2 }}>
+          <Box sx={{ backgroundColor: colors.pureWhite, color: colors.black, borderRadius: 3, p: 2 }}>
             <FullCalendar
               ref={calendarRef}
               plugins={[timeGridPlugin, interactionPlugin]}
               initialView="timeGridWeek"
               allDaySlot={false}
+              selectable={true}
+              select={handleSelect}
               eventClick={handleEventClick}
               eventMouseEnter={(mouseEnterInfo) => {
                 mouseEnterInfo.el.style.cursor = 'pointer';
@@ -190,7 +229,7 @@ const DoctorCalendar: React.FC = () => {
         >
           <DialogTitle>
             <Typography component="h2" variant="h6" sx={{ color: colors.color5, mb: 2 }}>
-              {t("doctorFreeDays.removeConfirm")}
+              {t("doctorCalendar.removeConfirm")}
             </Typography>
           </DialogTitle>
           <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
@@ -199,11 +238,46 @@ const DoctorCalendar: React.FC = () => {
               onClick={() => setOpenModal(false)}
               sx={{ borderColor: colors.color3, color: colors.white }}
             >
-              {t("doctorFreeDays.cancel")}
+              {t("cancel")}
             </Button>
             <Button
               variant="contained"
               onClick={handleDelete}
+              sx={{ backgroundColor: colors.color3, color: colors.white }}
+            >
+              {t("yes")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={addTimeModalOpen}
+          onClose={() => setAddTimeModalOpen(false)}
+          PaperProps={{
+            sx: {
+              backgroundColor: colors.color2,
+              color: colors.white,
+              borderRadius: 3,
+              width: 300,
+              p: 4,
+            },
+          }}
+        >
+          <DialogTitle>
+            <Typography component="h2" variant="h6" sx={{ color: colors.color5, mb: 2 }}>
+              {t("doctorCalendar.addConfirm")}
+            </Typography>
+          </DialogTitle>
+          <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+            <Button
+              variant="outlined"
+              onClick={() => setAddTimeModalOpen(false)}
+              sx={{ borderColor: colors.color3, color: colors.white }}
+            >
+              {t("cancel")}
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleAddWorkingHours}
               sx={{ backgroundColor: colors.color3, color: colors.white }}
             >
               {t("yes")}

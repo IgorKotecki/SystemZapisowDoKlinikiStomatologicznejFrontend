@@ -29,89 +29,92 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import DoctorDaySchedule from "./pages/doctor/doctorDaySchedule";
 import DoctorAppointmentsConsole from "./pages/doctor/doctorAppointmentConsole";
 import { GlobalAlert } from "./utils/GlobalAlert";
+import { RegisterGratulation } from "./pages/RegisterGratulation";
+import AdditionalInformation from "./pages/doctor/doctorAddInfo";
 
 const App = () => {
   return (
     <>
-    <GlobalAlert />
-    <Router>
-      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <Header />
-        <main style={{ flex: 1, display: 'flex' }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/appointment" element={<Appointment />} />
-            <Route path="/login" element={<LogIn />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/prices" element={<Pricing />} />
-            <Route path="/contacts" element={<Contact />} />
-            <Route path="/resetpassword" element={<ResetPassword />} />
+      <GlobalAlert />
+      <Router>
+        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+          <Header />
+          <main style={{ flex: 1, display: 'flex' }}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/appointment" element={<Appointment />} />
+              <Route path="/login" element={<LogIn />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/prices" element={<Pricing />} />
+              <Route path="/contacts" element={<Contact />} />
+              <Route path="/resetpassword" element={<ResetPassword />} />
+              <Route path="/register/gratulation" element={<RegisterGratulation />} />
 
-            {/* USER */}
+              {/* USER */}
 
-            <Route
-              path="/user/profile"
-              element={
-                <ProtectedRoute allowedRoles={['Registered_user']}>
-                  <User />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/user/appointments"
-              element={
-                <ProtectedRoute allowedRoles={['Registered_user']}>
-                  <Appointments />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/user/makeAppointment"
-              element={
-                <ProtectedRoute allowedRoles={['Registered_user']}>
-                  <UserMakeAppointment />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/user/dental"
-              element={
-                <ProtectedRoute allowedRoles={['Registered_user']}>
-                  <DentalChartPage />
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/user/profile"
+                element={
+                  <ProtectedRoute allowedRoles={['Registered_user']}>
+                    <User />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/user/appointments"
+                element={
+                  <ProtectedRoute allowedRoles={['Registered_user']}>
+                    <Appointments />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/user/makeAppointment"
+                element={
+                  <ProtectedRoute allowedRoles={['Registered_user']}>
+                    <UserMakeAppointment />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/user/dental"
+                element={
+                  <ProtectedRoute allowedRoles={['Registered_user']}>
+                    <DentalChartPage />
+                  </ProtectedRoute>
+                }
+              />
 
-            {/* RECETIONIST */}
+              {/* RECETIONIST */}
 
-            <Route
-              path="/receptionist/profile"
-              element={
-                <ProtectedRoute allowedRoles={["Receptionist"]}>
-                  <ReceptionistProfile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/receptionist/calendar"
-              element={
-                <ProtectedRoute allowedRoles={["Receptionist"]}>
-                  <ReceptionistCalendar />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/receptionist/users"
-              element={
-                <ProtectedRoute allowedRoles={["Receptionist"]}>
-                  <ReceptionistUsers />
-                </ProtectedRoute>
-              }
-            />
-            {/* <Route
+              <Route
+                path="/receptionist/profile"
+                element={
+                  <ProtectedRoute allowedRoles={["Receptionist"]}>
+                    <ReceptionistProfile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/receptionist/calendar"
+                element={
+                  <ProtectedRoute allowedRoles={["Receptionist"]}>
+                    <ReceptionistCalendar />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/receptionist/users"
+                element={
+                  <ProtectedRoute allowedRoles={["Receptionist"]}>
+                    <ReceptionistUsers />
+                  </ProtectedRoute>
+                }
+              />
+              {/* <Route
               path="/receptionist/users/:id"
               element={
                 <ProtectedRoute allowedRoles={["Receptionist"]}>
@@ -119,95 +122,92 @@ const App = () => {
                 </ProtectedRoute>
               }
             /> */}
-            <Route
-              path="/receptionist/appointment"
-              element={
-                <ProtectedRoute allowedRoles={["Receptionist","Doctor"]}>
-                  <ReceptionistAppointment />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/receptionist/services"
-              element={
-                <ProtectedRoute allowedRoles={["Receptionist","Doctor"]}>
-                  <ReceptionistServices />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/receptionist/services/:id"
-              element={
-                <ProtectedRoute allowedRoles={["Receptionist","Doctor"]}>
-                  <EditService />
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/receptionist/appointment"
+                element={
+                  <ProtectedRoute allowedRoles={["Receptionist", "Doctor"]}>
+                    <ReceptionistAppointment />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/receptionist/services"
+                element={
+                  <ProtectedRoute allowedRoles={["Receptionist", "Doctor"]}>
+                    <ReceptionistServices />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/receptionist/services/:id"
+                element={
+                  <ProtectedRoute allowedRoles={["Receptionist", "Doctor"]}>
+                    <EditService />
+                  </ProtectedRoute>
+                }
+              />
 
-            {/* DOCTOR */}
+              {/* DOCTOR */}
 
-            <Route
-              path="/doctor/profile"
-              element={
-                <ProtectedRoute allowedRoles={["Doctor"]}>
-                  <DoctorProfile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/doctor/users"
-              element={
-                <ProtectedRoute allowedRoles={["Doctor"]}>
-                  <ReceptionistUsers />
-                </ProtectedRoute>
-              }
-            />
-            {/* <Route
-              path="/doctor/users/:id"
-              element={
-                <ProtectedRoute allowedRoles={["Doctor"]}>
-                  <EditUser />
-                </ProtectedRoute>
-              }
-            /> */}
-            <Route
-              path="/doctor/appointment"
-              element={
-                <ProtectedRoute allowedRoles={["Doctor"]}>
-                  <DoctorAppointments />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/doctor/calendar"
-              element={
-                <ProtectedRoute allowedRoles={["Doctor"]}>
-                  <DoctorCalendar />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/doctor/daySchedule"
-              element={
-                <ProtectedRoute allowedRoles={["Doctor"]}>
-                  <DoctorDaySchedule />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/doctor/appointmentConsole/:guid"
-              element={
-                <ProtectedRoute allowedRoles={["Doctor"]}>
-                  <DoctorAppointmentsConsole />
-                </ProtectedRoute>
-              }
-            />
+              <Route
+                path="/doctor/profile"
+                element={
+                  <ProtectedRoute allowedRoles={["Doctor"]}>
+                    <DoctorProfile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/doctor/users"
+                element={
+                  <ProtectedRoute allowedRoles={["Doctor"]}>
+                    <ReceptionistUsers />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/doctor/appointment"
+                element={
+                  <ProtectedRoute allowedRoles={["Doctor"]}>
+                    <DoctorAppointments />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/doctor/calendar"
+                element={
+                  <ProtectedRoute allowedRoles={["Doctor"]}>
+                    <DoctorCalendar />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/doctor/daySchedule"
+                element={
+                  <ProtectedRoute allowedRoles={["Doctor"]}>
+                    <DoctorDaySchedule />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/doctor/appointmentConsole/:guid"
+                element={
+                  <ProtectedRoute allowedRoles={["Doctor"]}>
+                    <DoctorAppointmentsConsole />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/doctor/additionalInfo"
+                element={
+                  <ProtectedRoute allowedRoles={["Doctor"]}>
+                    <AdditionalInformation />
+                  </ProtectedRoute>} />
 
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </Router>
     </>
   );
 };

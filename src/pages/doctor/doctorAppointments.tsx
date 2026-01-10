@@ -61,7 +61,7 @@ const DoctorAppointments: React.FC = () => {
     <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, minHeight: "100vh", backgroundColor: colors.color1 }}>
       <UserNavigation />
 
-      <Box sx={{ flex: 1, p: 4, color: colors.white }}>
+      <Box sx={{ flex: 1, p: 4, color: colors.pureWhite }}>
         <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
           {t("doctorCalendar.title")}
         </Typography>
@@ -69,7 +69,7 @@ const DoctorAppointments: React.FC = () => {
         {loading ? (
           <CircularProgress sx={{ color: colors.color5 }} />
         ) : (
-          <Box sx={{ backgroundColor: colors.white, color: colors.black, borderRadius: 3, p: 2 }}>
+          <Box sx={{ backgroundColor: colors.pureWhite, color: colors.black, borderRadius: 3, p: 2 }}>
             <FullCalendar
               plugins={[timeGridPlugin, interactionPlugin]}
               initialView="timeGridWeek"

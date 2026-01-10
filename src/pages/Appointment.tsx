@@ -173,7 +173,7 @@ export default function Appointment() {
 
             showAlert({
                 type: 'success',
-                message: t("success"),
+                message: t("userMakeAppointment.success"),
             });
 
             setServicesIds([]);

@@ -361,7 +361,12 @@
     "save": "Zapisz notatkę",
     "savedNote": "Notatka została zapisana",
     "workingHours": "Godziny pracy",
-    "subtitle": "Kliknij w kalendarzu, aby dodać godziny pracy lub usunąć istniejące"
+    "subtitle": "Kliknij w kalendarzu, aby dodać godziny pracy lub usunąć istniejące",
+    "addWorkingHoursSuccess": "Godziny pracy zostały pomyślnie dodane.",
+    "removeWorkingHoursSuccess": "Godziny pracy zostały pomyślnie usunięte.",
+    "errorOccurred": "Wystąpił błąd podczas przetwarzania Twojego żądania.",
+    "addConfirm": "Czy chcesz dodać godziny pracy dla wybranego dnia?",
+    "removeConfirm": "Czy chcesz usunąć godziny pracy dla wybranego dnia?"
   },
   "doctorFreeDays": {
     "title": "Dni i godziny wolne lekarza",
@@ -381,7 +386,8 @@
     "users": "Użytkownicy",
     "scheduleVisit": "Zaplanowane wizyty",
     "mySchedule": "Mój grafik",
-    "editServices": "Edit Services"
+    "editServices": "Edit Services",
+    "additionalInfo": "Dodatkowe informacje"
   },
   "forget": {
     "title": "Resetuj hasło",
@@ -406,13 +412,15 @@
   },
   "doctorDaySchedule": {
     "title": "Grafik dni lekarza",
-    "subtitle": "Przeglądaj i zarządzaj swoim standardowym grafikiem pracy",
+    "subtitle": "Przeglądaj i zarządzaj swoim standardowym grafikiem pracy. Uwaga, grafik bedzie zastosowany do nadchodzących miesięcy zmiana nie wpłynie na aktualne godziny pracy te możesz dostosować w kalendarzu.",
     "scheduledTime": "Zaplanowany czas",
     "addScheduledTime": "Dodaj zaplanowany czas",
     "saveChanges": "Zapisz zmiany",
     "remove": "Czy chcesz usunąć plan dnia?",
     "updateSuccess": "Grafik został pomyślnie zaktualizowany.",
-    "updateError": "Wystąpił błąd podczas aktualizacji grafiku."
+    "updateError": "Wystąpił błąd podczas aktualizacji grafiku.",
+    "fetchNextScheduleError": "Wystąpił błąd podczas pobierania następnej daty grafiku.",
+    "nextScheduledTime": "Ten grafik zacznie obowiązywać od"
   },
   "appointmentInfo": {
     "title": "Informacje o wizycie : ",
@@ -475,7 +483,22 @@
   "NO_ADD_INFO": "Brak dodatkowych informacji.",
   "GENERIC_ERROR": "Wystąpił błąd. Spróbuj ponownie.",
   "DAY_HAS_APPOINTMENTS": "Dzień ma zaplanowane wizyty i nie może zostać usunięty.",
+  "WORKING_HOURS_ALREADY_EXIST": "Godziny pracy dla tego dnia już istnieją.",
   "globalAlert": {
     "errorLoadingData": "Błąd podczas ładowania danych. Spróbuj ponownie później."
+  },
+  "registration": {
+    "gratulationTitle": "Rejestracja zakończona sukcesem!",
+    "gratulationMessage": "Dziękujemy za rejestrację. Teraz możesz zalogować się na swoje konto.",
+    "goToLogin": "Przejdź do logowania"
+  },
+  "additionalInfo": {
+    "title": "Dodatkowe informacje",
+    "subtitle": "Zarządzaj dodatkowymi szczegółami związanymi ze zdrowiem stomatologicznym swoich pacjentów.",
+    "action": "Akcja",
+    "delete": "Usuń",
+    "deleteSuccess": "Dodatkowa informacja została pomyślnie usunięta.",
+    "deleteError": "Wystąpił błąd podczas usuwania informacji.",
+    "body": "Treść"
   }
 }

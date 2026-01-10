@@ -357,7 +357,12 @@
     "save": "Save note",
     "savedNote": "Note has been saved",
     "workingHours": "Working Hours",
-    "subtitle": "Click on a date to add working hours or delete existing ones"
+    "subtitle": "Click on a date to add working hours or delete existing ones",
+    "addWorkingHoursSuccess": "Working hours have been added successfully.",
+    "removeWorkingHoursSuccess": "Working hours have been removed successfully.",
+    "errorOccurred": "An error occurred while processing your request.",
+    "addConfirm": "Do you want to add working hours for the selected day?",
+    "removeConfirm": "Do you want to remove working hours for the selected day?"
   },
   "doctorFreeDays": {
     "title": "Doctor's Free Days and Breaks",
@@ -377,7 +382,8 @@
     "users": "Users",
     "scheduleVisit": "Schedule Appointment",
     "mySchedule": "My Schedule",
-    "editServices": "Edit Services"
+    "editServices": "Edit Services",
+    "additionalInfo": "Additional Information"
   },
   "forget": {
     "title": "Reset your password",
@@ -402,13 +408,15 @@
   },
   "doctorDaySchedule": {
     "title": "Doctor's Day Schedule",
-    "subtitle": "View and manage your work day schedule template",
+    "subtitle": "View and manage your work day schedule template, be aware schedule will be applied to months ahead, changes will not affect current working hours those you can adjust in calendar.",
     "scheduledTime": "Scheduled Time",
     "addScheduledTime": "Add Scheduled Time",
     "saveChanges": "Save Changes",
     "remove": "Do You want to remove day schedule?",
     "updateSuccess": "Schedule has been updated successfully.",
-    "updateError": "An error occurred while updating the schedule."
+    "updateError": "An error occurred while updating the schedule.",
+    "fetchNextScheduleError": "An error occurred while fetching the next schedule date.",
+    "nextScheduledTime": "This schedule will take effect from"
   },
   "appointmentInfo": {
     "title": "Appointment Information : ",
@@ -464,7 +472,22 @@
   "NO_ADD_INFO": "No additional information",
   "GENERIC_ERROR": "An error occurred. Please try again.",
   "DAY_HAS_APPOINTMENTS": "The day has scheduled appointments and cannot be deleted.",
+  "WORKING_HOURS_ALREADY_EXIST": "Working hours for this day already exist.",
   "globalAlert": {
     "errorLoadingData": "Error loading data. Please try again later."
+  },
+  "registration": {
+    "gratulationTitle": "Registration Successful!",
+    "gratulationMessage": "Thank you for registering. You can now log in to your account.",
+    "goToLogin": "Go to Login"
+  },
+  "additionalInfo": {
+    "title": "Additional Information",
+    "subtitle": "Manage extra details related to your patients' dental health.",
+    "action": "Action",
+    "delete": "Delete",
+    "deleteSuccess": "Additional information has been deleted successfully.",
+    "deleteError": "An error occurred while deleting the information.",
+    "body": "Body"
   }
 }

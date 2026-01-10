@@ -86,7 +86,7 @@ const ReceptionistCalendar: React.FC = () => {
         {loading ? (
           <CircularProgress sx={{ color: colors.color5 }} />
         ) : (
-          <Box sx={{ backgroundColor: colors.white, color: colors.black, borderRadius: 3, p: 2 }}>
+          <Box sx={{ backgroundColor: colors.pureWhite, color: colors.black, borderRadius: 3, p: 2 }}>
             <FullCalendar
               plugins={[timeGridPlugin, interactionPlugin]}
               initialView="timeGridWeek"

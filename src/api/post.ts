@@ -12,7 +12,7 @@ export const bookAppointmentRegistered = async (payload: any) => {
 };
 
 export const addAdditionalInformation = async (payload: any) => {
-    const response = await api.post(`/api/Appointment/doctor/additional-information`, payload);
+    const response = await api.post(`/api/additional-information`, payload);
     return response.data;
 };
 
@@ -77,6 +77,11 @@ export const updatePhoto = async (file: File) =>{
     const data = await response.json();
     return data.secure_url;
 }
+export const createNewWorkingHours = async (payload: any) => {
+    const response = await api.post(`/api/time-blocks/working-hours`, payload);
+    return response.data;
+}
+
 
 export default {
     bookAppointmentGuest,
@@ -92,4 +97,5 @@ export default {
     bookAppointmentReceptionist,
     updatePhoto ,
     addNewService,
+    createNewWorkingHours,
 };

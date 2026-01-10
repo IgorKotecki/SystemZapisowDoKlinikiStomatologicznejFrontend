@@ -11,7 +11,7 @@ export const getDoctorAppointments = async (lang: string, date: string) => {
 }
 
 export const getAdditionalInformation = async (lang: string) => {
-  const response = await api.get(`/api/Appointment/doctor/additional-information?lang=${lang}`);
+  const response = await api.get(`/api/additional-information?lang=${lang}`);
   return response.data;
 }
 
@@ -109,6 +109,10 @@ export const getDoctorWorkingHours = async (date: string) => {
   });
   return response.data;
 }
+export const getNextScheduleDate = async () => {
+  const response = await api.get(`/api/Doctor/next-schedule`);
+  return response.data;
+}
 
 export default {
   getUserAppointments,
@@ -131,4 +135,5 @@ export default {
   getServiceCategories,
   getDoctorWorkingHours,
   getUserById,
+  getNextScheduleDate,
 };
