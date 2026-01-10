@@ -139,11 +139,15 @@ export default function UserAppointmentPage() {
       setDoctorId("");
       setTimeBlockId("");
       setDate(null);
-    } catch (err: any) {
+    } catch (err: any) {  
       console.error(err);
+      const errorCode =
+        err?.response?.data?.title ??
+        err?.response?.data?.Title ?? // PascalCase
+        "GENERIC_ERROR";
       setNotification({
         type: "error",
-        message: t("userMakeAppointment.errorOccurred") + ": " + (err.message || err),
+        message: t("userMakeAppointment.errorOccurred") + ": " + errorCode,
       });
     } finally {
       setLoading(false);

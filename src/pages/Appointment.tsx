@@ -166,7 +166,10 @@ export default function Appointment() {
             });
         } catch (err: any) {
             console.error(err);
-            setAlert({ type: 'error', message: t("userMakeAppointment.errorOccurred") + err });
+            let errorCode = err.response?.data?.title ??
+                err.response?.data?.Title ?? // PascalCase
+                "GENERIC_ERROR";
+            setAlert({ type: 'error', message: t("userMakeAppointment.errorOccurred") + (t(errorCode)) });
         } finally {
             setLoading(false);
         }
