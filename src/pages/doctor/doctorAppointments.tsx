@@ -109,7 +109,7 @@ const DoctorAppointments: React.FC = () => {
               hiddenDays={[7, 0]}
               headerToolbar={{
                 left: "today",
-                center: "",
+                center: "title",
                 right: "prev next"
               }}
               datesSet={(dateInfo) => {

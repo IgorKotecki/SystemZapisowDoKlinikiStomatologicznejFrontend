@@ -49,7 +49,7 @@ export const getTimeBlocks = async (doctorId: number, date: Date) => {
     },
   });
   console.log(response.data);
-  
+
   return response.data;
 }
 
@@ -96,6 +96,14 @@ export const getServiceCategories = async () => {
   const response = await api.get(`/api/Service/serviceCategories`);
   return response.data;
 }
+export const getDoctorWorkingHours = async (date: string) => {
+  const response = await api.get(`/api/time-blocks/working-hours`, {
+    params: {
+      date: date,
+    },
+  });
+  return response.data;
+}
 
 export default {
   getUserAppointments,
@@ -116,4 +124,5 @@ export default {
   getCloudinarySignature,
   getServiceById,
   getServiceCategories,
+  getDoctorWorkingHours,
 };
