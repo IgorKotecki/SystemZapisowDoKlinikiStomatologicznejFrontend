@@ -121,29 +121,6 @@ const ReceptionistServices: React.FC = () => {
               disableRowSelectionOnClick
               sx={{ border: 'none', '& .MuiDataGrid-cell:focus': { outline: 'none' } }}
             />
-            {/* <DataGrid
-              rows={services}
-              columns={columns}
-              loading={loading}
-              autoHeight
-              slots={{
-                toolbar: GridToolbar,
-              }}
-              slotProps={{
-                toolbar: {
-                  showQuickFilter: true,
-                  quickFilterProps: { debounceMs: 500 },
-                },
-              }}
-              initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
-              pageSizeOptions={[5, 10, 20]}
-              disableRowSelectionOnClick
-              sx={{
-                border: 'none',
-                '& .MuiDataGrid-cell:focus': { outline: 'none' },
-                '& .MuiButton-root': { color: colors.color1 }
-              }}
-            /> */}
           </Paper>
         </Box>
       </Box>

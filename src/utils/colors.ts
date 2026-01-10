@@ -19,4 +19,6 @@ export const colors = {
     calenderBorderDayOff: "#b71c1c",
     calenderBorderNotDayOff: "#ffa000",
     gold: "#D4AF37",
+    lightBlue: "#e0f7f8",
+    softGray: "#f8f9fa",
 };

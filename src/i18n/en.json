@@ -44,8 +44,8 @@
     "cta": "Find your treatment",
     "help": "You need assistance?",
     "contactUs": "Contact us to learn more about our services and schedule an appointment.",
-    "appointment": "Umów wizytę",
-    "contact": "Skontaktuj się",
+    "appointment": "Make an appointment",
+    "contact": "Contact Us",
     "prices": "See prices",
     "categories": "Categories"
   },
@@ -191,7 +191,9 @@
     "service": "Service",
     "dentist": "Dentist",
     "price": "Price",
-    "state": "State"
+    "state": "State",
+    "additionalInformation": "AI",
+    "noInformation": "No information"
   },
   "userMakeAppointment": {
     "title": "Book an Appointment",
@@ -460,6 +462,24 @@
     "services": "Services",
     "date": "Date",
     "time": "Time"
+  },
+  "contactPage": {
+    "title": "Contact Us",
+    "subtitle": "We are here to answer all your questions and schedule your visit.",
+    "infoTitle": "Contact Information",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "hours": "Opening Hours",
+    "hoursContent": "Mon-Fri: 8:00 AM - 8:00 PM\nSaturday: 9:00 AM - 3:00 PM\nSunday: Closed",
+    "formTitle": "Write to us",
+    "formName": "Full Name",
+    "formEmail": "Email Address",
+    "formPhone": "Phone Number",
+    "formMessage": "Your message",
+    "formSubmit": "Send Message",
+    "findUs": "Find us on the map",
+    "mapPlaceholder": "[Interactive Google Map will appear here]"
   },
   "yes": "Yes",
   "no": "No",

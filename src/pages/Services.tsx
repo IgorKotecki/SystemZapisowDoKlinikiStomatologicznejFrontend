@@ -73,160 +73,176 @@ export default function Services() {
   }, [Object.keys(groupedServices).length])
 
   return (
-    <Box sx={{ width: "100vw", minHeight: "100vh", backgroundColor: colors.white }}>
+    <Box sx={{ width: "100%", minHeight: "100vh", backgroundColor: colors.white, overflowX: "hidden" }}>
       <Box
         sx={{
           width: "100%",
-          height: { xs: "70vh", md: "90vh" },
-          backgroundImage: 'url("/images/dental-services.jpg")',
+          height: { xs: "70vh", md: "85vh" },
           backgroundSize: "cover",
           backgroundPosition: "center",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          position: "relative",
-          color: colors.white,
-          textAlign: "center",
         }}
       >
         <Box
           sx={{
             width: "100%",
-            height: { xs: "70vh", md: "85vh" },
-            backgroundColor: "rgba(0, 49, 65, 0.8)",
-            p: 2.5,
+            height: "100%",
+            backgroundColor: "rgba(0, 49, 65, 0.75)",
+            p: { xs: 3, md: 8 },
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            alignItems: "flex-start",
+            alignItems: "center", 
+            textAlign: "center", 
           }}
         >
-          <Box
-            sx={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "flex-start",
-            }}
-          >
-            <Typography variant="h3" gutterBottom>
+          <Box sx={{ maxWidth: "800px" }}>
+            <Typography variant="h2" sx={{ fontWeight: "bold", mb: 2, color: colors.color5 }}>
               {t('servicesPage.title')}
             </Typography>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h5" sx={{ mb: 4, opacity: 0.9 }}>
               {t('servicesPage.subtitle')}
             </Typography>
-          </Box>
 
-          <Box
-            sx={{
-              flex: 1,
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center",
-              gap: 1,
-            }}
-          >
-            <Button
-              variant="contained"
-              size="large"
-              sx={{
-                mt: 3,
-                backgroundColor: colors.color3,
-                "&:hover": { backgroundColor: colors.color4 },
-                textTransform: "none",
-                px: 2,
-              }}
-              onClick={() => navigate("/appointment")}
-            >
-              {t('servicesPage.cta')}
-            </Button>
-            <Button
-              variant="contained"
-              size="large"
-              sx={{
-                mt: 3,
-                backgroundColor: colors.color3,
-                "&:hover": { backgroundColor: colors.color4 },
-                textTransform: "none",
-                px: 2,
-              }}
-              onClick={() => navigate("/prices")}
-            >
-              {t('servicesPage.prices')}
-            </Button>
+            <Box sx={{ display: "flex", justifyContent: "center", gap: 2, flexWrap: "wrap" }}>
+              <Button
+                variant="contained"
+                size="large"
+                sx={{
+                  backgroundColor: colors.color3,
+                  "&:hover": { backgroundColor: colors.color4 },
+                  textTransform: "none",
+                  px: 4, py: 1.5, fontSize: "1.1rem", fontWeight: "bold"
+                }}
+                onClick={() => navigate("/appointment")}
+              >
+                {t('servicesPage.cta')}
+              </Button>
+              <Button
+                variant="outlined"
+                size="large"
+                sx={{
+                  borderColor: colors.white,
+                  color: colors.white,
+                  "&:hover": { backgroundColor: "rgba(255,255,255,0.1)", borderColor: colors.color5 },
+                  textTransform: "none",
+                  px: 4, py: 1.5, fontSize: "1.1rem"
+                }}
+                onClick={() => navigate("/prices")}
+              >
+                {t('servicesPage.prices')}
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Box>
 
-      <Box sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: "#f5f5f5" }}>
-        <Typography variant="h4" textAlign="center" sx={{ mb: 6 }}>
+      <Box sx={{ py: 12, px: { xs: 3, md: 10 }, backgroundColor: "#f0f7f9" }}>
+        <Typography variant="h3" textAlign="center" sx={{ mb: 2, fontWeight: "bold", color: colors.color1 }}>
           {t("servicesPage.categories")}
         </Typography>
+        <Box sx={{ width: "80px", height: "4px", backgroundColor: colors.color4, mx: "auto", mb: 8 }} />
 
-        <Grid container spacing={4} justifyContent={"center"}>
+        <Grid container spacing={4} justifyContent="center">
           {Object.entries(groupedServices).map(([categoryName, servicesList], index) => (
-            <Grid key={index} size={{ xs: 12, md: 5 }} component="div">
-              <Card sx={{ borderRadius: 10, boxShadow: 2, height: "100%" }}>
+            <Grid key={index} size={{ xs: 12, sm: 6, md: 4 }} sx={{ display: "flex" }}>
+              <Card
+                sx={{
+                  borderRadius: 4,
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  transition: "transform 0.3s",
+                  "&:hover": { transform: "translateY(-5px)" }
+                }}
+              >
                 <CardContent sx={{ p: 4, display: "flex", flexDirection: "column", flexGrow: 1 }}>
-
-                  <Box sx={{ mb: 2, fontSize: 40, color: colors.color3 }}>
+                  <Box sx={{ mb: 3, display: "flex", justifyContent: "center" }}>
                     {randomIcon[categoryName] ?? (
-                      <HelpOutlineIcon sx={{ fontSize: 50, color: colors.color3 }} />
+                      <HelpOutlineIcon sx={{ fontSize: 60, color: colors.color3 }} />
                     )}
                   </Box>
 
-                  <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
+                  <Typography variant="h5" textAlign="center" sx={{ fontWeight: "bold", mb: 3, color: colors.color1 }}>
                     {categoryName}
                   </Typography>
 
-                  {servicesList.map((service) => (
-                    <Box key={service.id} sx={{ mb: 1.5 }}>
-                      <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                        {service.name}
-                      </Typography>
-
-                      <Typography variant="body2" color="text.secondary">
-                        {formatPrice(service.lowPrice, service.highPrice)}
-                      </Typography>
-                    </Box>
-                  ))}
+                  <Box sx={{ flexGrow: 1, mb: 4 }}>
+                    {servicesList.map((service) => (
+                      <Box
+                        key={service.id}
+                        sx={{
+                          mb: 2,
+                          pb: 1,
+                          borderBottom: `1px solid ${i18n.language === 'pl' ? '#eee' : '#eee'}`,
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "flex-end"
+                        }}
+                      >
+                        <Box>
+                          <Typography variant="body1" sx={{ fontWeight: 600, color: colors.color1 }}>
+                            {service.name}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {formatPrice(service.lowPrice, service.highPrice)}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    ))}
+                  </Box>
 
                   <Button
                     fullWidth
-                    variant="outlined"
-                    sx={{ mt: "auto", borderColor: colors.color3, color: colors.color3, "&:hover": { backgroundColor: colors.color3, color: colors.white, }, textTransform: "none", }}
+                    variant="contained"
+                    sx={{
+                      mt: "auto",
+                      backgroundColor: colors.color3,
+                      "&:hover": { backgroundColor: colors.color4 },
+                      textTransform: "none",
+                      borderRadius: 2,
+                      fontWeight: "bold"
+                    }}
                     onClick={() => navigate("/appointment")}
                   >
-                    Umów wizytę
+                    {t('servicesPage.appointment') || "Umów wizytę"}
                   </Button>
-
                 </CardContent>
               </Card>
             </Grid>
           ))}
         </Grid>
       </Box>
-
       <Box
-        sx={{ py: 8, px: { xs: 2, md: 4 }, backgroundColor: colors.color3, color: colors.white, textAlign: "center" }}
+        sx={{
+          py: 10,
+          px: 4,
+          backgroundColor: colors.color1,
+          color: colors.white,
+          textAlign: "center"
+        }}
       >
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2 }}>
           {t("servicesPage.help")}
         </Typography>
-        <Typography variant="h6" paragraph sx={{ mb: 4 }}>
+        <Typography variant="h6" sx={{ mb: 6, opacity: 0.8, maxWidth: "600px", mx: "auto" }}>
           {t("servicesPage.contactUs")}
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "center", gap: 2, flexWrap: "wrap" }}>
+
+        <Box sx={{ display: "flex", justifyContent: "center", gap: 3, flexWrap: "wrap" }}>
           <Button
             variant="contained"
             size="large"
             sx={{
-              backgroundColor: colors.white,
-              color: colors.color3,
-              "&:hover": { backgroundColor: "#f0f0f0" },
+              backgroundColor: colors.color5,
+              color: colors.color1,
+              "&:hover": { backgroundColor: colors.white },
               textTransform: "none",
-              px: 4,
+              px: 5,
+              fontWeight: "bold"
             }}
             onClick={() => navigate("/appointment")}
           >
@@ -236,16 +252,13 @@ export default function Services() {
             variant="outlined"
             size="large"
             sx={{
-              borderColor: colors.white,
-              color: colors.white,
-              "&:hover": {
-                backgroundColor: colors.white,
-                color: colors.color3,
-              },
+              borderColor: colors.color5,
+              color: colors.color5,
+              "&:hover": { borderColor: colors.white, color: colors.white },
               textTransform: "none",
-              px: 4,
+              px: 5,
             }}
-            onClick={() => navigate("/contact")}
+            onClick={() => navigate("/contacts")}
           >
             {t("servicesPage.contact")}
           </Button>

@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Paper, Button, Alert } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Paper,
+  Button,
+  Alert,
+} from "@mui/material";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { colors } from "../../utils/colors";
 import type { User } from "../../Interfaces/User";
+import { useAuth } from "../../context/AuthContext";
 import get from "../../api/get";
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 import EditUserModal from "../../components/EditUserModel";
 import { showAlert } from "../../utils/GlobalAlert";
 
 const ReceptionistUsers: React.FC = () => {
+  const { userRole } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
@@ -38,12 +46,7 @@ const ReceptionistUsers: React.FC = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
-
-  const handleEditClick = (id: number) => {
-    setSelectedUserId(id);
-    setIsEditModalOpen(true);
-  };
+  }, [t]);
 
   const columns: GridColDef<User>[] = [
     { field: 'name', headerName: t("receptionistUsers.firstName"), width: 150 },
@@ -61,15 +64,15 @@ const ReceptionistUsers: React.FC = () => {
             variant="contained"
             sx={{ color: colors.white, backgroundColor: colors.color3, '&:hover': { backgroundColor: colors.color4 } }}
             size="small"
-            onClick={() => navigate(`/receptionist/appointment`, { state: { user: params.row } })}
+            onClick={() => handleMakeAppointment(params.row)}
           >
             {t("receptionistUsers.makeAppointment")}
           </Button>
           <Button
             variant="outlined"
-            sx={{ color: colors.color1, borderColor: colors.color1 }}
+            sx={{ color: colors.color1, borderColor: colors.color1, '&:hover': { borderColor: colors.color3 } }}
             size="small"
-            onClick={() => handleEditClick(params.row.id)}
+            onClick={() => handleUserClick(params.row.id)}
           >
             {t("receptionistUsers.viewEdit")}
           </Button>
@@ -126,8 +129,26 @@ const ReceptionistUsers: React.FC = () => {
                   },
                 },
               }}
+              disableColumnResize
+              showToolbar={true}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 10,
+                  },
+                },
+              }}
               pageSizeOptions={[5, 10, 20]}
               disableRowSelectionOnClick
+              sx={{
+                border: 'none',
+                '& .MuiDataGrid-cell:focus': { outline: 'none' },
+                '& .MuiDataGrid-columnHeaders': {
+                  backgroundColor: '#f5f5f5',
+                  color: colors.color1,
+                  fontWeight: 'bold',
+                },
+              }}
               sx={{
                 border: 'none',
                 '& .MuiDataGrid-cell:focus': { outline: 'none' },
