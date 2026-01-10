@@ -3,7 +3,6 @@ import {
   Box,
   Typography,
   Paper,
-  CircularProgress,
   Button,
   Alert,
 } from "@mui/material";
@@ -56,7 +55,6 @@ const ReceptionistUsers: React.FC = () => {
   }, [t]);
 
   const columns: GridColDef<User>[] = [
-    { field: 'id', headerName: 'ID', width: 100 },
     {
       field: 'name',
       headerName: t("receptionistUsers.firstName") || 'First name',
@@ -80,22 +78,22 @@ const ReceptionistUsers: React.FC = () => {
     {
       field: 'action',
       headerName: t("receptionistUsers.action") || 'Action',
-      width: 300,
+      width: 400,
       sortable: false,
       renderCell: (params) => (
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-          <Button 
-            variant="contained" 
-            sx={{ color: colors.white, backgroundColor: colors.color3, '&:hover': { backgroundColor: colors.color4 } }} 
-            size="small" 
+          <Button
+            variant="contained"
+            sx={{ color: colors.white, backgroundColor: colors.color3, '&:hover': { backgroundColor: colors.color4 } }}
+            size="small"
             onClick={() => handleMakeAppointment(params.row)}
           >
             {t("receptionistUsers.makeAppointment")}
           </Button>
-          <Button 
-            variant="outlined" 
-            sx={{ color: colors.color1, borderColor: colors.color1, '&:hover': { borderColor: colors.color3 } }} 
-            size="small" 
+          <Button
+            variant="outlined"
+            sx={{ color: colors.color1, borderColor: colors.color1, '&:hover': { borderColor: colors.color3 } }}
+            size="small"
             onClick={() => handleUserClick(params.row.id)}
           >
             {t("receptionistUsers.viewEdit")}
@@ -156,6 +154,8 @@ const ReceptionistUsers: React.FC = () => {
               columns={columns}
               loading={loading}
               autoHeight
+              disableColumnResize
+              showToolbar={true}
               initialState={{
                 pagination: {
                   paginationModel: {

@@ -1,7 +1,7 @@
-import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Paper, Select, Typography } from "@mui/material";
+import { Box, Button, Checkbox, CircularProgress, FormControl, InputLabel, List, ListItem, ListItemIcon, ListItemText, MenuItem, Paper, Select, Typography } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { colors } from "../utils/colors";
 import type { Service } from "../Interfaces/Service";
@@ -31,6 +31,8 @@ export default function Appointment() {
         email: '',
         phone: '',
     });
+    const [search, setSearch] = useState<string>("");
+    const [loadingServices, setLoadingServices] = useState<boolean>(false);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -38,24 +40,24 @@ export default function Appointment() {
 
     const validate = () => {
         if (!servicesIds || !doctorId || !timeBlockId || !date) {
-                setAlert({ type: 'error', message: t("userMakeAppointment.errorFields") });
-                return;
-            }
+            setAlert({ type: 'error', message: t("userMakeAppointment.errorFields") });
+            return;
+        }
 
-            if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
-                setAlert({ type: 'error', message: t("appointment.errorIncompleteForm") });
-                return;
-            }
+        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
+            setAlert({ type: 'error', message: t("appointment.errorIncompleteForm") });
+            return;
+        }
 
-            if (formData.email.indexOf("@") === -1) {
-                setAlert({ type: 'error', message: t("appointment.errorInvalidEmail") });
-                return;
-            }
+        if (formData.email.indexOf("@") === -1) {
+            setAlert({ type: 'error', message: t("appointment.errorInvalidEmail") });
+            return;
+        }
 
-            if (formData.phone.match(/[^0-9+\-()\s]/)) {
-                setAlert({ type: 'error', message: t("appointment.errorInvalidPhone") });
-                return;
-            }
+        if (formData.phone.match(/[^0-9+\-()\s]/)) {
+            setAlert({ type: 'error', message: t("appointment.errorInvalidPhone") });
+            return;
+        }
     }
 
 
@@ -64,6 +66,7 @@ export default function Appointment() {
         const lang = i18n.language || "pl";
 
         const fetchServices = async () => {
+            setLoadingServices(true);
             try {
                 const response = await get.getUserServices(lang);
                 console.log("Usługi:", response);
@@ -71,6 +74,8 @@ export default function Appointment() {
             } catch (err) {
                 console.error("Błąd pobierania usług:", err);
                 setServices([]);
+            } finally {
+                setLoadingServices(false);
             }
         };
 
@@ -175,6 +180,20 @@ export default function Appointment() {
         }
     };
 
+    const filteredRows = useMemo(
+        () =>
+            services.filter((service) =>
+                service.name.toLowerCase().includes(search.toLowerCase())
+            ),
+        [search, services]
+    );
+
+    const toggleSelect = (id: number) => {
+        setServicesIds((prev) =>
+            prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+        );
+    };
+
     return (
         <Box
             sx={{
@@ -228,26 +247,50 @@ export default function Appointment() {
                                     }}
                                 />
                             </LocalizationProvider>
-                            <FormControl fullWidth sx={{ mt: 3 }}>
-                                <InputLabel sx={{ color: colors.black }}>
-                                    {t("userMakeAppointment.service")}
-                                </InputLabel>
-                                <Select
-                                    multiple
-                                    value={servicesIds}
-                                    onChange={(e) => {
-                                        const value = e.target.value
-                                        setServicesIds(typeof value === 'string' ? value.split(',').map(Number) : value)
-                                    }}
-                                    sx={{ backgroundColor: colors.white }}
-                                >
-                                    {services.map((s) => (
-                                        <MenuItem key={s.id} value={s.id}>
-                                            {s.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                            <Box sx={{ padding: 1 }}>
+                                <TextField
+                                    label={t("userMakeAppointment.search")}
+                                    variant="outlined"
+                                    size="small"
+                                    fullWidth
+                                    margin="normal"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    sx={{ backgroundColor: colors.white, borderRadius: 1 }}
+                                />
+                            </Box>
+                            <Box sx={{ flex: 1, overflowY: "auto", maxHeight: "40vh", backgroundColor: colors.white, borderRadius: 1 }}>
+                                {loadingServices ? (
+                                    <CircularProgress />
+                                ) : (
+                                    <List dense sx={{ borderRadius: 1 }}>
+                                        {filteredRows.map((row) => {
+                                            const isSelected = servicesIds.includes(row.id);
+                                            return (
+                                                <ListItem key={row.id} divider disablePadding
+                                                    sx={{ cursor: "pointer", borderRadius: 1 }}
+                                                    alignItems="center">
+                                                    <ListItemIcon sx={{ minWidth: 40, alignItems: "center", justifyContent: "center", paddingLeft: 2, borderRadius: 1 }}>
+                                                        <Checkbox
+                                                            edge="start"
+                                                            checked={isSelected}
+                                                            tabIndex={-1}
+                                                            disableRipple
+                                                            onChange={() => toggleSelect(row.id)}
+                                                        />
+                                                    </ListItemIcon>
+                                                    <ListItemText
+                                                        primary={row.name}
+                                                        secondary={row.description}
+                                                        onClick={() => toggleSelect(row.id)}
+                                                        sx={{ margin: 1 }}
+                                                    />
+                                                </ListItem>
+                                            );
+                                        })}
+                                    </List>
+                                )}
+                            </Box>
                             <FormControl
                                 fullWidth
                                 sx={{ mt: 3 }}

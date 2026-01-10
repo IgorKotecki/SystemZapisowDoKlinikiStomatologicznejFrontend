@@ -20,6 +20,7 @@ import TextField from '@mui/material/TextField';
 import api from "../api/axios";
 import Alert from '@mui/material/Alert';
 import { useEffect } from "react";
+import i18n from "../i18n";
 
 type AddInfoRendererProps = {
     addInfo?: AddInfo[];
@@ -75,9 +76,10 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
         const addInfoPayload = {
             bodyPl: newInfoPl,
             bodyEn: newInfoEn,
+            language: i18n.language,
         };
 
-        await api.post<AddInfo>('/api/Appointment/createAddInformation', addInfoPayload)
+        await api.post<AddInfo>('/api/Appointment/doctor/additional-information', addInfoPayload)
             .then((response) => {
                 console.log('Additional info added:', response.data);
                 const newItem: AddInfo = {
@@ -197,7 +199,7 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
                 </DialogActions>
             </Dialog>
             {alert &&
-                <Alert severity={alert.type}>{alert.message}</Alert>
+                <Alert style={{ position: "fixed", bottom: 24, right: 24, zIndex: 2000, minWidth: 300, boxShadow: "0px 4px 12px rgba(0,0,0,0.3)" }} severity={alert.type}>{alert.message}</Alert>
             }
         </Box>
     );

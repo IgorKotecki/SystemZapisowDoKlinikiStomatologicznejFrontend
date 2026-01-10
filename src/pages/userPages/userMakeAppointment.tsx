@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Box,
   Typography,
@@ -9,7 +9,13 @@ import {
   Select,
   Paper,
   CircularProgress,
-  Alert, // Import Alert
+  Alert,
+  TextField,
+  List,
+  ListItem,
+  Checkbox,
+  ListItemText,
+  ListItemIcon, // Import Alert
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -22,6 +28,7 @@ import type { Doctor } from "../../Interfaces/Doctor";
 import type { TimeBlock } from "../../Interfaces/TimeBlock";
 import post from "../../api/post";
 import get from "../../api/get";
+import { fi } from "date-fns/locale";
 
 export default function UserAppointmentPage() {
   const { t, i18n } = useTranslation();
@@ -35,6 +42,8 @@ export default function UserAppointmentPage() {
   const [loading, setLoading] = useState(false);
   const [loadingDoctors, setLoadingDoctors] = useState(false);
   const [loadingBlocks, setLoadingBlocks] = useState(false);
+  const [search, setSearch] = useState("");
+  const [loadingServices, setLoadingServices] = useState(true);
 
   const [notification, setNotification] = useState<{
     type: "success" | "error";
@@ -53,12 +62,15 @@ export default function UserAppointmentPage() {
   useEffect(() => {
     const lang = i18n.language || "pl";
     const fetchServices = async () => {
+      setLoadingServices(true);
       try {
         const response = await get.getUserServices(lang);
         setServices(response);
       } catch (err) {
         console.error("Błąd pobierania usług:", err);
         setServices([]);
+      } finally {
+        setLoadingServices(false);
       }
     };
     fetchServices();
@@ -139,7 +151,7 @@ export default function UserAppointmentPage() {
       setDoctorId("");
       setTimeBlockId("");
       setDate(null);
-    } catch (err: any) {  
+    } catch (err: any) {
       console.error(err);
       const errorCode =
         err?.response?.data?.title ??
@@ -152,6 +164,20 @@ export default function UserAppointmentPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const filteredRows = useMemo(
+    () =>
+      services.filter((service) =>
+        service.name.toLowerCase().includes(search.toLowerCase())
+      ),
+    [search, services]
+  );
+
+  const toggleSelect = (id: number) => {
+    setServicesIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
   };
 
   return (
@@ -204,31 +230,55 @@ export default function UserAppointmentPage() {
                   slotProps={{
                     textField: {
                       fullWidth: true,
-                      sx: { backgroundColor: colors.white, borderRadius: 1, mt: 2 },
+                      sx: { backgroundColor: colors.white, borderRadius: 1 },
                     },
                   }}
                 />
               </LocalizationProvider>
-              <FormControl fullWidth sx={{ mt: 3 }}>
-                <InputLabel sx={{ color: colors.black }}>
-                  {t("userMakeAppointment.service")}
-                </InputLabel>
-                <Select
-                  multiple
-                  value={servicesIds}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setServicesIds(typeof value === "string" ? value.split(",").map(Number) : value);
-                  }}
-                  sx={{ backgroundColor: colors.white }}
-                >
-                  {services.map((s) => (
-                    <MenuItem key={s.id} value={s.id}>
-                      {s.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <Box sx={{ padding: 1 }}>
+                <TextField
+                  label={t("userMakeAppointment.search")}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  margin="normal"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  sx={{ backgroundColor: colors.white, borderRadius: 1 }}
+                />
+              </Box>
+              <Box sx={{ flex: 1, overflowY: "auto", maxHeight: "40vh", backgroundColor: colors.white, borderRadius: 1 }}>
+                {loadingServices ? (
+                  <CircularProgress />
+                ) : (
+                  <List dense sx={{ borderRadius: 1 }}>
+                    {filteredRows.map((row) => {
+                      const isSelected = servicesIds.includes(row.id);
+                      return (
+                        <ListItem key={row.id} divider disablePadding
+                          sx={{ cursor: "pointer", borderRadius: 1 }}
+                          alignItems="center">
+                          <ListItemIcon sx={{ minWidth: 40, alignItems: "center", justifyContent: "center", paddingLeft: 2, borderRadius: 1 }}>
+                            <Checkbox
+                              edge="start"
+                              checked={isSelected}
+                              tabIndex={-1}
+                              disableRipple
+                              onChange={() => toggleSelect(row.id)}
+                            />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={row.name}
+                            secondary={row.description}
+                            onClick={() => toggleSelect(row.id)}
+                            sx={{ margin: 1 }}
+                          />
+                        </ListItem>
+                      );
+                    })}
+                  </List>
+                )}
+              </Box>
               <FormControl fullWidth sx={{ mt: 3 }} disabled={!servicesIds.length}>
                 <InputLabel sx={{ color: colors.black }}>
                   {t("userMakeAppointment.doctor")}

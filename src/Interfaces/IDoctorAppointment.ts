@@ -1,3 +1,5 @@
+import type {AddInfo}  from "./AddInfo";
+
 export interface IDoctorAppointment {
 
     id: string;
@@ -10,4 +12,5 @@ export interface IDoctorAppointment {
     timeEnd: string;
     patientEmail: string;
     patienPhoneNumber: string;
+    additionalInformation: AddInfo[]
 }

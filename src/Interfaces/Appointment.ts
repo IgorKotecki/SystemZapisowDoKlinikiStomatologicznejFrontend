@@ -1,5 +1,6 @@
 import type { User } from "./User";
 import type { Service } from "./Service";
+import type { AddInfo } from "./AddInfo";
 
 export interface Appointment {
   user: User;
@@ -9,4 +10,5 @@ export interface Appointment {
   doctor: User;
   services: Service[];
   status: string;
+  additionalInformation: AddInfo[];
 }

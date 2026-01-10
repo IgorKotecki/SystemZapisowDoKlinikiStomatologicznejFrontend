@@ -1,6 +1,6 @@
 import type { ApiDaySchedule } from "../Interfaces/ApiDaySchedule";
 import type { CalendarDaySchedule } from "../Interfaces/CalendarDaySchedule";
-import { formatISO, startOfWeek, addDays, setHours, setMinutes } from "date-fns";
+import { formatISO, startOfWeek, addDays, setHours, setMinutes, add } from "date-fns";
 import { colors } from "../utils/colors";
 import type { IDoctorAppointment } from "../Interfaces/IDoctorAppointment";
 import type { Appointment } from "../Interfaces/Appointment";
@@ -57,7 +57,8 @@ export class CalendarMapper {
       timeStart: apiAppointment.startTime.split("T")[1],
       timeEnd: apiAppointment.endTime.split("T")[1],
       patientEmail: apiAppointment.user.email,
-      patienPhoneNumber: apiAppointment.user.phoneNumber
+      patienPhoneNumber: apiAppointment.user.phoneNumber,
+      additionalInformation: apiAppointment.additionalInformation
     };
   }
 

@@ -31,6 +31,7 @@ const DoctorAppointments: React.FC = () => {
       try {
         const response = await get.getDoctorAppointments(language, date);
         setAppointments(CalendarMapper.ApiAppointmentsToDoctorAppointments(response));
+        console.log(response);
         setLoading(false);
       } catch (err) {
         console.error(err);
@@ -46,7 +47,7 @@ const DoctorAppointments: React.FC = () => {
       title: `${a.patientFirstName} ${a.patientLastName}`,
       start: `${a.date}T${a.timeStart}`,
       end: `${a.date}T${a.timeEnd}`,
-      description: a.servicesName,
+      description: a.servicesName.toString(),
       extendedProps: a,
     })),
     [appointments]

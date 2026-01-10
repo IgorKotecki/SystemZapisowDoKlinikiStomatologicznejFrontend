@@ -203,7 +203,8 @@
     "submit": "Book Appointment",
     "success": "The appointment has been booked successfully!",
     "errorFields": "Please fill in all fields.",
-    "errorOccurred": "An error occurred during booking."
+    "errorOccurred": "An error occurred during booking.",
+    "search": "Search services..."
   },
   "dentalChart": {
     "back": "Back",

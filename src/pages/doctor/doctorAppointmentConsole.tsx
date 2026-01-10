@@ -104,6 +104,7 @@ export default function DoctorAppointmentsConsole() {
         fetchTeethData();
         fetchStatusesAsync();
         fetchAddInfoData();
+        setChecked(state?.appointment.additionalInformation || []);
         setLoading(false);
     }, [t]);
 

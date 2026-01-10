@@ -208,7 +208,8 @@
     "submit": "Zarezerwuj wizytę",
     "success": "Wizyta została pomyślnie zarezerwowana!",
     "errorFields": "Uzupełnij wszystkie pola.",
-    "errorOccurred": "Wystąpił błąd podczas rezerwacji."
+    "errorOccurred": "Wystąpił błąd podczas rezerwacji.",
+    "search": "Szukaj usług..."
   },
   "dentalChart": {
     "back": "Powrót",
