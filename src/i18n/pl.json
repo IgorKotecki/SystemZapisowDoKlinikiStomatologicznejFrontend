@@ -380,7 +380,14 @@
     "loading": "Ładowanie...",
     "changePassword": "Zmień hasło",
     "newPassword": "Nowe hasło",
-    "confirmNewPassword": "Potwierdź nowe hasło"
+    "confirmNewPassword": "Potwierdź nowe hasło",
+    "passwordLength": "Hasło musi mieć co najmniej 8 znaków.",
+    "passwordMismatch": "Hasła nie są takie same.",
+    "missingToken": "Brak tokenu resetującego.",
+    "resetLinkSent": "Link do resetowania został wysłany. Sprawdź swoją skrzynkę e-mail.",
+    "requestFailed": "Nie udało się zrealizować żądania.",
+    "successMessage": "Twoje hasło zostało pomyślnie zresetowane!",
+    "enterValidEmail": "Wprowadź prawidłowy adres e-mail."
   },
   "doctorDaySchedule": {
     "title": "Grafik dni lekarza",

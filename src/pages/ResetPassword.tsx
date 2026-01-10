@@ -82,7 +82,7 @@ export default function ResetPassword() {
     async function requestReset(e?: React.FormEvent) {
         e?.preventDefault();
         if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-            showAlert({ type: "error", message: "Enter a valid email address." });
+            showAlert({ type: "error", message: t('reset.enterValidEmail') });
             return;
         }
         try {
@@ -94,24 +94,24 @@ export default function ResetPassword() {
 
             setEmail("");
             setSentTo(email);
-            showAlert({ type: "success", message: "Reset link sent. Check your email." });
+            showAlert({ type: "success", message: t('reset.resetLinkSent') });
         } catch (err: any) {
-            showAlert({ type: "error", message: err?.message || "Request failed." });
+            showAlert({ type: "error", message: err?.message || t('reset.requestFailed') });
         }
     }
 
     async function submitNewPassword(e?: React.FormEvent) {
         e?.preventDefault();
         if (!token) {
-            showAlert({ type: "error", message: "Missing reset token." });
+            showAlert({ type: "error", message: t('reset.missingToken') });
             return;
         }
         if (newPassword.length < 8) {
-            showAlert({ type: "error", message: "Password must be at least 8 characters." });
+            showAlert({ type: "error", message: t('reset.passwordLength') });
             return;
         }
         if (newPassword !== confirm) {
-            showAlert({ type: "error", message: "Passwords do not match." });
+            showAlert({ type: "error", message: t('reset.passwordMismatch') });
             return;
         }
         try {
@@ -123,7 +123,7 @@ export default function ResetPassword() {
 
             var res = await post.resetPassword(payload);
 
-            showAlert({ type: "success", message: "Password changed successfully. You may now log in." });
+            showAlert({ type: "success", message: t('reset.successMessage') });
             setNewPassword("");
             setConfirm("");
 

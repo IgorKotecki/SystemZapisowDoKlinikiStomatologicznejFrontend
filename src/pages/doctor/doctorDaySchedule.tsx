@@ -23,7 +23,6 @@ import { useEffect } from "react";
 import { colors } from "../../utils/colors";
 import get from "../../api/get";
 import put from "../../api/put";
-import { set } from "date-fns";
 import { showAlert } from "../../utils/GlobalAlert";
 
 export default function DoctorDaySchedule() {

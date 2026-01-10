@@ -28,7 +28,6 @@ import type { Doctor } from "../../Interfaces/Doctor";
 import type { TimeBlock } from "../../Interfaces/TimeBlock";
 import post from "../../api/post";
 import get from "../../api/get";
-import { fi } from "date-fns/locale";
 
 export default function UserAppointmentPage() {
   const { t, i18n } = useTranslation();

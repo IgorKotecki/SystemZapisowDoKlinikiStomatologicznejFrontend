@@ -375,7 +375,14 @@
     "loading": "Loading...",
     "changePassword": "Change password",
     "newPassword": "New password",
-    "confirmNewPassword": "Confirm new password"
+    "confirmNewPassword": "Confirm new password",
+    "passwordLength": "Password must be at least 8 characters.",
+    "passwordMismatch": "Passwords do not match.",
+    "missingToken": "Missing reset token.",
+    "resetLinkSent": "Reset link sent. Check your email.",
+    "requestFailed": "Request failed.",
+    "successMessage": "Your password has been reset successfully!",
+    "enterValidEmail": "Enter a valid email address."
   },
   "doctorDaySchedule": {
     "title": "Doctor's Day Schedule",
