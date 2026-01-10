@@ -76,12 +76,24 @@ const ReceptionistUsers: React.FC = () => {
   return (
     <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, width: "100%", minHeight: "100vh", backgroundColor: colors.color1 }}>
       <UserNavigation />
-      <Box component="main" sx={{ flex: 1, px: { xs: 2, md: 8 }, py: 6, display: "flex", flexDirection: "column", alignItems: "center" }}>
+
+      <Box
+        component="main"
+        sx={{
+          flex: 1,
+          px: { xs: 2, md: 8 },
+          py: 4,
+          color: colors.white,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
         <Box sx={{ width: "100%", maxWidth: 1500 }}>
-          <Typography variant="h4" gutterBottom sx={{ color: colors.color5, fontWeight: "bold" }}>
+          <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
             {t("receptionistUsers.title")}
           </Typography>
-          <Typography variant="subtitle1" sx={{ mb: 4, color: colors.white, opacity: 0.9 }}>
+          <Typography variant="subtitle1" sx={{ mb: 1, opacity: 0.9 }}>
             {t("receptionistUsers.subtitle")}
           </Typography>
 

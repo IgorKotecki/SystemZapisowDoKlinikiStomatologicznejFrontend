@@ -9,8 +9,17 @@ export const deleteUser = async (userId: any) =>{
     const response = await api.delete(`/api/User/delete/${userId}`);
     return response.data;
 }
+export const deleteWorkingHours = async (date: string) => {
+    const response = await api.delete(`/api/time-blocks/working-hours`, {
+        params: {
+            date: date,
+        },
+    });
+    return response.data;
+}
 
 export default {
     deleteService,
     deleteUser,
+    deleteWorkingHours,
 };

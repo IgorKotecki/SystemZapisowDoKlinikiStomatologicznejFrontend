@@ -359,7 +359,9 @@
     "addNote": "Dodaj notatkę do wizyty",
     "selectTeeth": "Zaznacz zęby",
     "save": "Zapisz notatkę",
-    "savedNote": "Notatka została zapisana"
+    "savedNote": "Notatka została zapisana",
+    "workingHours": "Godziny pracy",
+    "subtitle": "Kliknij w kalendarzu, aby dodać godziny pracy lub usunąć istniejące"
   },
   "doctorFreeDays": {
     "title": "Dni i godziny wolne lekarza",
@@ -371,7 +373,7 @@
     "reason": "Powód przerwy",
     "save": "Zapisz",
     "cancel": "Anuluj",
-    "removeConfirm": "Czy na pewno chcesz usunąć ten czas wolny?"
+    "removeConfirm": "Czy chcesz potwierdzić dzień wolny?"
   },
   "doctorNavigation": {
     "profile": "Profil",
@@ -470,5 +472,10 @@
   "BLOCK_NOT_AVAILABLE": "Blok czasowy nie jest dostępny.",
   "BLOCK_BOOKED": "Blok czasowy jest już zarezerwowany.",
   "NO_APPOINTMENT": "Brak wizyty.",
-  "NO_ADD_INFO": "Brak dodatkowych informacji."
+  "NO_ADD_INFO": "Brak dodatkowych informacji.",
+  "GENERIC_ERROR": "Wystąpił błąd. Spróbuj ponownie.",
+  "DAY_HAS_APPOINTMENTS": "Dzień ma zaplanowane wizyty i nie może zostać usunięty.",
+  "globalAlert": {
+    "errorLoadingData": "Błąd podczas ładowania danych. Spróbuj ponownie później."
+  }
 }
