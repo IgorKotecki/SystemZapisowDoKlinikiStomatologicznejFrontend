@@ -196,7 +196,9 @@
     "service": "Zabieg",
     "dentist": "Dentysta",
     "price": "Cena",
-    "state": "Status"
+    "state": "Status",
+    "additionalInformation": "D.I.",
+    "noInformation": "Brak infromacji"
   },
   "userMakeAppointment": {
     "title": "Umów wizytę",
@@ -456,6 +458,24 @@
     "services": "Usługi",
     "date": "Data",
     "time": "Godzina"
+  },
+  "contactPage": {
+    "title": "Skontaktuj się z nami",
+    "subtitle": "Jesteśmy tutaj, aby odpowiedzieć na wszystkie Twoje pytania i umówić wizytę.",
+    "infoTitle": "Informacje kontaktowe",
+    "address": "Adres",
+    "phone": "Telefon",
+    "email": "Email",
+    "hours": "Godziny otwarcia",
+    "hoursContent": "Pon-Pt: 8:00 - 20:00\nSobota: 9:00 - 15:00\nNiedziela: Zamknięte",
+    "formTitle": "Napisz do nas",
+    "formName": "Imię i nazwisko",
+    "formEmail": "Adres Email",
+    "formPhone": "Numer telefonu",
+    "formMessage": "Twoja wiadomość",
+    "formSubmit": "Wyślij wiadomość",
+    "findUs": "Znajdź nas na mapie",
+    "mapPlaceholder": "[Tutaj pojawi się interaktywna mapa Google]"
   },
   "yes": "Tak",
   "no": "Nie",

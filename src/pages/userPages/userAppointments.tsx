@@ -10,12 +10,15 @@ import {
   TableHead,
   TableRow,
   CircularProgress,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { colors } from "../../utils/colors";
 import type { Appointment } from "../../Interfaces/Appointment";
-import get from "../../api/get"
+import get from "../../api/get";
+import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 
 export default function VisitsHistoryPage() {
 
@@ -115,11 +118,15 @@ export default function VisitsHistoryPage() {
                       <TableCell sx={{ color: colors.color5, fontWeight: "bold" }}>
                         {t("userAppointments.state")}
                       </TableCell>
+                      <TableCell sx={{ color: colors.color5, fontWeight: "bold" }}>
+                        {t("userAppointments.additionalInformation")}
+                      </TableCell>
                     </TableRow>
                   </TableHead>
 
                   <TableBody>
                     {appointments.map((a) => {
+                      console.log(a.additionalInformation)
                       const date = new Date(a.startTime);
                       const price = a.services.reduce(
                         (sum, s) => sum + (s.highPrice || 0),
@@ -164,14 +171,41 @@ export default function VisitsHistoryPage() {
                           <TableCell
                             sx={{
                               color:
-                                a.status === "Completed"
+                                (a.status === "Completed" || a.status === "Zakończona")
                                   ? "#8ef58a"
-                                  : a.status === "Canceled"
+                                  : (a.status === "Canceled" || a.status === "Anulowana")
                                     ? "#f58a8a"
                                     : "#fff68a",
                             }}
                           >
                             {a.status}
+                          </TableCell>
+
+                          <TableCell sx={{ textAlign: 'center' }}>
+                            {a.additionalInformation && a.additionalInformation.length > 0 ? (
+                              <Tooltip
+                                title={"- " + a.additionalInformation.map((i) => i.body).join("\n - ")}
+                                slotProps={{
+                                  tooltip: {
+                                    sx: {
+                                      whiteSpace: "pre-line", 
+                                      padding: "10px",
+                                      fontSize: 15
+                                    }
+
+                                  }
+                                }}
+                                arrow
+                              >
+                                <IconButton size="small" sx={{ color: colors.color5 }}>
+                                  <InfoOutlineIcon fontSize="small" />
+                                </IconButton>
+                              </Tooltip>
+                            ) : (
+                              <Typography variant="body2" sx={{color: colors.white, opacity: 0.5, fontSize: "italic" }}>
+                                {t("userAppointments.noInformation")}
+                              </Typography>
+                            )} 
                           </TableCell>
                         </TableRow>
                       );
