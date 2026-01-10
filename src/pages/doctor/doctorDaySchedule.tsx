@@ -23,6 +23,8 @@ import { useEffect } from "react";
 import { colors } from "../../utils/colors";
 import get from "../../api/get";
 import put from "../../api/put";
+import { set } from "date-fns";
+import { showAlert } from "../../utils/GlobalAlert";
 
 export default function DoctorDaySchedule() {
     const { t } = useTranslation();
@@ -31,6 +33,8 @@ export default function DoctorDaySchedule() {
     const [openModal, setOpenModal] = useState(false);
     const [selectedRange, setSelectedRange] = useState<{ start: string; end: string, dayOfWeek: string } | null>(null);
     const calendarRef = useRef<any>(null);
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState<any>(null);
 
     useEffect(() => {
         const fetchWeekScheme = async () => {
@@ -50,11 +54,10 @@ export default function DoctorDaySchedule() {
             daysSchemes: CalendarMapper.CalendarDayScheduletoApi(daySchedule),
         };
         try {
-            const response = await put.updateDoctorWeekSchedule(payload);
-
-            console.log("Week scheme updated:", response);
+            await put.updateDoctorWeekSchedule(payload);
+            showAlert({ type: 'success', message: t('doctorDaySchedule.updateSuccess') });
         } catch (error: any) {
-            console.error("Error updating week scheme:", error.response?.data || error.message);
+            showAlert({ type: 'error', message: t('doctorDaySchedule.updateError') });
         }
     };
 
@@ -87,16 +90,18 @@ export default function DoctorDaySchedule() {
         };
         setDaySchedule([...daySchedule, newEvent]);
         setOpenModal(false);
-        console.log(daySchedule);
     };
 
     const handleEventClick = (info: any) => {
-        if (window.confirm(t("doctorDaySchedule.remove"))) {
-            setDaySchedule((prev) => prev.filter((f) => f.dayOfWeek != info.event.id));
-            console.log(info.event.id);
-            console.log(daySchedule);
-        }
+        setSelectedEvent(info);
+        setOpenDeleteModal(true);
     };
+
+    const handleDeleteTime = () => {
+        setDaySchedule((prev) => prev.filter((f) => f.dayOfWeek != selectedEvent.event.id));
+        setSelectedEvent(null);
+        setOpenDeleteModal(false);
+    }
 
     return (
         <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, minHeight: "100vh", backgroundColor: colors.color1 }}>
@@ -192,6 +197,41 @@ export default function DoctorDaySchedule() {
                             sx={{ backgroundColor: colors.color3, color: colors.white }}
                         >
                             {t("doctorFreeDays.save")}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={openDeleteModal}
+                    onClose={() => setOpenDeleteModal(false)}
+                    PaperProps={{
+                        sx: {
+                            backgroundColor: colors.color2,
+                            color: colors.white,
+                            borderRadius: 3,
+                            width: 300,
+                            p: 4,
+                        },
+                    }}
+                >
+                    <DialogTitle>
+                        <Typography component="h2" variant="h6" sx={{ color: colors.color5, mb: 2 }}>
+                            {t("doctorDaySchedule.remove")}
+                        </Typography>
+                    </DialogTitle>
+                    <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+                        <Button
+                            variant="outlined"
+                            onClick={() => setOpenDeleteModal(false)}
+                            sx={{ borderColor: colors.color3, color: colors.white }}
+                        >
+                            {t("doctorFreeDays.cancel")}
+                        </Button>
+                        <Button
+                            variant="contained"
+                            onClick={handleDeleteTime}
+                            sx={{ backgroundColor: colors.color3, color: colors.white }}
+                        >
+                            {t("yes")}
                         </Button>
                     </DialogActions>
                 </Dialog>

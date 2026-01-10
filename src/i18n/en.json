@@ -383,7 +383,9 @@
     "scheduledTime": "Scheduled Time",
     "addScheduledTime": "Add Scheduled Time",
     "saveChanges": "Save Changes",
-    "remove": "Do You wont to remove day schedule?"
+    "remove": "Do You want to remove day schedule?",
+    "updateSuccess": "Schedule has been updated successfully.",
+    "updateError": "An error occurred while updating the schedule."
   },
   "appointmentInfo": {
     "title": "Appointment Information : ",
@@ -425,6 +427,16 @@
     "patient": "Patient",
     "doctor": "Doctor",
     "services": "Services",
-    "date": "Date"
-  }
+    "date": "Date",
+    "time": "Time"
+  },
+  "yes": "Yes",
+  "no": "No",
+  "SERVICES_NOT_FOUND": "Services not found",
+  "SERVICE_NOT_FOUND": "Service not found",
+  "APPLICATION_ERROR": "Application error",
+  "BLOCK_NOT_AVAILABLE": "Time block not available",
+  "BLOCK_BOOKED": "Time block already booked",
+  "NO_APPOINTMENT": "No appointment found",
+  "NO_ADD_INFO": "No additional information"
 }

@@ -8,9 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { colors } from '../utils/colors';
 import post from '../api/post';
-
-
-type Status = { type: "idle" | "loading" | "success" | "error"; message?: string };
+import { showAlert } from '../utils/GlobalAlert';
 
 const styles: Record<string, React.CSSProperties> = {
     background: {
@@ -69,7 +67,6 @@ export default function ResetPassword() {
     const [email, setEmail] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirm, setConfirm] = useState("");
-    const [status, setStatus] = useState<Status>({ type: "idle" });
     const [token, setToken] = useState<string | null>(null);
     const [sentTo, setSentTo] = useState<string | null>(null);
     const navigate = useNavigate();
@@ -84,9 +81,8 @@ export default function ResetPassword() {
 
     async function requestReset(e?: React.FormEvent) {
         e?.preventDefault();
-        setStatus({ type: "loading" });
         if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-            setStatus({ type: "error", message: "Enter a valid email address." });
+            showAlert({ type: "error", message: "Enter a valid email address." });
             return;
         }
         try {
@@ -98,25 +94,24 @@ export default function ResetPassword() {
 
             setEmail("");
             setSentTo(email);
-            setStatus({ type: "success", message: "Reset link sent. Check your email." });
+            showAlert({ type: "success", message: "Reset link sent. Check your email." });
         } catch (err: any) {
-            setStatus({ type: "error", message: err?.message || "Request failed." });
+            showAlert({ type: "error", message: err?.message || "Request failed." });
         }
     }
 
     async function submitNewPassword(e?: React.FormEvent) {
         e?.preventDefault();
-        setStatus({ type: "loading" });
         if (!token) {
-            setStatus({ type: "error", message: "Missing reset token." });
+            showAlert({ type: "error", message: "Missing reset token." });
             return;
         }
         if (newPassword.length < 8) {
-            setStatus({ type: "error", message: "Password must be at least 8 characters." });
+            showAlert({ type: "error", message: "Password must be at least 8 characters." });
             return;
         }
         if (newPassword !== confirm) {
-            setStatus({ type: "error", message: "Passwords do not match." });
+            showAlert({ type: "error", message: "Passwords do not match." });
             return;
         }
         try {
@@ -128,7 +123,7 @@ export default function ResetPassword() {
 
             var res = await post.resetPassword(payload);
 
-            setStatus({ type: "success", message: "Password changed successfully. You may now log in." });
+            showAlert({ type: "success", message: "Password changed successfully. You may now log in." });
             setNewPassword("");
             setConfirm("");
 
@@ -139,7 +134,7 @@ export default function ResetPassword() {
             }
 
         } catch (err: any) {
-            setStatus({ type: "error", message: err?.message || "Reset failed." });
+            showAlert({ type: "error", message: err?.message || "Reset failed." });
         }
     }
 
@@ -164,8 +159,7 @@ export default function ResetPassword() {
                                 onChange={(s) => setEmail(s.target.value)}
                                 sx={{ backgroundColor: colors.white, borderRadius: 1 }}
                             />
-                            {status.type === "error" && <div style={styles.error}>{status.message}</div>}
-                            {status.type === "success" && <div style={styles.success}>{status.message}</div>}
+            
                             {sentTo && <div style={styles.hint}>Sent to: {sentTo}</div>}
                             <Button
                                 type="submit"
@@ -178,7 +172,7 @@ export default function ResetPassword() {
                                     textTransform: 'none'
                                 }}
                             >
-                                {status.type === "loading" ? t('forget.sending') : t('forget.sendResetLink')}
+                                {t('forget.sendResetLink')}
                             </Button>
                         </form>
                     </>
@@ -223,12 +217,11 @@ export default function ResetPassword() {
                                     textTransform: 'none'
                                 }}
                             >
-                                {status.type === "loading" ? t('reset.loading') : t('reset.changePassword')}
+                                {t('reset.changePassword')}
                             </Button>
 
                         </form>
-                        {status.type === "error" && <div style={styles.error}>{status.message}</div>}
-                        {status.type === "success" && <div style={styles.success}>{status.message}</div>}
+                        
                     </>
                 )}
             </div>

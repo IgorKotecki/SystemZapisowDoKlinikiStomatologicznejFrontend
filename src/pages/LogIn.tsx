@@ -10,44 +10,41 @@ import {
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { useAuth } from '../context/AuthContext';
 
 import post from '../api/post';
+import { showAlert } from '../utils/GlobalAlert';
+import { Link as RouterLink } from 'react-router-dom';
 
 export default function LogIn() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [language, setLanguage] = useState(i18n.language || 'pl');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const { login, userRole } = useAuth();
+  const { login } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleLanguageChange = (e: any) => {
-    const lang = e.target.value;
-    i18n.changeLanguage(lang);
-    setLanguage(lang);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setLoading(true);
-    setError(null);
-
+    if (!formData.email || !formData.password) {
+      showAlert({ type: "error", message: t('fillAllFields') });
+      setLoading(false);
+      return;
+    }
     try {
       const response = await post.loginUser(formData);
-      const { accessToken, refreshToken , photoURL} = response;
-      console.log(response);
+      const { accessToken, refreshToken, photoURL } = response;
+
       login(accessToken, refreshToken, photoURL);
 
       const decoded = jwtDecode(accessToken);
+      // @ts-ignore
       const role = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 
       if (role === "Registered_user") navigate('/user/profile');
@@ -56,12 +53,13 @@ export default function LogIn() {
 
     } catch (err: any) {
       if (err.response?.status === 401) {
-        setError(t('error.userDataIncorrect'));
+        showAlert({ type: "error", message: t('invalidCredentials') });
       } else {
-        setError(t('error.errorOccurred'));
+        showAlert({ type: "error", message: t('errorOccurred') });
       }
-    } finally {
+    } finally { 
       setLoading(false);
+      setFormData({ ...formData, password: '' });
     }
   };
 
@@ -87,71 +85,75 @@ export default function LogIn() {
     >
       <Card sx={{ maxWidth: 420, width: '100%', borderRadius: 3, boxShadow: 5 }}>
         <CardContent sx={{ p: 4 }}>
-          <form onSubmit={handleSubmit}>
-            <Typography variant="h5" sx={{ textAlign: 'center', mb: 3, color: colors.color1 }}>
-              {t('login.title')}
+
+          <Typography variant="h5" sx={{ textAlign: 'center', mb: 3, color: colors.color1 }}>
+            {t('login.title')}
+          </Typography>
+
+          <TextField
+            label={t('login.email')}
+            name="email"
+            fullWidth
+            margin="normal"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            sx={{ backgroundColor: colors.white, borderRadius: 1 }}
+          />
+
+          <TextField
+            label={t('login.password')}
+            name="password"
+            type="password"
+            fullWidth
+            margin="normal"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            sx={{ backgroundColor: colors.white, borderRadius: 1 }}
+          />
+          <Link
+            component={RouterLink}
+            to="/resetpassword"
+            underline="hover"
+            sx={{ color: colors.color3 }}
+          >
+            {t('login.forgotPassword')}
+          </Link>
+
+
+
+          <Button
+            type="button"
+            variant="contained"
+            fullWidth
+            disabled={loading}
+            onClick={handleSubmit}
+            sx={{
+              mt: 3,
+              backgroundColor: colors.color3,
+              '&:hover': { backgroundColor: colors.color4 },
+              textTransform: 'none'
+            }}
+          >
+            {loading ? t('login.loading') : t('login.signIn')}
+          </Button>
+
+          <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <Typography variant="body2">
+              {t('login.noAccount')}{' '}
+              <Link
+                component={RouterLink}
+                to="/register"
+                underline="hover"
+                sx={{ color: colors.color3 }}
+              >
+                {t('login.register')}
+              </Link>
+
             </Typography>
+          </Box>
 
-            <TextField
-              label={t('login.email')}
-              name="email"
-              fullWidth
-              margin="normal"
-              value={formData.email}
-              onChange={handleChange}
-              sx={{ backgroundColor: colors.white, borderRadius: 1 }}
-            />
-
-            <TextField
-              label={t('login.password')}
-              name="password"
-              type="password"
-              fullWidth
-              margin="normal"
-              value={formData.password}
-              onChange={handleChange}
-              sx={{ backgroundColor: colors.white, borderRadius: 1 }}
-            />
-            <Link underline="hover"
-              sx={{ color: colors.color3, cursor: 'pointer' }}
-              onClick={() => navigate('/resetpassword')}>
-              {t('login.forgotPassword')}
-            </Link>
-
-            {error && (
-              <Typography color="error" sx={{ mt: 1 }}>
-                {error}
-              </Typography>
-            )}
-
-            <Button
-              type="submit"
-              variant="contained"
-              fullWidth
-              disabled={loading}
-              sx={{
-                mt: 3,
-                backgroundColor: colors.color3,
-                '&:hover': { backgroundColor: colors.color4 },
-                textTransform: 'none'
-              }}
-            >
-              {loading ? t('login.loading') : t('login.signIn')}
-            </Button>
-
-            <Box sx={{ mt: 2, textAlign: 'center' }}>
-              <Typography variant="body2">
-                {t('login.noAccount')}{' '}
-                <Link
-                  underline="hover"
-                  sx={{ color: colors.color3, cursor: 'pointer' }}
-                  onClick={() => navigate('/register')}
-                >
-                  {t('login.register')}
-                </Link>
-              </Typography>
-            </Box>
-          </form>
         </CardContent>
       </Card>
     </Box>

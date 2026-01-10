@@ -152,7 +152,7 @@ const ReceptionistCalendar: React.FC = () => {
           }}
         >
           <DialogTitle>
-            <Typography component="h2" variant="h6" sx={{ color: colors.color5, mb: 2 }}>
+            <Typography component="h1" variant="h6" sx={{ color: colors.color5, fontWeight: "bold" }}>
               {t("receptionistCalendar.appointmentDetails")}
             </Typography>
           </DialogTitle>
@@ -161,7 +161,10 @@ const ReceptionistCalendar: React.FC = () => {
               {t("receptionistCalendar.patient")}: {`${selectedAppointment?.patientFirstName} ${selectedAppointment?.patientLastName}`}
             </Typography>
             <Typography sx={{ mb: 2 }}>
-              {t("receptionistCalendar.date")}: {selectedAppointment?.date} {selectedAppointment?.timeStart} - {selectedAppointment?.timeEnd}
+              {t("receptionistCalendar.date")}: {selectedAppointment?.date} 
+            </Typography>
+            <Typography sx={{ mb: 2 }}>
+              {t("receptionistCalendar.time")}: {selectedAppointment?.timeStart?.slice(0, 5)} - {selectedAppointment?.timeEnd?.slice(0, 5)}
             </Typography>
             <Typography sx={{ mb: 2 }}>
               {t("receptionistCalendar.services")}: {selectedAppointment?.servicesName.toString()}

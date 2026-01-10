@@ -17,11 +17,11 @@ import AddInfoRenderer from "../../components/AddInfoRenderer";
 import type { AddInfo } from "../../Interfaces/AddInfo";
 import { Typography } from "@mui/material";
 import { Button } from "@mui/material";
-import Alert from '@mui/material/Alert';
 import put from "../../api/put";
 import get from "../../api/get";
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from "@mui/material/IconButton";
+import { showAlert } from "../../utils/GlobalAlert";
 
 export default function DoctorAppointmentsConsole() {
     const location = useLocation();
@@ -34,16 +34,6 @@ export default function DoctorAppointmentsConsole() {
     const [selectedTooth, setSelectedTooth] = useState<ToothData | null>(null);
     const [addInfo, setAddInfo] = useState<AddInfo[]>([]);
     const [checked, setChecked] = useState<AddInfo[]>([]);
-    const [alert, setAlert] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-
-    useEffect(() => {
-        if (alert) {
-            const timer = setTimeout(() => {
-                setAlert(null);
-            }, 3000);
-            return () => clearTimeout(timer);
-        }
-    }, [alert]);
 
     const onStatusChange = (status: Status) => {
         console.log("Selected status:", status);
@@ -139,10 +129,10 @@ export default function DoctorAppointmentsConsole() {
             await put.updateAppointmentStatus(statusPayload);
             console.log("Status wizyty zapisany:");
 
-            setAlert({ type: 'success', message: t('doctorAppointmentConsole.saveSuccess') });
+            showAlert({ type: 'success', message: t('doctorAppointmentConsole.saveSuccess') });
         } catch (error) {
             console.error("Błąd zapisywania zmian:", error);
-            setAlert({ type: 'error', message: t('doctorAppointmentConsole.saveError') });
+            showAlert({ type: 'error', message: t('doctorAppointmentConsole.saveError') });
         }
     };
 
@@ -186,7 +176,7 @@ export default function DoctorAppointmentsConsole() {
                                 {t("doctorAppointmentConsole.title")}
                             </Typography>
                         </Box>
-                        <Button onClick={saveChanges}>
+                        <Button onClick={saveChanges} variant="contained" sx={{ backgroundColor: colors.color3, color: colors.white, textTransform: 'none' }}>
                             {t("doctorAppointmentConsole.saveChanges")}
                         </Button>
                     </Box>
@@ -204,11 +194,6 @@ export default function DoctorAppointmentsConsole() {
                     <ToothStatusComponent statusesByCategories={statusesByCategories} selectedStatus={selectedStatus} onStatusChange={onStatusChange} />
                 </Grid>
             </Grid>
-            {alert && (
-                <Alert severity={alert.type} sx={{ position: 'fixed', bottom: 16, right: 16 }}>
-                    {alert.message}
-                </Alert>
-            )}
         </Box>
     );
 }

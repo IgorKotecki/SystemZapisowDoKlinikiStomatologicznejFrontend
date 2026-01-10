@@ -29,9 +29,12 @@ import ResetPassword from "./pages/ResetPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DoctorDaySchedule from "./pages/doctor/doctorDaySchedule";
 import DoctorAppointmentsConsole from "./pages/doctor/doctorAppointmentConsole";
+import { GlobalAlert } from "./utils/GlobalAlert";
 
 const App = () => {
   return (
+    <>
+    <GlobalAlert />
     <Router>
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <Header />
@@ -206,6 +209,7 @@ const App = () => {
         <Footer />
       </div>
     </Router>
+    </>
   );
 };
 

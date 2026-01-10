@@ -388,7 +388,9 @@
     "scheduledTime": "Zaplanowany czas",
     "addScheduledTime": "Dodaj zaplanowany czas",
     "saveChanges": "Zapisz zmiany",
-    "remove": "Czy chcesz usunąć plan dnia?"
+    "remove": "Czy chcesz usunąć plan dnia?",
+    "updateSuccess": "Grafik został pomyślnie zaktualizowany.",
+    "updateError": "Wystąpił błąd podczas aktualizacji grafiku."
   },
   "appointmentInfo": {
     "title": "Informacje o wizycie : ",
@@ -430,6 +432,23 @@
     "patient": "Pacjent",
     "doctor": "Lekarz",
     "services": "Usługi",
-    "date": "Data"
-  }
+    "date": "Data",
+    "time": "Godzina"
+  },
+  "yes": "Tak",
+  "no": "Nie",
+  "errorFetchingDoctors": "Wystąpił błąd podczas pobierania lekarzy.",
+  "errorFetchingServices": "Wystąpił błąd podczas pobierania usług.",
+  "errorFetchingTimeBlocks": "Wystąpił błąd podczas pobierania bloków czasowych.",
+  "fillAllFields": "Proszę wypełnić wszystkie wymagane pola.",
+  "success": "Wizyta została pomyślnie zarezerwowana!",
+  "invalidCredentials": "Nieprawidłowe dane logowania.",
+  "errorOccurred": "Wystąpił błąd.",
+  "SERVICES_NOT_FOUND": "Usługi nie zostały znalezione.",
+  "SERVICE_NOT_FOUND": "Usługa nie została znaleziona.",
+  "APPLICATION_ERROR": "Błąd aplikacji.",
+  "BLOCK_NOT_AVAILABLE": "Blok czasowy nie jest dostępny.",
+  "BLOCK_BOOKED": "Blok czasowy jest już zarezerwowany.",
+  "NO_APPOINTMENT": "Brak wizyty.",
+  "NO_ADD_INFO": "Brak dodatkowych informacji."
 }

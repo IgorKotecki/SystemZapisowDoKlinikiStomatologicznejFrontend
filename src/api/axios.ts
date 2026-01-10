@@ -23,6 +23,11 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     
+    if (originalRequest.url?.includes('/api/auth/login') || 
+        originalRequest.url?.includes('/api/auth/register')) {
+      return Promise.reject(error);
+    }
+
     // Sprawdź czy to błąd 401 (Unauthorized) i nie próbowaliśmy już odświeżyć
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;

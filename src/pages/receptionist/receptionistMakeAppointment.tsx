@@ -29,7 +29,7 @@ import post from "../../api/post";
 import get from "../../api/get";
 import type { User } from "../../Interfaces/User";
 import { useLocation } from "react-router-dom";
-import { fi } from "date-fns/locale";
+import { showAlert } from "../../utils/GlobalAlert";
 
 export default function ReceptionistAppointment() {
   const { t, i18n } = useTranslation();
@@ -45,7 +45,6 @@ export default function ReceptionistAppointment() {
   const [loading, setLoading] = useState(false);
   const [loadingDoctors, setLoadingDoctors] = useState(false);
   const [loadingBlocks, setLoadingBlocks] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [loadingServices, setLoadingServices] = useState(true);
 
@@ -61,6 +60,7 @@ export default function ReceptionistAppointment() {
         setServices(response);
       } catch (err) {
         console.error("Błąd pobierania usług:", err);
+        showAlert({ type: "error", message: t("errorFetchingServices") });
         setServices([]);
       } finally {
         setLoadingServices(false);
@@ -83,6 +83,7 @@ export default function ReceptionistAppointment() {
         setDoctors(response);
       } catch (err) {
         console.error("Błąd pobierania lekarzy:", err);
+        showAlert({ type: "error", message: t("errorFetchingDoctors") });
         setDoctors([]);
       } finally {
         setLoadingDoctors(false);
@@ -106,6 +107,7 @@ export default function ReceptionistAppointment() {
         setTimeBlocks(response);
       } catch (err) {
         console.error("Błąd pobierania bloków czasowych:", err);
+        showAlert({ type: "error", message: t("errorFetchingTimeBlocks") });
         setTimeBlocks([]);
       } finally {
         setLoadingBlocks(false);
@@ -125,10 +127,9 @@ export default function ReceptionistAppointment() {
     var duration = 0;
     serv.forEach(s => duration += s.minTime);
 
-    setError(null);
     try {
       if (!servicesIds || !doctorId || !timeBlockId || !date || !state?.user.id) {
-        setError(t("userMakeAppointment.errorFields"));
+        showAlert({ type: "error", message: t("fillAllFields") });
         return;
       }
 
@@ -146,7 +147,7 @@ export default function ReceptionistAppointment() {
 
       await post.bookAppointmentReceptionist(payload)
 
-      alert(t("userMakeAppointment.success"));
+      showAlert({ type: "success", message: t("success") });
 
       setServicesIds([]);
       setDoctorId("");
@@ -154,7 +155,13 @@ export default function ReceptionistAppointment() {
       setDate(null);
     } catch (err: any) {
       console.error(err);
-      setError(t("userMakeAppointment.errorOccurred") + err);
+      let errorCode = err.response?.data?.title ??
+        err.response?.data?.Title ?? // PascalCase
+        "GENERIC_ERROR";
+      showAlert({
+        type: 'error',
+        message: t(errorCode),
+      });
     } finally {
       setLoading(false);
     }
@@ -244,18 +251,18 @@ export default function ReceptionistAppointment() {
                   sx={{ backgroundColor: colors.white, borderRadius: 1 }}
                 />
               </Box>
-              <Box sx={{ flex: 1, overflowY: "auto", maxHeight: "40vh", backgroundColor: colors.white ,borderRadius: 1 }}>
+              <Box sx={{ flex: 1, overflowY: "auto", maxHeight: "40vh", backgroundColor: colors.white, borderRadius: 1 }}>
                 {loadingServices ? (
                   <CircularProgress />
                 ) : (
-                  <List dense sx={{borderRadius : 1}}>
+                  <List dense sx={{ borderRadius: 1 }}>
                     {filteredRows.map((row) => {
                       const isSelected = servicesIds.includes(row.id);
                       return (
                         <ListItem key={row.id} divider disablePadding
-                          sx={{ cursor: "pointer" , borderRadius: 1 }}
+                          sx={{ cursor: "pointer", borderRadius: 1 }}
                           alignItems="center">
-                          <ListItemIcon sx={{ minWidth: 40, alignItems: "center", justifyContent: "center", paddingLeft: 2 , borderRadius: 1 }}>
+                          <ListItemIcon sx={{ minWidth: 40, alignItems: "center", justifyContent: "center", paddingLeft: 2, borderRadius: 1 }}>
                             <Checkbox
                               edge="start"
                               checked={isSelected}
@@ -339,9 +346,7 @@ export default function ReceptionistAppointment() {
                   )}
                 </Select>
               </FormControl>
-              {error && (
-                <Typography sx={{ mt: 2, color: "#ff8080" }}>{error}</Typography>
-              )}
+              
 
               <Button
                 type="submit"

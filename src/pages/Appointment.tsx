@@ -10,7 +10,7 @@ import type { TimeBlock } from "../Interfaces/TimeBlock";
 import { TextField, Grid } from "@mui/material";
 import post from "../api/post";
 import get from "../api/get";
-import { Alert } from "@mui/material";
+import { showAlert } from "../utils/GlobalAlert";
 
 export default function Appointment() {
     const { t, i18n } = useTranslation();
@@ -24,7 +24,6 @@ export default function Appointment() {
     const [loading, setLoading] = useState(false);
     const [loadingDoctors, setLoadingDoctors] = useState(false);
     const [loadingBlocks, setLoadingBlocks] = useState(false);
-    const [alert, setAlert] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -39,25 +38,39 @@ export default function Appointment() {
     };
 
     const validate = () => {
-        if (!servicesIds || !doctorId || !timeBlockId || !date) {
-            setAlert({ type: 'error', message: t("userMakeAppointment.errorFields") });
-            return;
+        if (!servicesIds || servicesIds.length === 0 || !doctorId || !timeBlockId || !date) {
+            showAlert({ type: 'error', message: t("userMakeAppointment.errorFields") });
+            return false;
         }
 
-        if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
-            setAlert({ type: 'error', message: t("appointment.errorIncompleteForm") });
-            return;
+        if (!formData.firstName || formData.firstName.trim() === "") {
+            showAlert({ type: 'error', message: t("appointment.errorFirstName") });
+            return false;
+        }
+        if (!formData.lastName || formData.lastName.trim() === "") {
+            showAlert({ type: 'error', message: t("appointment.errorLastName") });
+            return false;
+        }
+        if (!formData.email || formData.email.trim() === "") {
+            showAlert({ type: 'error', message: t("appointment.errorEmail") });
+            return false;
+        }
+        if (!formData.phone || formData.phone.trim() === "") {
+            showAlert({ type: 'error', message: t("appointment.errorPhone") });
+            return false;
         }
 
         if (formData.email.indexOf("@") === -1) {
-            setAlert({ type: 'error', message: t("appointment.errorInvalidEmail") });
-            return;
+            showAlert({ type: 'error', message: t("appointment.errorEmail") });
+            return false;
         }
 
         if (formData.phone.match(/[^0-9+\-()\s]/)) {
-            setAlert({ type: 'error', message: t("appointment.errorInvalidPhone") });
-            return;
+            showAlert({ type: 'error', message: t("appointment.errorPhone") });
+            return false;
         }
+
+        return true;
     }
 
 
@@ -137,10 +150,11 @@ export default function Appointment() {
         var duration = 0;
         serv.forEach(s => duration += s.minTime);
 
-        setAlert(null);
         try {
 
-            validate();
+            if (!validate()) {
+                return;
+            }
 
             setLoading(true);
 
@@ -157,7 +171,10 @@ export default function Appointment() {
 
             await post.bookAppointmentGuest(payload)
 
-            setAlert({ type: 'success', message: t("userMakeAppointment.success") });
+            showAlert({
+                type: 'success',
+                message: t("userMakeAppointment.successAlert"),
+            });
 
             setServicesIds([]);
             setDoctorId("");
@@ -174,7 +191,10 @@ export default function Appointment() {
             let errorCode = err.response?.data?.title ??
                 err.response?.data?.Title ?? // PascalCase
                 "GENERIC_ERROR";
-            setAlert({ type: 'error', message: t("userMakeAppointment.errorOccurred") + (t(errorCode)) });
+            showAlert({
+                type: 'error',
+                message: t(errorCode),
+            });
         } finally {
             setLoading(false);
         }
@@ -401,13 +421,6 @@ export default function Appointment() {
                                     />
                                 </Grid>
                             </Grid>
-
-                            {alert && (
-                                <Alert severity={alert.type} sx={{ mt: 2 }}>
-                                    {alert.message}
-                                </Alert>
-                            )}
-
                             <Button
                                 type="submit"
                                 fullWidth
