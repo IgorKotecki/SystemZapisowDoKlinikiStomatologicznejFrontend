@@ -13,14 +13,12 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { colors } from "../../utils/colors";
 import type { User } from "../../Interfaces/User";
-import { useAuth } from "../../context/AuthContext";
 import get from "../../api/get";
 import { DataGrid, type GridColDef, type GridPaginationModel } from '@mui/x-data-grid';
 import EditUserModal from "../../components/EditUserModel";
 import { showAlert } from "../../utils/GlobalAlert";
 
 const ReceptionistUsers: React.FC = () => {
-  const { userRole } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
@@ -79,7 +77,8 @@ const ReceptionistUsers: React.FC = () => {
   const columns: GridColDef<User>[] = [
     { field: 'name', headerName: t("receptionistUsers.firstName"), width: 150 },
     { field: 'surname', headerName: t("receptionistUsers.lastName"), width: 150 },
-    { field: 'email', headerName: 'Email', width: 250 },
+    // @ts-ignore
+    { field: 'email', headerName: 'Email', width: 250, felx: 1 },
     { field: 'phoneNumber', headerName: t("receptionistUsers.phone"), width: 180 },
     {
       field: 'action',
@@ -185,12 +184,10 @@ const ReceptionistUsers: React.FC = () => {
               columns={columns}
               loading={loading}
               autoHeight
-              
               paginationMode="server"
               rowCount={totalRows}
               paginationModel={paginationModel}
               onPaginationModelChange={setPaginationModel}
-              
               pageSizeOptions={[5, 10, 20, 50]}
               disableRowSelectionOnClick
               sx={{

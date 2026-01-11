@@ -21,4 +21,9 @@ export const colors = {
     gold: "#D4AF37",
     lightBlue: "#e0f7f8",
     softGray: "#f8f9fa",
+    doctor1: "#ff8a80",
+    doctor2: "#8c9eff",
+    doctor3: "#80d8ff",
+    doctor4: "#a7ffeb",
+    doctor5: "#ccff90",
 };

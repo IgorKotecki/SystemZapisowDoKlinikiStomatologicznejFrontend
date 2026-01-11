@@ -58,7 +58,8 @@ export class CalendarMapper {
       timeEnd: apiAppointment.endTime.split("T")[1],
       patientEmail: apiAppointment.user.email,
       patienPhoneNumber: apiAppointment.user.phoneNumber,
-      additionalInformation: apiAppointment.additionalInformation
+      additionalInformation: apiAppointment.additionalInformation,
+      doctor: apiAppointment.doctor,
     };
   }
 

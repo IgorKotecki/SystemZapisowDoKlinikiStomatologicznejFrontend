@@ -35,6 +35,7 @@ const ReceptionistCalendar: React.FC = () => {
       const language = i18n.language;
       try {
         const response = await get.getAppointmentsForRecepcionist(language, date);
+        console.log('API Response:', response);
         setAppointments(CalendarMapper.ApiAppointmentsToDoctorAppointments(response));
         setLoading(false);
       } catch (err) {
@@ -45,14 +46,27 @@ const ReceptionistCalendar: React.FC = () => {
     fetchDoctorsAppointemtAsync(currentWeekStart);
   }, [currentWeekStart, t]);
 
+  const switchDoctorColor = (doctorId: number) => {
+    switch(doctorId) {
+      case 6:
+        return colors.doctor1;
+      case 3006:
+        return colors.doctor2;
+      default:
+        return colors.doctor3;
+  };}
+
   const events = useMemo(
     () => appointments.map((a) => ({
       id: String(a.id),
       title: `${a.patientFirstName} ${a.patientLastName}`,
       start: `${a.date}T${a.timeStart}`,
       end: `${a.date}T${a.timeEnd}`,
-      description: a.servicesName,
+      description: `Doctor : ${a.doctor.name} ${a.doctor.surname}`,
       extendedProps: a,
+      borderColor: colors.black,
+      backgroundColor: switchDoctorColor(a.doctor.id),
+      textColor: colors.black,
     })),
     [appointments]
   );
@@ -64,13 +78,13 @@ const ReceptionistCalendar: React.FC = () => {
 
   const goToAppointment = () => {
     setOpenModal(false);
-    const info : User = {
+    const info: User = {
       id: selectedAppointment?.patientId!,
       name: selectedAppointment?.patientFirstName!,
       surname: selectedAppointment?.patientLastName!,
       email: selectedAppointment?.patientEmail!,
       phoneNumber: selectedAppointment?.patienPhoneNumber!,
-    } 
+    }
     navigate(`/receptionist/appointment`, { state: { user: info as User } });
   };
 
@@ -92,6 +106,8 @@ const ReceptionistCalendar: React.FC = () => {
               initialView="timeGridWeek"
               allDaySlot={false}
               eventClick={handleEventClick}
+              slotEventOverlap={false}
+              eventOverlap={false}
               eventMouseEnter={(mouseEnterInfo) => {
                 mouseEnterInfo.el.style.cursor = 'pointer';
               }}
@@ -111,8 +127,8 @@ const ReceptionistCalendar: React.FC = () => {
                 );
               }}
               eventDidMount={(info) => {
-                const appointment = info.event.extendedProps;
-                const tooltipText = `${appointment.description ?? ''}\nPacjent: ${appointment.patientFirstName} ${appointment.patientLastName}\nEmail: ${appointment.patientEmail}\nTelefon: ${appointment.patienPhoneNumber ?? ''}`;
+                const appointment = info.event.extendedProps as IDoctorAppointment;
+                const tooltipText = `${appointment.servicesName.toString() ?? ''}\nPacjent: ${appointment.patientFirstName} ${appointment.patientLastName}\nEmail: ${appointment.patientEmail}\nTelefon: ${appointment.patienPhoneNumber ?? ''}`;
                 info.el.setAttribute('title', tooltipText);
               }}
               height="auto"
@@ -157,18 +173,49 @@ const ReceptionistCalendar: React.FC = () => {
             </Typography>
           </DialogTitle>
           <DialogContent>
-            <Typography sx={{ mb: 2 }}>
-              {t("receptionistCalendar.patient")}: {`${selectedAppointment?.patientFirstName} ${selectedAppointment?.patientLastName}`}
+            <Typography >
+              {t("receptionistCalendar.patient")}:
             </Typography>
-            <Typography sx={{ mb: 2 }}>
-              {t("receptionistCalendar.date")}: {selectedAppointment?.date} 
+            <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
+              <Typography >
+                {`${selectedAppointment?.patientFirstName} ${selectedAppointment?.patientLastName}`}
+              </Typography>
+              <Typography >
+                {selectedAppointment?.patientEmail}
+              </Typography>
+              <Typography >
+                {selectedAppointment?.patienPhoneNumber}
+              </Typography>
+            </Box>
+            <Typography >
+              {t("receptionistCalendar.doctor")}:
             </Typography>
-            <Typography sx={{ mb: 2 }}>
-              {t("receptionistCalendar.time")}: {selectedAppointment?.timeStart?.slice(0, 5)} - {selectedAppointment?.timeEnd?.slice(0, 5)}
+            <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
+              <Typography >
+                {`${selectedAppointment?.doctor.name} ${selectedAppointment?.doctor.surname}`}
+              </Typography>
+            </Box>
+            <Typography >
+              {t("receptionistCalendar.date")} - {t("receptionistCalendar.time")}:
             </Typography>
-            <Typography sx={{ mb: 2 }}>
-              {t("receptionistCalendar.services")}: {selectedAppointment?.servicesName.toString()}
+            <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
+              <Typography >
+                {selectedAppointment?.date}
+              </Typography>
+              <Typography >
+                {selectedAppointment?.timeStart?.slice(0, 5)} - {selectedAppointment?.timeEnd?.slice(0, 5)}
+              </Typography>
+            </Box>
+            <Typography >
+              {t("receptionistCalendar.services")}
             </Typography>
+            <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
+              {selectedAppointment?.servicesName.map((service, index) => (
+                <Typography key={index}>
+                  - {service}
+                </Typography>
+              ))}
+            </Box>
           </DialogContent>
           <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
             <Button

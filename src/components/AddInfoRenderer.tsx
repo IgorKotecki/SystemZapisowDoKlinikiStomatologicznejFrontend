@@ -105,7 +105,7 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
             p: 4,
             pt: 1,
             borderRadius: 3,
-            backgroundColor: colors.white,
+            backgroundColor: colors.pureWhite,
             color: colors.black,
             display: "flex",
             flexDirection: "column",

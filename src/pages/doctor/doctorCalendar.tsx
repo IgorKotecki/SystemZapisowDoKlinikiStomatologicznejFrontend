@@ -23,6 +23,7 @@ import type { Appointment } from "../../Interfaces/Appointment";
 import { showAlert } from "../../utils/GlobalAlert";
 import deleteApi from "../../api/delete";
 import post from "../../api/post";
+import type { EventApi } from "@fullcalendar/core/index.js";
 
 const DoctorCalendar: React.FC = () => {
   const { t } = useTranslation();
@@ -32,7 +33,7 @@ const DoctorCalendar: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const calendarRef = React.useRef<FullCalendar>(null);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [workingDay, setWorkingDay] = useState<Date | null>(null);
+  const [workingDay, setWorkingDay] = useState<EventApi | null>(null);
   const [selectedRange, setSelectedRange] = useState<{ start: string; end: string, dayOfWeek: string } | null>(null);
   const [addTimeModalOpen, setAddTimeModalOpen] = useState(false);
 
@@ -97,26 +98,37 @@ const DoctorCalendar: React.FC = () => {
       return;
     }
     setOpenModal(true);
-    setWorkingDay(info.event.start);
+    setWorkingDay(info.event);
   };
 
   const handleDelete = async () => {
-    try {
-      await deleteApi.deleteWorkingHours(workingDay!.toISOString());
-
-      showAlert({ type: 'success', message: t('doctorCalendar.removeWorkingHoursSuccess') });
-      await fetchDoctorWorkingHours(currentWeekStart);
-      setOpenModal(false);
-    } catch (err: any) {
-      console.error(err);
-      let errorCode = err.response?.data?.title ??
-        err.response?.data?.Title ?? // PascalCase
-        "GENERIC_ERROR";
-      showAlert({ type: 'error', message: t(errorCode) });
-    } finally {
-      setWorkingDay(null);
+  try {
+    if (!workingDay || !workingDay.start || !workingDay.end) {
+      throw new Error('Invalid working day data');
     }
-  };
+
+    const payload = {
+      startTime: workingDay.extendedProps.startTime,
+      endTime: workingDay.extendedProps.endTime,
+    };
+    
+    console.log('Payload being sent:', payload);
+    
+    await deleteApi.deleteWorkingHours(payload);
+
+    showAlert({ type: 'success', message: t('doctorCalendar.removeWorkingHoursSuccess') });
+    await fetchDoctorWorkingHours(currentWeekStart);
+    setOpenModal(false);
+  } catch (err: any) {
+    console.error(err);
+    let errorCode = err.response?.data?.title ??
+      err.response?.data?.Title ??
+      "GENERIC_ERROR";
+    showAlert({ type: 'error', message: t(errorCode) });
+  } finally {
+    setWorkingDay(null);
+  }
+};
 
   const handleSelect = (info: any) => {
     if (info.start.getDay() != info.end.getDay()) {
@@ -171,6 +183,7 @@ const DoctorCalendar: React.FC = () => {
               initialView="timeGridWeek"
               allDaySlot={false}
               selectable={true}
+              timeZone="local"
               select={handleSelect}
               eventClick={handleEventClick}
               eventMouseEnter={(mouseEnterInfo) => {

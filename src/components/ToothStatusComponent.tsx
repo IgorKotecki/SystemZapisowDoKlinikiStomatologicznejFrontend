@@ -112,7 +112,7 @@ export default function ToothStatusComponent({ statusesByCategories, selectedSta
         <Box
             sx={{
                 flexGrow: 1,
-                bgcolor: colors.white,
+                bgcolor: colors.pureWhite,
                 display: 'flex',
                 borderRadius: 8,
                 margin: 0,
@@ -131,7 +131,7 @@ export default function ToothStatusComponent({ statusesByCategories, selectedSta
                     borderRight: 1,
                     borderColor: 'divider',
                     color: colors.color1,
-                    backgroundColor: colors.white,
+                    backgroundColor: colors.pureWhite,
                     borderTopLeftRadius: 8,
                     borderBottomLeftRadius: 8,
                 }}
