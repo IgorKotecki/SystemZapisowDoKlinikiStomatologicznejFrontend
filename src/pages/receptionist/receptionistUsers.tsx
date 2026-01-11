@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import UserNavigation from "../../components/userComponents/userNavigation";
+import EditUserModal from "../../components/EditUserModel";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { colors } from "../../utils/colors";
@@ -107,6 +108,15 @@ const ReceptionistUsers: React.FC = () => {
       ),
     },
   ];
+
+  // const handleUserClick = (userId: number) => {
+  //   const role = userRole;
+  //   if (role === "Doctor") {
+  //     navigate(`/doctor/users/${userId}`);
+  //   } else if (role === "Receptionist") {
+  //     navigate(`/receptionist/users/${userId}`);
+  //   }
+  // };
 
   const handleUserClick = (userId: number) => {
     setSelectedUserId(userId);

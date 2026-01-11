@@ -181,7 +181,8 @@
     "changePhoto": "Change profile photo",
     "deleteAccount": "Delete account",
     "confirmDeleteTitle": "Account deleting process",
-    "confirmDeleteMessage": "Deleting account process is irreversible! Do you still want to proceed?"
+    "confirmDeleteMessage": "Deleting account process is irreversible! Do you still want to proceed?",
+    "saveSuccess": "Data updated successfully"
   },
   "userAppointments": {
     "title": "Appointment history",
@@ -492,6 +493,20 @@
     "formSubmit": "Send Message",
     "findUs": "Find us on the map",
     "mapPlaceholder": "[Interactive Google Map will appear here]"
+  },
+  "cancellation": {
+    "title": "Cancel Appointment",
+    "subtitle": "Please provide a reason for cancelling the appointment. The patient will be notified of this change.",
+    "reasonPlaceholder": "Enter reason here... (e.g., doctor's illness, change in working hours)",
+    "errorEmptyReason": "Cancellation reason cannot be empty.",
+    "success": "Appointment cancelled successfully.",
+    "error": "An error occurred while cancelling the appointment. Please try again.",
+    "confirm": "Confirm Cancellation",
+    "cancel": "Go back"
+  },
+  "global": {
+    "confirm": "Confirm",
+    "cancel": "Cancel"
   },
   "yes": "Yes",
   "no": "No",
