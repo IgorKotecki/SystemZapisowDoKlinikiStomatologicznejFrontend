@@ -186,7 +186,8 @@
     "changePhoto": "Edytuj zdjęcie profilowe",
     "deleteAccount": "Usuń konto",
     "confirmDeleteTitle": "Usuwanie konta",
-    "confirmDeleteMessage": "Proces usuwania konta jest nie odwracalny! Czy na pewno chcesz usunąć konto?"
+    "confirmDeleteMessage": "Proces usuwania konta jest nie odwracalny! Czy na pewno chcesz usunąć konto?",
+    "saveSuccess": "Dane zostały zaktualizowane pomyślnie"
   },
   "userAppointments": {
     "title": "Historia Wizyt",
@@ -476,6 +477,20 @@
     "formSubmit": "Wyślij wiadomość",
     "findUs": "Znajdź nas na mapie",
     "mapPlaceholder": "[Tutaj pojawi się interaktywna mapa Google]"
+  },
+  "cancellation": {
+    "title": "Anulowanie wizyty",
+    "subtitle": "Proszę podać powód anulowania wizyty. Pacjent zostanie poinformowany o tej zmianie.",
+    "reasonPlaceholder": "Wpisz powód tutaj... (np. choroba lekarza, zmiana godzin pracy)",
+    "errorEmptyReason": "Powód anulowania nie może być pusty.",
+    "success": "Wizyta została pomyślnie anulowana.",
+    "error": "Wystąpił błąd podczas anulowania wizyty. Spróbuj ponownie.",
+    "confirm": "Potwierdź anulowanie",
+    "cancel": "Wróć"
+  },
+  "global": {
+    "confirm": "Potwierdź",
+    "cancel": "Anuluj"
   },
   "yes": "Tak",
   "no": "Nie",

@@ -22,7 +22,6 @@ import type { WorkingHours } from "../../Interfaces/WorkingHours";
 import type { Appointment } from "../../Interfaces/Appointment";
 import { showAlert } from "../../utils/GlobalAlert";
 import deleteApi from "../../api/delete";
-import { set } from "date-fns";
 
 const DoctorCalendar: React.FC = () => {
   const { t } = useTranslation();

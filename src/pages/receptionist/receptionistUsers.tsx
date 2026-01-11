@@ -7,20 +7,23 @@ import {
   Alert,
 } from "@mui/material";
 import UserNavigation from "../../components/userComponents/userNavigation";
+import EditUserModal from "../../components/EditUserModel";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { colors } from "../../utils/colors";
 import type { User } from "../../Interfaces/User";
-import { useAuth } from "../../context/AuthContext";
+// import { useAuth } from "../../context/AuthContext";
 import get from "../../api/get";
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
 
 const ReceptionistUsers: React.FC = () => {
-  const { userRole } = useAuth();
+  // const { userRole } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [alert, setAlert] = useState<{
     type: "success" | "error";
     message: string;
@@ -57,12 +60,12 @@ const ReceptionistUsers: React.FC = () => {
   const columns: GridColDef<User>[] = [
     {
       field: 'name',
-      headerName: t("receptionistUsers.firstName") || 'First name',
+      headerName: t("receptionistUsers.firstName"),
       width: 150,
     },
     {
       field: 'surname',
-      headerName: t("receptionistUsers.lastName") || 'Last name',
+      headerName: t("receptionistUsers.lastName"),
       width: 150,
     },
     {
@@ -72,12 +75,12 @@ const ReceptionistUsers: React.FC = () => {
     },
     {
       field: 'phoneNumber',
-      headerName: t("receptionistUsers.phone") || 'Phone number',
+      headerName: t("receptionistUsers.phone"),
       width: 150,
     },
     {
       field: 'action',
-      headerName: t("receptionistUsers.action") || 'Action',
+      headerName: t("receptionistUsers.action"),
       width: 400,
       sortable: false,
       renderCell: (params) => (
@@ -103,13 +106,30 @@ const ReceptionistUsers: React.FC = () => {
     },
   ];
 
-  const handleUserClick = (userId: number) => {
-    const role = userRole;
-    if (role === "Doctor") {
-      navigate(`/doctor/users/${userId}`);
-    } else if (role === "Receptionist") {
-      navigate(`/receptionist/users/${userId}`);
-    }
+  // const handleUserClick = (userId: number) => {
+  //   const role = userRole;
+  //   if (role === "Doctor") {
+  //     navigate(`/doctor/users/${userId}`);
+  //   } else if (role === "Receptionist") {
+  //     navigate(`/receptionist/users/${userId}`);
+  //   }
+  // };
+
+    const handleUserClick = (userId: number) => {
+    setSelectedUserId(userId);
+    setOpenEditModal(true);
+  };
+
+  const handleFetchUsers = async () => {
+     setLoading(true);
+     try {
+       const response = await get.getAllUsers();
+       setUsers(response);
+     } catch (error) {
+       console.error("Error fetching users:", error);
+     } finally {
+       setLoading(false);
+     }
   };
 
   const handleMakeAppointment = (user: User) => {
@@ -178,6 +198,13 @@ const ReceptionistUsers: React.FC = () => {
           </Paper>
         </Box>
       </Box>
+
+      <EditUserModal 
+        open={openEditModal}
+        onClose={() => setOpenEditModal(false)}
+        userId={selectedUserId}
+        onSuccess={handleFetchUsers} 
+      />
 
       {alert && (
         <Alert

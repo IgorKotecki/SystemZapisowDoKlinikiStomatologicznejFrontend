@@ -1,4 +1,5 @@
 import api from "./axios";
+import type { Cancellation } from "../Interfaces/Cancellation";
 
 export const updateAditianalInformationToAppointment = async (payload: any) => {
     const response = await api.put(`/api/Appointment/doctor/additional-information`, payload);
@@ -35,6 +36,11 @@ export const updateUserById = async(userId: number, dto: any) => {
     return response.data;
 }
 
+export const cancellation = async(payload: Cancellation) => {
+    const response = await api.put(`/api/Appointment/cancel-appointment`);
+    return response.data;
+}
+
 export default {
     updateAditianalInformationToAppointment,
     updateDoctorWeekSchedule,
@@ -43,4 +49,5 @@ export default {
     updateAppointmentStatus,
     updateService,
     updateUserById,
+    cancellation,
 };
