@@ -98,13 +98,13 @@ const AdditionalInformation: React.FC = () => {
             setAdditionalInfo(newAddInfoArray);
             setOpenModal(false);
             showAlert({
-                type: 'success', message: t('addInfo.addInfoAdded')
+                type: 'success', message: t('addInfo.success')
             });
         })
             .catch((error) => {
                 console.error('Error adding additional info:', error);
                 showAlert({
-                    type: 'error', message: t('addInfo.addInfoError')
+                    type: 'error', message: t('addInfo.error')
                 });
             }
             );
@@ -203,6 +203,7 @@ const AdditionalInformation: React.FC = () => {
                             label={t("addInfo.newInfoLabelPl")}
                             variant="outlined"
                             fullWidth
+                            required
                             name="infoPl"
                             key={'infoPl'}
                             sx={{ mb: 2, backgroundColor: colors.white }}
@@ -211,6 +212,7 @@ const AdditionalInformation: React.FC = () => {
                             label={t("addInfo.newInfoLabelEn")}
                             variant="outlined"
                             fullWidth
+                            required
                             name="infoEn"
                             key={'infoEn'}
                             sx={{ mb: 2, backgroundColor: colors.white }}

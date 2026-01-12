@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import type { IDoctorAppointment } from "../../Interfaces/IDoctorAppointment";
 import UserNavigation from "../../components/userComponents/userNavigation";
@@ -34,6 +34,9 @@ export default function DoctorAppointmentsConsole() {
     const [selectedTooth, setSelectedTooth] = useState<ToothData | null>(null);
     const [addInfo, setAddInfo] = useState<AddInfo[]>([]);
     const [checked, setChecked] = useState<AddInfo[]>([]);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [note, setNote] = useState<string>("");
+    const [saving, setSaving] = useState(false);
 
     const onStatusChange = (status: Status) => {
         console.log("Selected status:", status);
@@ -116,25 +119,55 @@ export default function DoctorAppointmentsConsole() {
             };
 
             console.log(appointmentPayload);
-            
 
             await put.updateAditianalInformationToAppointment(appointmentPayload);
             console.log("Dodatkowe informacje zapisane:");
 
-            const statusPayload = {
-                "appointmentId": state?.appointment.id,
-                "statusId": 3, // Completed
-            };
-
-            await put.updateAppointmentStatus(statusPayload);
-            console.log("Status wizyty zapisany:");
-
             showAlert({ type: 'success', message: t('doctorAppointmentConsole.saveSuccess') });
-        } catch (error) {
-            console.error("Błąd zapisywania zmian:", error);
-            showAlert({ type: 'error', message: t('doctorAppointmentConsole.saveError') });
+        } catch (err: any) {
+            console.error(err);
+            let errorCode = err.response?.data?.title ??
+                err.response?.data?.Title ??
+                "GENERIC_ERROR";
+            showAlert({
+                type: 'error',
+                message: t(errorCode),
+            });
         }
     };
+
+    const completeAppointmentModal = () => {
+        setConfirmOpen(true);
+    }
+
+    const completeAppointment = async () => {
+        setSaving(true);
+        await saveChanges();
+        try {
+            if (!state) return;
+            const payload = {
+                appointmentGroupId: state.appointment.id,
+                notes: note,
+            };
+            await put.completeAppointment(payload);
+            showAlert({ type: 'success', message: t('doctorAppointmentConsole.completeSuccess') });
+            setConfirmOpen(false);
+            setNote("");
+            goBack();
+        } catch (err: any) {
+            console.error(err);
+            let errorCode = err.response?.data?.title ??
+                err.response?.data?.Title ??
+                "GENERIC_ERROR";
+            showAlert({
+                type: 'error',
+                message: t(errorCode),
+            });
+        } finally {
+            setSaving(false);
+        }
+    };
+
 
     if (loading) {
         return (
@@ -176,9 +209,14 @@ export default function DoctorAppointmentsConsole() {
                                 {t("doctorAppointmentConsole.title")}
                             </Typography>
                         </Box>
-                        <Button onClick={saveChanges} variant="contained" sx={{ backgroundColor: colors.color3, color: colors.white, textTransform: 'none' }}>
-                            {t("doctorAppointmentConsole.saveChanges")}
-                        </Button>
+                        <Box sx={{ justifyContent: "center", gap: 1, display: "flex" }}>
+                            <Button onClick={saveChanges} variant="contained" sx={{ backgroundColor: colors.color3, color: colors.white, textTransform: 'none', ":hover": { backgroundColor: colors.color4 } }}>
+                                {t("doctorAppointmentConsole.saveChanges")}
+                            </Button>
+                            <Button onClick={completeAppointmentModal} variant="contained" sx={{ backgroundColor: colors.color3, color: colors.white, textTransform: 'none', ":hover": { backgroundColor: colors.color4 } }}>
+                                {t("doctorAppointmentConsole.completeAppointment")}
+                            </Button>
+                        </Box>
                     </Box>
                 </Grid>
                 <Grid size={12}>
@@ -194,6 +232,70 @@ export default function DoctorAppointmentsConsole() {
                     <ToothStatusComponent statusesByCategories={statusesByCategories} selectedStatus={selectedStatus} onStatusChange={onStatusChange} />
                 </Grid>
             </Grid>
+            <Dialog
+                open={confirmOpen}
+                PaperProps={{
+                    sx: {
+                        backgroundColor: colors.color2,
+                        color: colors.white,
+                        borderRadius: 3,
+                        p: 2,
+                        minWidth: { xs: "90%", sm: 400 }
+                    }
+                }}
+            >
+                <DialogTitle>
+                    <Typography variant="h5" sx={{ color: colors.color5, fontWeight: "bold" }}>
+                        {t("doctorAppointmentConsole.completeTitle")}
+                    </Typography>
+                </DialogTitle>
+                <DialogContent>
+                    <Typography sx={{ mb: 2, opacity: 0.8 }}>
+                        {t("doctorAppointmentConsole.completeSubtitle")}
+                    </Typography>
+                    <TextField
+                        fullWidth
+                        multiline
+                        rows={4}
+                        variant="outlined"
+                        placeholder={t("doctorAppointmentConsole.notePlaceholder")}
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
+                        sx={{
+                            backgroundColor: colors.white,
+                            borderRadius: 1,
+                            "& .MuiOutlinedInput-root": {
+                                "& fieldset": { borderColor: colors.color3 },
+                                "&:hover fieldset": { borderColor: colors.color4 },
+                            }
+                        }}
+                    />
+                </DialogContent>
+                <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
+                    <Button
+                        onClick={() => {
+                            setConfirmOpen(false);
+                            setNote("");
+                        }}
+                        sx={{ color: colors.white, textTransform: "none" }}
+                    >
+                        {t("global.cancel")}
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={completeAppointment}
+                        sx={{
+                            backgroundColor: colors.color3,
+                            color: colors.white,
+                            textTransform: "none",
+                            px: 4,
+                            "&:hover": { backgroundColor: colors.color4 }
+                        }}
+                    >
+                        {saving ? <CircularProgress size={24} color="inherit" /> : t("global.confirm")}
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 }

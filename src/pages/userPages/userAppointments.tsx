@@ -33,6 +33,7 @@ export default function VisitsHistoryPage() {
         setLoading(true);
         const lang = i18n.language || "pl";
         const response = await get.getUserAppointments(lang);
+        console.log(response);
         setAppointments(response);
       } catch (err) {
         setError("Nie udało się pobrać wizyt.");

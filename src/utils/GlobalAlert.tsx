@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Snackbar, Alert as MuiAlert } from "@mui/material";
 
-type AlertType = "success" | "error";
+type AlertType = "success" | "error" | "info";
 
 interface Alert {
   type: AlertType;

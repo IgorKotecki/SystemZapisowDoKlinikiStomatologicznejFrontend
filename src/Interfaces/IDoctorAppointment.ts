@@ -14,5 +14,7 @@ export interface IDoctorAppointment {
     patientEmail: string;
     patienPhoneNumber: string;
     additionalInformation: AddInfo[];
+    status: string;
     doctor: User;
+    cancellatingReason?: string;
 }

@@ -378,12 +378,17 @@
     "save": "Zapisz notatkę",
     "savedNote": "Notatka została zapisana",
     "workingHours": "Godziny pracy",
-    "subtitle": "Kliknij w kalendarzu, aby dodać godziny pracy lub usunąć istniejące",
+    "subtitle": "Klikni na godziny pracy aby je usunąć, zaznaczaj obszar w daniu aby dodać nowe godziny pracy. Po kliknieciu na daną wizyte możesz ja odwołać.",
     "addWorkingHoursSuccess": "Godziny pracy zostały pomyślnie dodane.",
     "removeWorkingHoursSuccess": "Godziny pracy zostały pomyślnie usunięte.",
     "errorOccurred": "Wystąpił błąd podczas przetwarzania Twojego żądania.",
     "addConfirm": "Czy chcesz dodać godziny pracy dla wybranego dnia?",
-    "removeConfirm": "Czy chcesz usunąć godziny pracy dla wybranego dnia?"
+    "removeConfirm": "Czy chcesz usunąć godziny pracy dla wybranego dnia?",
+    "cancelledAppointmentAlert": "Ta wizyta została anulowana i nie można jej edytować.",
+    "completedAppointmentAlert": "Ta wizyta została zakończona i nie można jej edytować.",
+    "cancelledAppointmentAlertCancel": "Ta wizyta została anulowana i nie można jej anulować ponownie.",
+    "completedAppointmentAlertCancel": "Ta wizyta została zakończona i nie można jej anulować.",
+    "cancelSuccess": "Wizyta została pomyślnie anulowana."
   },
   "doctorFreeDays": {
     "title": "Dni i godziny wolne lekarza",
@@ -460,7 +465,9 @@
     "infoAdded": "Nowa informacja została dodana.",
     "infoRemoved": "Informacja została usunięta.",
     "removeConfirm": "Czy na pewno chcesz usunąć tę informację?",
-    "addInfoTitle": "Dodaj nową informację"
+    "addInfoTitle": "Dodaj nową informację",
+    "error": "Wystąpił błąd podczas dodawania informacji.",
+    "success": "Informacja została pomyślnie dodana."
   },
   "doctorAppointmentConsole": {
     "title": "Konsola wizyty lekarskiej",
@@ -469,7 +476,31 @@
     "selectAdditionalInfo": "Wybierz dodatkowe informacje do dodania do wizyty",
     "saveChanges": "Zapisz zmiany",
     "saveSuccess": "Zmiany zostały pomyślnie zapisane.",
-    "saveError": "Wystąpił błąd podczas zapisywania zmian."
+    "saveError": "Wystąpił błąd podczas zapisywania zmian.",
+    "toothState": "Stan zęba",
+    "notes": "Notatki",
+    "completeAppointment": "Zakończ wizytę",
+    "completeConfirm": "Czy na pewno chcesz zakończyć tę wizytę?",
+    "completeSuccess": "Wizyta została pomyślnie zakończona.",
+    "completeError": "Wystąpił błąd podczas zakończenia wizyty.",
+    "completeTitle": "Zakończenie wizyty",
+    "completeSubtitle": "Po zakończeniu wizyty nie będzie można wprowadzać dalszych zmian. Poniżej możliwość dodania notatki.",
+    "notePlaceholder": "Wpisz notatkę dotyczącą wizyty..."
+  },
+  "doctorAppointments": {
+    "title": "Zaplanowane wizyty",
+    "subtitle": "Przeglądaj i zarządzaj swoimi nadchodzącymi wizytami stomatologicznymi",
+    "date": "Data",
+    "hour": "Godzina",
+    "patient": "Pacjent",
+    "service": "Usługa",
+    "price": "Cena",
+    "state": "Status",
+    "additionalInformation": "D.I.",
+    "noInformation": "Brak infromacji",
+    "loading": "Ładowanie wizyt...",
+    "noAppointments": "Brak zaplanowanych wizyt",
+    "filters": "Filtry"
   },
   "receptionistCalendar": {
     "close": "Zamknij",
@@ -480,7 +511,20 @@
     "doctor": "Lekarz",
     "services": "Usługi",
     "date": "Data",
-    "time": "Godzina"
+    "time": "Godzina",
+    "cancelAppointment": "Anuluj wizytę",
+    "errorFetchingAppointments": "Wystąpił błąd podczas pobierania wizyt.",
+    "options": "Opcje i legenda",
+    "legend": {
+      "title": "Legenda",
+      "scheduled": "Zaplanowane wizyty",
+      "completed": "Zakończone wizyty",
+      "cancelled": "Anulowane wizyty"
+    },
+    "errorFetchingDoctors": "Wystąpił błąd podczas pobierania lekarzy.",
+    "showCancelled": "Pokaż anulowane wizyty",
+    "showCompleted": "Pokaż zakończone wizyty",
+    "filters": "Filtry"
   },
   "contactPage": {
     "title": "Skontaktuj się z nami",
@@ -533,6 +577,10 @@
   "GENERIC_ERROR": "Wystąpił błąd. Spróbuj ponownie.",
   "DAY_HAS_APPOINTMENTS": "Dzień ma zaplanowane wizyty i nie może zostać usunięty.",
   "WORKING_HOURS_ALREADY_EXIST": "Godziny pracy dla tego dnia już istnieją.",
+  "CANNOT_COMPLETE":"Nie można zapisać zmiań dla wizyty która dopiero ma się odbyć.",
+  "ALREADY_CANCELLED": "Wizyta została już anulowana.",
+  "CANNOT_CANCEL_COMPLETED": "Nie można anulować wizyty, która już się odbyła.",
+  "APPOINTMENT_IN_PAST": "Wizyta nie może być zaplanowana w przeszłości.",
   "globalAlert": {
     "errorLoadingData": "Błąd podczas ładowania danych. Spróbuj ponownie później."
   },
@@ -549,5 +597,6 @@
     "deleteSuccess": "Dodatkowa informacja została pomyślnie usunięta.",
     "deleteError": "Wystąpił błąd podczas usuwania informacji.",
     "body": "Treść"
-  }
+  },
+  "cancellationSuccess": "Wizyta została pomyślnie anulowana."
 }

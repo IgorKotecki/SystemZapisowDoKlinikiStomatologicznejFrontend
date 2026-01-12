@@ -377,7 +377,11 @@
     "removeWorkingHoursSuccess": "Working hours have been removed successfully.",
     "errorOccurred": "An error occurred while processing your request.",
     "addConfirm": "Do you want to add working hours for the selected day?",
-    "removeConfirm": "Do you want to remove working hours for the selected day?"
+    "removeConfirm": "Do you want to remove working hours for the selected day?",
+    "cancelledAppointmentAlert": "This appointment has been cancelled and cannot be edited.",
+    "completedAppointmentAlert": "This appointment has been completed and cannot be edited.",
+    "cancelledAppointmentAlertCancel": "This appointment has been cancelled and cannot be cancelled again.",
+    "completedAppointmentAlertCancel": "This appointment has been completed and cannot be cancelled."
   },
   "doctorFreeDays": {
     "title": "Doctor's Free Days and Breaks",
@@ -454,7 +458,9 @@
     "infoAdded": "New information has been added.",
     "infoRemoved": "Information has been removed.",
     "removeConfirm": "Are you sure you want to remove this information?",
-    "addInfoTitle": "Add new information"
+    "addInfoTitle": "Add new information",
+    "error": "An error occurred while processing your request.",
+    "success": "Information has been added successfully."
   },
   "doctorAppointmentConsole": {
     "title": "Appointment Console",
@@ -463,7 +469,28 @@
     "saveChanges": "Save Changes",
     "loading": "Loading appointment data...",
     "saveSuccess": "Changes have been saved successfully!",
-    "saveError": "An error occurred while saving changes."
+    "saveError": "An error occurred while saving changes.",
+    "completeAppointment": "Complete Appointment",
+    "completeSuccess": "Appointment has been marked as completed.",
+    "completeError": "An error occurred while completing the appointment.",
+    "completeTitle": "Complete Appointment",
+    "completeSubtitle": "Once the appointment is completed, no further changes can be made. Below you can add a note regarding the appointment.",
+    "notePlaceholder": "Enter a note about the appointment..."
+  },
+  "doctorAppointments": {
+    "title": "My Appointments",
+    "pageInfo": "View and manage your scheduled dental appointments",
+    "date": "Date",
+    "hour": "Hour",
+    "service": "Service",
+    "patient": "Patient",
+    "price": "Price",
+    "state": "State",
+    "additionalInformation": "AI",
+    "noInformation": "No information",
+    "loading": "Loading appointments...",
+    "noAppointments": "No appointments found.",
+    "fillters": "Filters"
   },
   "receptionistCalendar": {
     "close": "Close",
@@ -474,7 +501,19 @@
     "doctor": "Doctor",
     "services": "Services",
     "date": "Date",
-    "time": "Time"
+    "time": "Time",
+    "errorFetchingAppointments": "Error fetching appointments. Please try again later.",
+    "options": "Options and Legend",
+    "legend": {
+      "title": "Legend",
+      "completed": "Completed Appointment",
+      "cancelled": "Cancelled Appointment",
+      "scheduled": "Scheduled Appointment"
+    },
+    "errorFetchingDoctors": "Error fetching doctors. Please try again later.",
+    "showCancelled": "Show Cancelled Appointments",
+    "showCompleted": "Show Completed Appointments",
+    "filters": "Filters"
   },
   "contactPage": {
     "title": "Contact Us",
@@ -520,6 +559,10 @@
   "GENERIC_ERROR": "An error occurred. Please try again.",
   "DAY_HAS_APPOINTMENTS": "The day has scheduled appointments and cannot be deleted.",
   "WORKING_HOURS_ALREADY_EXIST": "Working hours for this day already exist.",
+  "CANNOT_COMPLETE": "Cannot save changes for an appointment that is yet to take place.",
+  "ALREADY_CANCELLED": "Appointment has already been cancelled.",
+  "CANNOT_CANCEL_COMPLETED": "Cannot cancel an appointment that has already been completed.",
+  "APPOINTMENT_IN_PAST": "Appointment cannot be scheduled in the past.",
   "globalAlert": {
     "errorLoadingData": "Error loading data. Please try again later."
   },
@@ -536,5 +579,6 @@
     "deleteSuccess": "Additional information has been deleted successfully.",
     "deleteError": "An error occurred while deleting the information.",
     "body": "Body"
-  }
+  },
+  "cancellationSuccess": "Appointment has been cancelled successfully."
 }

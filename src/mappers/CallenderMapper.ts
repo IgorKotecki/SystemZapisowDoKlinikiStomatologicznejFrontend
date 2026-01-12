@@ -59,7 +59,9 @@ export class CalendarMapper {
       patientEmail: apiAppointment.user.email,
       patienPhoneNumber: apiAppointment.user.phoneNumber,
       additionalInformation: apiAppointment.additionalInformation,
+      status: apiAppointment.status,
       doctor: apiAppointment.doctor,
+      cancellatingReason: apiAppointment.cancellatingReason,
     };
   }
 

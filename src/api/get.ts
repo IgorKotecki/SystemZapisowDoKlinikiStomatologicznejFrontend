@@ -5,8 +5,8 @@ export const getUserAppointments = async (lang: string) => {
   return response.data;
 }
 
-export const getDoctorAppointments = async (lang: string, date: string) => {
-  const response = await api.get(`/api/Appointment/doctor/appointments?lang=${lang}&date=${date}`);
+export const getDoctorAppointments = async (lang: string, date: string, showCancelled: boolean, showCompleted: boolean) => {
+  const response = await api.get(`/api/Appointment/doctor/appointments?lang=${lang}&date=${date}&showCancelled=${showCancelled}&showCompleted=${showCompleted}`);
   return response.data;
 }
 
@@ -73,8 +73,9 @@ export const getUserById = async (userId: number) => {
   return response.data;
 }
 
-export const getAppointmentsForRecepcionist = async (lang: string, date: string) => {
-  const response = await api.get(`/api/Appointment/receptionist/appointments?lang=${lang}&date=${date}`);
+export const getAppointmentsForRecepcionist = async (lang: string, date: string, showCancelled : boolean, showCompleted : boolean) => {
+  const response = await api
+  .get(`/api/Appointment/receptionist/appointments?lang=${lang}&date=${date}&showCancelled=${showCancelled}&showCompleted=${showCompleted}`);
   return response.data;
 }
 

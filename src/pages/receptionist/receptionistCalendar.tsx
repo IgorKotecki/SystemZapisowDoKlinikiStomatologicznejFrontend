@@ -4,6 +4,9 @@ import {
   Typography,
   CircularProgress,
   DialogContent,
+  Drawer,
+  Switch,
+  FormControlLabel,
 } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -20,6 +23,8 @@ import plLocale from '@fullcalendar/core/locales/pl';
 import get from "../../api/get";
 import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import CancellationModal from "../../components/CancellationModal";
+import { showAlert } from "../../utils/GlobalAlert";
 
 const ReceptionistCalendar: React.FC = () => {
   const { t } = useTranslation();
@@ -28,33 +33,66 @@ const ReceptionistCalendar: React.FC = () => {
   const [currentWeekStart, setCurrentWeekStart] = useState<string>(new Date().toISOString().split("T")[0]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<IDoctorAppointment | null>(null);
+  const [cancellationModalOpen, setCancellationModalOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [doctors, setDoctors] = useState<User[]>([]);
+  const [showCancelled, setShowCancelled] = useState(true);
+  const [showCompleted, setShowCompleted] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchDoctorsAppointemtAsync = async (date: string) => {
-      const language = i18n.language;
-      try {
-        const response = await get.getAppointmentsForRecepcionist(language, date);
-        console.log('API Response:', response);
-        setAppointments(CalendarMapper.ApiAppointmentsToDoctorAppointments(response));
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-      }
-    };
+  const getStatusIcon = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'completed':
+      case 'zakończona':
+        return '✓';
+      case 'cancelled':
+      case 'anulowana':
+        return '✕';
+      case 'planned':
+      case 'zaplanowana':
+        return '●';
+      default:
+        return '○';
+    }
+  };
 
-    fetchDoctorsAppointemtAsync(currentWeekStart);
+  const fetchDoctorsAppointemtAsync = async (date: string, showCancelled: boolean, showCompleted: boolean) => {
+    const language = i18n.language;
+    try {
+      const response = await get.getAppointmentsForRecepcionist(language, date, showCancelled, showCompleted);
+      console.log('API Response:', response);
+      setAppointments(CalendarMapper.ApiAppointmentsToDoctorAppointments(response));
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      showAlert({ type: "error", message: t("receptionistCalendar.errorFetchingAppointments") });
+    }
+  };
+
+  const fetchDoctors = async () => {
+    try {
+      const doctorsResponse = await get.getDoctors();
+      setDoctors(doctorsResponse);
+    } catch (err) {
+      console.error("Error fetching doctors:", err);
+      showAlert({ type: "error", message: t("receptionistCalendar.errorFetchingDoctors") });
+    }
+  };
+  useEffect(() => {
+    fetchDoctorsAppointemtAsync(currentWeekStart, showCancelled, showCompleted);
+    fetchDoctors();
   }, [currentWeekStart, t]);
 
   const switchDoctorColor = (doctorId: number) => {
-    switch(doctorId) {
+    switch (doctorId) {
       case 6:
         return colors.doctor1;
       case 3006:
         return colors.doctor2;
       default:
         return colors.doctor3;
-  };}
+    };
+  }
 
   const events = useMemo(
     () => appointments.map((a) => ({
@@ -88,15 +126,28 @@ const ReceptionistCalendar: React.FC = () => {
     navigate(`/receptionist/appointment`, { state: { user: info as User } });
   };
 
+  const cancelAppointment = async () => {
+    setOpenModal(false);
+    setCancellationModalOpen(true);
+  };
+
   return (
     <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, minHeight: "100vh", backgroundColor: colors.color1 }}>
       <UserNavigation />
 
       <Box sx={{ flex: 1, p: 4, color: colors.white }}>
-        <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
-          {t("receptionistCalendar.title")}
-        </Typography>
-
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
+            {t("receptionistCalendar.title")}
+          </Typography>
+          <Button
+            variant="contained"
+            sx={{ ml: 2, color: colors.white, backgroundColor: colors.color3, '&:hover': { backgroundColor: colors.color4 } }}
+            onClick={() => setDrawerOpen(true)}
+          >
+            {t("receptionistCalendar.options")}
+          </Button>
+        </Box>
         {loading ? (
           <CircularProgress sx={{ color: colors.color5 }} />
         ) : (
@@ -118,7 +169,10 @@ const ReceptionistCalendar: React.FC = () => {
               eventContent={(arg) => {
                 return (
                   <div style={{ fontSize: '0.8em', lineHeight: '1.1em', overflow: 'hidden', height: '100%' }}>
-                    <div><b>{arg.timeText}</b></div>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <b>{arg.timeText}</b>
+                      <span style={{ fontSize: '1.8em' }}>{getStatusIcon(arg.event.extendedProps.status)}</span>
+                    </div>
                     <div>{arg.event.title}</div>
                     <div style={{ fontSize: '0.73em' }}>
                       {arg.event.extendedProps.description.toString()}
@@ -128,7 +182,7 @@ const ReceptionistCalendar: React.FC = () => {
               }}
               eventDidMount={(info) => {
                 const appointment = info.event.extendedProps as IDoctorAppointment;
-                const tooltipText = `${appointment.servicesName.toString() ?? ''}\nPacjent: ${appointment.patientFirstName} ${appointment.patientLastName}\nEmail: ${appointment.patientEmail}\nTelefon: ${appointment.patienPhoneNumber ?? ''}`;
+                const tooltipText = `${appointment.servicesName.toString() ?? ''}\nStatus: ${appointment.status}\nPacjent: ${appointment.patientFirstName} ${appointment.patientLastName}\nEmail: ${appointment.patientEmail}\nTelefon: ${appointment.patienPhoneNumber ?? ''}`;
                 info.el.setAttribute('title', tooltipText);
               }}
               height="auto"
@@ -172,49 +226,61 @@ const ReceptionistCalendar: React.FC = () => {
               {t("receptionistCalendar.appointmentDetails")}
             </Typography>
           </DialogTitle>
-          <DialogContent>
-            <Typography >
-              {t("receptionistCalendar.patient")}:
-            </Typography>
-            <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
-              <Typography >
-                {`${selectedAppointment?.patientFirstName} ${selectedAppointment?.patientLastName}`}
+          <DialogContent sx={{ display: "flex", justifyContent: "space-between", gap: 4 }}>
+            <Box>
+              <Typography sx={{ fontWeight: "bold" }}>
+                {t("receptionistCalendar.patient")}:
               </Typography>
-              <Typography >
-                {selectedAppointment?.patientEmail}
-              </Typography>
-              <Typography >
-                {selectedAppointment?.patienPhoneNumber}
-              </Typography>
-            </Box>
-            <Typography >
-              {t("receptionistCalendar.doctor")}:
-            </Typography>
-            <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
-              <Typography >
-                {`${selectedAppointment?.doctor.name} ${selectedAppointment?.doctor.surname}`}
-              </Typography>
-            </Box>
-            <Typography >
-              {t("receptionistCalendar.date")} - {t("receptionistCalendar.time")}:
-            </Typography>
-            <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
-              <Typography >
-                {selectedAppointment?.date}
-              </Typography>
-              <Typography >
-                {selectedAppointment?.timeStart?.slice(0, 5)} - {selectedAppointment?.timeEnd?.slice(0, 5)}
-              </Typography>
-            </Box>
-            <Typography >
-              {t("receptionistCalendar.services")}
-            </Typography>
-            <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
-              {selectedAppointment?.servicesName.map((service, index) => (
-                <Typography key={index}>
-                  - {service}
+              <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
+                <Typography >
+                  {`${selectedAppointment?.patientFirstName} ${selectedAppointment?.patientLastName}`}
                 </Typography>
-              ))}
+                <Typography >
+                  {selectedAppointment?.patientEmail}
+                </Typography>
+                <Typography >
+                  {selectedAppointment?.patienPhoneNumber}
+                </Typography>
+              </Box>
+              <Typography sx={{ fontWeight: "bold" }}>
+                {t("receptionistCalendar.doctor")}:
+              </Typography>
+              <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
+                <Typography >
+                  {`${selectedAppointment?.doctor.name} ${selectedAppointment?.doctor.surname}`}
+                </Typography>
+              </Box>
+              <Typography sx={{ fontWeight: "bold" }}>
+                {t("receptionistCalendar.date")} - {t("receptionistCalendar.time")}:
+              </Typography>
+              <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
+                <Typography >
+                  {selectedAppointment?.date}
+                </Typography>
+                <Typography >
+                  {selectedAppointment?.timeStart?.slice(0, 5)} - {selectedAppointment?.timeEnd?.slice(0, 5)}
+                </Typography>
+              </Box>
+            </Box>
+            <Box>
+              <Typography sx={{ fontWeight: "bold" }}>
+                {t("receptionistCalendar.services")}
+              </Typography>
+              <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
+                {selectedAppointment?.servicesName.map((service, index) => (
+                  <Typography key={index}>
+                    - {service}
+                  </Typography>
+                ))}
+              </Box>
+              <Typography sx={{ fontWeight: "bold" }}>
+                Status:
+              </Typography>
+              <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
+                <Typography >
+                  - {selectedAppointment?.status}
+                </Typography>
+              </Box>
             </Box>
           </DialogContent>
           <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
@@ -230,6 +296,13 @@ const ReceptionistCalendar: React.FC = () => {
             </Button>
             <Button
               variant="contained"
+              onClick={cancelAppointment}
+              sx={{ backgroundColor: colors.color3, color: colors.white }}
+            >
+              {t("receptionistCalendar.cancelAppointment")}
+            </Button>
+            <Button
+              variant="contained"
               onClick={goToAppointment}
               sx={{ backgroundColor: colors.color3, color: colors.white }}
             >
@@ -237,8 +310,73 @@ const ReceptionistCalendar: React.FC = () => {
             </Button>
           </DialogActions>
         </Dialog>
+        <CancellationModal
+          open={cancellationModalOpen}
+          onClose={() => setCancellationModalOpen(false)}
+          appointmentGuid={selectedAppointment?.id || null}
+          onSuccess={() => {
+            setCancellationModalOpen(false);
+            setOpenModal(false);
+            fetchDoctorsAppointemtAsync(currentWeekStart, showCancelled, showCompleted);
+            showAlert({ type: "success", message: t("doctorCalendar.cancelSuccess") });
+          }}
+        />
+        <Drawer
+          anchor="right"
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+        >
+          <Box sx={{ width: 250, p: 2, backgroundColor: colors.color1, height: '100%' }}>
+            <Typography variant="h6" sx={{ color: colors.color5, mb: 2 }}>
+              {t("receptionistCalendar.options")}
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, backgroundColor: colors.white, p: 2, borderRadius: 2 }}>
+              <Typography variant="body1" sx={{ fontWeight: 'bold', color: colors.color1 }}>
+                {t("receptionistCalendar.legend.title")}
+              </Typography>
+              <Typography variant="body2" sx={{ color: colors.color1 }}>
+                ● - {t("receptionistCalendar.legend.scheduled")}
+              </Typography>
+              <Typography variant="body2" sx={{ color: colors.color1 }}>
+                ✓ - {t("receptionistCalendar.legend.completed")}
+              </Typography>
+              <Typography variant="body2" sx={{ color: colors.color1 }}>
+                ✕ - {t("receptionistCalendar.legend.cancelled")}
+              </Typography>
+              {doctors.map(doctor => (
+                <Typography key={doctor.id} variant="body2" sx={{ color: colors.color1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: switchDoctorColor(doctor.id) }} />
+                  Dr. {doctor.name} {doctor.surname}
+                </Typography>
+              ))}
+            </Box>
+            <Box sx={{ mt: 4, borderTop: `1px solid ${colors.color3}`, pt: 2 }}></Box>
+            <Typography variant="h6" sx={{ color: colors.color5, mb: 2 }}>
+              {t("receptionistCalendar.filters")}
+            </Typography>
+            <FormControlLabel
+              control={<Switch checked={showCancelled} onChange={async (e) => {
+                var newValue = e.target.checked;
+                setShowCancelled(newValue);
+                await fetchDoctorsAppointemtAsync(currentWeekStart, newValue, showCompleted);
+              }} />}
+              label={t("receptionistCalendar.showCancelled")}
+              sx={{color: colors.white}}
+            />
+            <FormControlLabel
+              control={<Switch checked={showCompleted} onChange={async (e) => {
+                var newValue = e.target.checked;
+                setShowCompleted(newValue);
+                await fetchDoctorsAppointemtAsync(currentWeekStart, showCancelled, newValue);
+              }} />}
+              label={t("receptionistCalendar.showCompleted")}
+              sx={{color: colors.white}}
+            />
+            
+          </Box>
+        </Drawer>
       </Box>
-    </Box>
+    </Box >
   );
 };
 

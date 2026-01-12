@@ -16,7 +16,6 @@ import { colors } from "../../utils/colors";
 import type { User } from "../../Interfaces/User";
 import get from "../../api/get";
 import { DataGrid, type GridColDef, type GridPaginationModel } from '@mui/x-data-grid';
-import EditUserModal from "../../components/EditUserModel";
 import { showAlert } from "../../utils/GlobalAlert";
 
 const ReceptionistUsers: React.FC = () => {
@@ -26,11 +25,9 @@ const ReceptionistUsers: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [totalRows, setTotalRows] = useState(0);
   
-  // Search state
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   
-  // Pagination state
   const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
     page: 0,
     pageSize: 10,

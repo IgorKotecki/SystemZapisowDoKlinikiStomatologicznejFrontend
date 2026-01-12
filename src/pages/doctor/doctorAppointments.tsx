@@ -3,6 +3,9 @@ import {
   Box,
   Typography,
   CircularProgress,
+  FormControlLabel,
+  Switch,
+  Button,
 } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -17,28 +20,34 @@ import enLocale from '@fullcalendar/core/locales/en-gb';
 import plLocale from '@fullcalendar/core/locales/pl';
 import { useNavigate } from "react-router-dom";
 import get from "../../api/get";
+import { applayStatusColor } from "../../utils/colorsUtils";
+import { showAlert } from "../../utils/GlobalAlert";
+import { Drawer } from "@mui/material";
 
 const DoctorAppointments: React.FC = () => {
   const { t } = useTranslation();
   const [appointments, setAppointments] = useState<IDoctorAppointment[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentWeekStart, setCurrentWeekStart] = useState<string>(new Date().toISOString().split("T")[0]);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [showCancelled, setShowCancelled] = useState(true);
+  const [showCompleted, setShowCompleted] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchDoctorsAppointemtAsync = async (date: string) => {
-      const language = i18n.language;
-      try {
-        const response = await get.getDoctorAppointments(language, date);
-        setAppointments(CalendarMapper.ApiAppointmentsToDoctorAppointments(response));
-        console.log(response);
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-      }
-    };
+  const fetchDoctorsAppointemtAsync = async (date: string, showCancelled: boolean, showCompleted: boolean) => {
+    const language = i18n.language;
+    try {
+      const response = await get.getDoctorAppointments(language, date, showCancelled, showCompleted);
+      setAppointments(CalendarMapper.ApiAppointmentsToDoctorAppointments(response));
+      console.log(response);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-    fetchDoctorsAppointemtAsync(currentWeekStart);
+  useEffect(() => {
+    fetchDoctorsAppointemtAsync(currentWeekStart, showCancelled, showCompleted);
   }, [currentWeekStart, t]);
 
   const events = useMemo(
@@ -49,12 +58,21 @@ const DoctorAppointments: React.FC = () => {
       end: `${a.date}T${a.timeEnd}`,
       description: a.servicesName.toString(),
       extendedProps: a,
+      backgroundColor: applayStatusColor(a.status),
     })),
     [appointments]
   );
 
   const handleEventClick = (info: any) => {
-    navigate(`/doctor/appointmentConsole/${info.event.id}`, { state: { appointment: info.event.extendedProps as IDoctorAppointment} });
+    if (info.event.extendedProps.status === 'Cancelled' || info.event.extendedProps.status === 'Anulowana') {
+      showAlert({ type: "info", message: t("doctorCalendar.cancelledAppointmentAlert") });
+      return;
+    }
+    if (info.event.extendedProps.status === 'Completed' || info.event.extendedProps.status === 'Zakończona') {
+      showAlert({ type: "info", message: t("doctorCalendar.completedAppointmentAlert") });
+      return;
+    }
+    navigate(`/doctor/appointmentConsole/${info.event.id}`, { state: { appointment: info.event.extendedProps as IDoctorAppointment } });
   };
 
   return (
@@ -62,9 +80,14 @@ const DoctorAppointments: React.FC = () => {
       <UserNavigation />
 
       <Box sx={{ flex: 1, p: 4, color: colors.pureWhite }}>
-        <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
-          {t("doctorCalendar.title")}
-        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
+            {t("doctorAppointments.title")}
+          </Typography>
+          <Button onClick={() => setDrawerOpen(true)} variant="contained" sx={{ backgroundColor: colors.color3, color: colors.white, textTransform: 'none', ":hover": { backgroundColor: colors.color4 } }}>
+            {t("receptionistCalendar.options")}
+          </Button>
+        </Box>
 
         {loading ? (
           <CircularProgress sx={{ color: colors.color5 }} />
@@ -84,7 +107,7 @@ const DoctorAppointments: React.FC = () => {
               events={events}
               eventContent={(arg) => {
                 return (
-                  <div style={{ fontSize: '0.8em', lineHeight: '1.1em', overflow: 'hidden' , height: '100%' }}>
+                  <div style={{ fontSize: '0.8em', lineHeight: '1.1em', overflow: 'hidden', height: '100%' }}>
                     <div><b>{arg.timeText}</b></div>
                     <div>{arg.event.title}</div>
                     <div style={{ fontSize: '0.73em' }}>
@@ -122,6 +145,57 @@ const DoctorAppointments: React.FC = () => {
           </Box>
         )}
       </Box>
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      >
+        <Box sx={{ width: 250, p: 2, backgroundColor: colors.color1, height: '100%' }}>
+          <Typography variant="h6" sx={{ color: colors.color5, mb: 2 }}>
+            {t("receptionistCalendar.options")}
+          </Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, backgroundColor: colors.white, p: 2, borderRadius: 2 }}>
+            <Typography variant="body1" sx={{ fontWeight: 'bold', color: colors.color1 }}>
+              {t("receptionistCalendar.legend.title")}
+            </Typography>
+
+            <Typography variant="body2" sx={{ color: colors.color1, display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'gray'}} />
+              - {t("receptionistCalendar.legend.cancelled")}
+            </Typography>
+            <Typography variant="body2" sx={{ color: colors.color1, display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'green'}} />
+              - {t("receptionistCalendar.legend.completed")}
+            </Typography>
+            <Typography variant="body2" sx={{ color: colors.color1, display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#3788D8'}} />
+              - {t("receptionistCalendar.legend.scheduled")}
+            </Typography>
+          </Box>
+          <Box sx={{ mt: 4, borderTop: `1px solid ${colors.color3}`, pt: 2 }}></Box>
+          <Typography variant="h6" sx={{ color: colors.color5, mb: 2 }}>
+            {t("receptionistCalendar.filters")}
+          </Typography>
+          <FormControlLabel
+            control={<Switch checked={showCancelled} onChange={async (e) => {
+              var newValue = e.target.checked;
+              setShowCancelled(newValue);
+              await fetchDoctorsAppointemtAsync(currentWeekStart, newValue, showCompleted);
+            }} />}
+            label={t("receptionistCalendar.showCancelled")}
+            sx={{ color: colors.white }}
+          />
+          <FormControlLabel
+            control={<Switch checked={showCompleted} onChange={async (e) => {
+              var newValue = e.target.checked;
+              setShowCompleted(newValue);
+              await fetchDoctorsAppointemtAsync(currentWeekStart, showCancelled, newValue);
+            }} />}
+            label={t("receptionistCalendar.showCompleted")}
+            sx={{ color: colors.white }}
+          />
+        </Box>
+      </Drawer>
     </Box>
   );
 };

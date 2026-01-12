@@ -79,7 +79,7 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
             language: i18n.language,
         };
 
-        await api.post<AddInfo>('/api/Appointment/doctor/additional-information', addInfoPayload)
+        await api.post<AddInfo>('/api/additional-information', addInfoPayload)
             .then((response) => {
                 console.log('Additional info added:', response.data);
                 const newItem: AddInfo = {
@@ -92,11 +92,11 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
 
                 setAddInfo(newAddInfoArray);
                 setOpenModal(false);
-                setAlert({ type: 'success', message: t('addInfo.addInfoAdded') });
+                setAlert({ type: 'success', message: t('addInfo.success') });
             })
             .catch((error) => {
                 console.error('Error adding additional info:', error);
-                setAlert({ type: 'error', message: t('addInfo.addInfoError') });
+                setAlert({ type: 'error', message: t('addInfo.error') });
             });
     }
 
@@ -166,6 +166,7 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
                         label={t("addInfo.newInfoLabelPl")}
                         variant="outlined"
                         fullWidth
+                        required
                         name="infoPl"
                         key={'infoPl'}
                         sx={{ mb: 2, backgroundColor: colors.white }}
@@ -174,6 +175,7 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
                         label={t("addInfo.newInfoLabelEn")}
                         variant="outlined"
                         fullWidth
+                        required
                         name="infoEn"
                         key={'infoEn'}
                         sx={{ mb: 2, backgroundColor: colors.white }}

@@ -37,7 +37,11 @@ export const updateUserById = async(userId: number, dto: any) => {
 }
 
 export const cancellation = async(payload: Cancellation) => {
-    const response = await api.put(`/api/Appointment/cancel-appointment`);
+    const response = await api.put(`/api/Appointment/cancel-appointment`,payload);
+    return response.data;
+}
+export const completeAppointment = async(payload: any) => {
+    const response = await api.put(`/api/Appointment/complete-appointment`, payload);
     return response.data;
 }
 
@@ -50,4 +54,5 @@ export default {
     updateService,
     updateUserById,
     cancellation,
+    completeAppointment
 };

@@ -41,17 +41,23 @@ const CancellationModal: React.FC<CancellationModalProps> = ({
         setLoading(true);
         try {
             await put.cancellation({
-                appointmentGuid: appointmentGuid, 
-                reason: reason,                   
+                appointmentGuid: appointmentGuid,
+                reason: reason,
             });
 
             showAlert({ type: "success", message: t("cancellation.success") });
             setReason("");
             onSuccess();
             onClose();
-        } catch (error) {
-            console.error(error);
-            showAlert({ type: "error", message: t("cancellation.error") });
+        } catch (err: any) {
+            console.error(err);
+            let errorCode = err.response?.data?.title ??
+                err.response?.data?.Title ?? // PascalCase
+                "GENERIC_ERROR";
+            showAlert({
+                type: 'error',
+                message: t(errorCode),
+            });
         } finally {
             setLoading(false);
         }
