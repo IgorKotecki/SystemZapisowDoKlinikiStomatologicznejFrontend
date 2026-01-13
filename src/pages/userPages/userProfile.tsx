@@ -19,7 +19,6 @@ import { Camera } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import api from "../../api/axios";
-import get from "../../api/get";
 import post from "../../api/post";
 import deleteUser from "../../api/delete";
 import { colors } from "../../utils/colors";
@@ -38,7 +37,7 @@ export default function ProfilePage() {
   const [originalUserData, setOriginalUserData] = useState<User | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -68,8 +67,6 @@ export default function ProfilePage() {
     const fetchUserData = async () => {
       try {
         const response = await api.get(`/api/User/${userId}`);
-        // const response = get.getUserById(userId);
-        // const mappedData = mapUserData(response);
         const mappedData = mapUserData(response.data);
         setUserData(mappedData);
         setOriginalUserData(mappedData);
@@ -117,18 +114,26 @@ export default function ProfilePage() {
         finalPhotoUrl = await uploadImageToCloudinary(selectedFile);
       }
 
+      // const dto: UserUpdate & { PhotoURL?: string } = {
+      //   name: userData.name,
+      //   surname: userData.surname,
+      //   phoneNumber: userData.phoneNumber,
+      //   email: userData.email,
+      //   PhotoURL: finalPhotoUrl,
+      // };
       const dto: UserUpdate & { PhotoURL?: string } = {
         name: userData.name,
         surname: userData.surname,
         phoneNumber: userData.phoneNumber,
         email: userData.email,
+        photoUrl: finalPhotoUrl || "",
         PhotoURL: finalPhotoUrl,
       };
 
       const response = await api.put(`/api/User/edit/${userId}`, dto);
 
       const mappedUpdatedData = mapUserData(response.data);
-      updateUserPhoto(mappedUpdatedData.photoUrl);
+      updateUserPhoto(mappedUpdatedData.photoUrl ?? null);
       setUserData(mappedUpdatedData);
       setOriginalUserData(mappedUpdatedData);
       setIsEditing(false);
@@ -335,7 +340,7 @@ export default function ProfilePage() {
                 onClick={handleDeleteAccount}
                 disabled={isDeleting}
                 sx={{
-                  backgroundColor: "#d32f2f", 
+                  backgroundColor: "#d32f2f",
                   color: colors.white,
                   px: 8,
                   py: 1.8,
@@ -345,7 +350,7 @@ export default function ProfilePage() {
                   textTransform: "none",
                   transition: "0.3s",
                   "&:hover": {
-                    backgroundColor: "#b71c1c", 
+                    backgroundColor: "#b71c1c",
                     transform: "translateY(-2px)",
                     boxShadow: "0px 4px 20px rgba(0,0,0,0.3)",
                   },
@@ -381,17 +386,17 @@ export default function ProfilePage() {
           </Typography>
         </DialogContent>
         <DialogActions sx={{ p: 2, gap: 1 }}>
-          <Button 
-            onClick={handleCloseDeleteDialog} 
+          <Button
+            onClick={handleCloseDeleteDialog}
             color="inherit"
             sx={{ borderRadius: "20px", px: 3 }}
           >
             {t("userProfile.cancel") || t("header.cancel")}
           </Button>
-          <Button 
-            onClick={handleConfirmDelete} 
-            variant="contained" 
-            color="error" 
+          <Button
+            onClick={handleConfirmDelete}
+            variant="contained"
+            color="error"
             autoFocus
             sx={{ borderRadius: "20px", px: 3 }}
           >

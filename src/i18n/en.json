@@ -8,6 +8,19 @@
   "loginText": "Login",
   "dropLine": "Drop a line",
   "phoneNumber": "call +48 123-456-789",
+  "components": {
+    "before": "Before",
+    "after": "After"
+  },
+  "metamorphosis": {
+    "title": "Smile Metamorphosis",
+    "subtitle": "See the results of our specialists' work.",
+    "shortDescription": "A unique aesthetic transformation performed using modern porcelain veneers.",
+    "readMore": "Read more",
+    "longDescription": "We present a detailed clinical case report. The patient presented with discoloration and irregularities of the front teeth. After consultation, it was decided to place 6 porcelain veneers in the upper arch. The entire process took only two visits and resulted in a natural, snow-white smile that completely transformed the patient's self-confidence.",
+    "back": "Back to gallery",
+    "description": "Case description"
+  },
   "appointment": {
     "title": "Book Appointment",
     "date": "Select a date",

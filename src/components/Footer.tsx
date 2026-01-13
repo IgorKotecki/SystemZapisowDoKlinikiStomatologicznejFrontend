@@ -1,4 +1,4 @@
-import { Box, Typography, Button, Grid, IconButton, Container } from '@mui/material';
+import { Box, Typography, Grid, IconButton, Container } from '@mui/material';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TelegramIcon from '@mui/icons-material/Telegram';
@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { colors } from '../utils/colors';
 
 export default function Footer() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <Box sx={{ bgcolor: colors.white, py: 6, mt: 10 }}>

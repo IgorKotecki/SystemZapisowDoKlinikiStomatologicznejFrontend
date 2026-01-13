@@ -11,7 +11,7 @@ export default function Pricing() {
   const navigate = useNavigate();
 
   const [groupedServices, setGroupedServices] = useState<Record<string, Service[]>>({});
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchServices = async () => {

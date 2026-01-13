@@ -1,4 +1,4 @@
-import { Box, Typography, Button, Grid, Card, CardContent, CardMedia, Chip, Paper } from "@mui/material"
+import { Box, Typography, Button, Grid, Card, CardContent } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
@@ -20,7 +20,7 @@ export default function Services() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [groupedServices, setGroupedServices] = useState<Record<string, Service[]>>({});
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchServices = async () => {
