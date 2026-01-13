@@ -18,4 +18,5 @@ export interface IDoctorAppointment {
     status: string;
     doctor: User;
     cancellationReason?: string;
+    notes?: string;
 }

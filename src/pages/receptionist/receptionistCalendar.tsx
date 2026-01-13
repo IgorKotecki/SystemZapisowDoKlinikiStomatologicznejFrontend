@@ -127,6 +127,15 @@ const ReceptionistCalendar: React.FC = () => {
   };
 
   const cancelAppointment = async () => {
+    if (!selectedAppointment) return;
+    if (selectedAppointment.status === "Cancelled" || selectedAppointment.status === "Anulowana") {
+      showAlert({ type: "error", message: t("userAppointments.alreadyCancelled") });
+      return;
+    }
+    if (selectedAppointment.status === "Completed" || selectedAppointment.status === "Zakończona") {
+      showAlert({ type: "error", message: t("userAppointments.alreadyCompleted") });
+      return;
+    }
     setOpenModal(false);
     setCancellationModalOpen(true);
   };

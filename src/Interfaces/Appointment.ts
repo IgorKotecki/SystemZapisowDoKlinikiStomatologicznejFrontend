@@ -11,6 +11,6 @@ export interface Appointment {
   services: Service[];
   status: string;
   additionalInformation: AddInfo[];
-  Note?: string;
+  notes?: string;
   cancellationReason?: string;
 }

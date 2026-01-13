@@ -154,11 +154,11 @@ export default function UserAppointmentPage() {
       console.error(err);
       const errorCode =
         err?.response?.data?.title ??
-        err?.response?.data?.Title ?? // PascalCase
+        err?.response?.data?.Title ??
         "GENERIC_ERROR";
       setNotification({
         type: "error",
-        message: t("userMakeAppointment.errorOccurred") + ": " + errorCode,
+        message: errorCode,
       });
     } finally {
       setLoading(false);

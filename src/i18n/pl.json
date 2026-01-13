@@ -210,7 +210,9 @@
     "note": "Notatka",
     "cancellationReason": "Powód anulowania",
     "noCancellationReason": "Brak podanego powodu anulowania",
-    "noNotes": "Brak notatek do wyświetlenia"
+    "noNotes": "Brak notatek do wyświetlenia",
+    "alreadyCancelled": "Ta wizyta została już anulowana i nie można jej anulować ponownie.",
+    "alreadyCompleted": "Ta wizyta została zakończona i nie można jej anulować."
   },
   "userMakeAppointment": {
     "title": "Umów wizytę",
@@ -496,7 +498,10 @@
     "completeError": "Wystąpił błąd podczas zakończenia wizyty.",
     "completeTitle": "Zakończenie wizyty",
     "completeSubtitle": "Po zakończeniu wizyty nie będzie można wprowadzać dalszych zmian. Poniżej możliwość dodania notatki.",
-    "notePlaceholder": "Wpisz notatkę dotyczącą wizyty..."
+    "notePlaceholder": "Wpisz notatkę dotyczącą wizyty...",
+    "showHistory": "Pokaż historię wizyt pacjenta",
+    "noHistory": "Brak historii wizyt do wyświetlenia.",
+    "historyTitle": "Historia wizyt pacjenta"
   },
   "doctorAppointments": {
     "title": "Zaplanowane wizyty",

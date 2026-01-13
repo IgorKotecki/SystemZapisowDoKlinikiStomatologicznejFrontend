@@ -9,6 +9,8 @@ import {
   DialogContent,
   DialogActions,
   CircularProgress,
+  FormControlLabel,
+  Switch,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
@@ -33,6 +35,8 @@ export default function VisitsHistoryPage() {
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [selectedAppointmentCancel, setSelectedAppointmentCancel] = useState<Appointment | null>(null);
   const [selectedAppointmentDetail, setSelectedAppointmentDetail] = useState<Appointment | null>(null);
+  const [showCancelled, setShowCancelled] = useState(true);
+  const [showCompleted, setShowCompleted] = useState(true);
 
   const columns: GridColDef<Appointment>[] = [
     {
@@ -100,7 +104,7 @@ export default function VisitsHistoryPage() {
             variant="contained"
             sx={{ color: colors.white, backgroundColor: colors.cancelled, '&:hover': { backgroundColor: colors.cancelledDark } }}
             size="small"
-            onClick={() => { setCancellationDialogOpen(true); setSelectedAppointmentCancel(params.row) }}
+            onClick={() => handleCancelClick(params.row)}
           >
             {t("userAppointments.cancelAppointment")}
           </Button>
@@ -118,12 +122,24 @@ export default function VisitsHistoryPage() {
     },
   ];
 
-  const fetchAppointments = async () => {
+  const handleCancelClick = (appointment: Appointment) => {
+    if (appointment.status === "Cancelled" || appointment.status === "Anulowana") {
+      showAlert({ type: "error", message: t("userAppointments.alreadyCancelled") });
+      return;
+    }
+    if (appointment.status === "Completed" || appointment.status === "Zakończona") {
+      showAlert({ type: "error", message: t("userAppointments.alreadyCompleted") });
+      return;
+    }
+    setSelectedAppointmentCancel(appointment);
+    setCancellationDialogOpen(true);
+  }
+
+  const fetchAppointments = async (showCancelled: boolean, showCompleted: boolean) => {
     try {
       setLoading(true);
       const lang = i18n.language || "pl";
-      const response = await get.getUserAppointments(lang);
-      console.log(response);
+      const response = await get.getUserAppointments(lang, showCancelled, showCompleted, true);
       setAppointments(response);
     } catch (err) {
       showAlert({ type: "error", message: t("userAppointments.fetchError") });
@@ -133,7 +149,7 @@ export default function VisitsHistoryPage() {
   };
 
   useEffect(() => {
-    fetchAppointments();
+    fetchAppointments(showCancelled, showCompleted);
   }, [i18n.language]);
 
   const cancellAppointment = async () => {
@@ -150,7 +166,7 @@ export default function VisitsHistoryPage() {
       showAlert({ type: "success", message: t("userAppointments.cancelSuccess") });
       setCancellationDialogOpen(false);
       setSelectedAppointmentCancel(null);
-      fetchAppointments();
+      fetchAppointments(showCancelled, showCompleted);
     } catch (err) {
       console.error(err);
       showAlert({ type: "error", message: t("userAppointments.cancelError") });
@@ -189,9 +205,38 @@ export default function VisitsHistoryPage() {
           <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
             {t("userAppointments.title")}
           </Typography>
-          <Typography variant="subtitle1" sx={{ mb: 1 }}>
-            {t("userAppointments.pageInfo")}
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <Typography variant="subtitle1" sx={{ mb: 1 }}>
+              {t("userAppointments.pageInfo")}
+            </Typography>
+            <Box>
+              <FormControlLabel
+                control={<Switch checked={showCancelled} onChange={async (e) => {
+                  var newValue = e.target.checked;
+                  setShowCancelled(newValue);
+                  await fetchAppointments(newValue, showCompleted);
+                }} />}
+                label={t("receptionistCalendar.showCancelled")}
+                sx={{ color: colors.white }}
+              />
+              <FormControlLabel
+                control={<Switch checked={showCompleted} onChange={async (e) => {
+                  var newValue = e.target.checked;
+                  setShowCompleted(newValue);
+                  await fetchAppointments(showCancelled, newValue);
+                }} />}
+                label={t("receptionistCalendar.showCompleted")}
+                sx={{ color: colors.white }}
+              />
+            </Box>
+          </Box>
           <Paper
             elevation={6}
             sx={{
@@ -292,7 +337,7 @@ export default function VisitsHistoryPage() {
               </Typography>
             </DialogTitle>
             <AppointmentDetailsDialogContent
-             selectedAppointmentDetail={selectedAppointmentDetail} />
+              selectedAppointmentDetail={selectedAppointmentDetail} />
             <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
               <Button
                 onClick={() => {

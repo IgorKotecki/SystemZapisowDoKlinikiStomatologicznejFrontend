@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { Box, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Drawer, TextField } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import type { IDoctorAppointment } from "../../Interfaces/IDoctorAppointment";
 import UserNavigation from "../../components/userComponents/userNavigation";
@@ -22,6 +22,7 @@ import get from "../../api/get";
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from "@mui/material/IconButton";
 import { showAlert } from "../../utils/GlobalAlert";
+import type { Appointment } from "../../Interfaces/Appointment";
 
 export default function DoctorAppointmentsConsole() {
     const location = useLocation();
@@ -37,6 +38,8 @@ export default function DoctorAppointmentsConsole() {
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [note, setNote] = useState<string>("");
     const [saving, setSaving] = useState(false);
+    const [openDrawer, setOpenDrawer] = useState(false);
+    const [historyAppointments, setHistoryAppointments] = useState<Appointment[]>([]);
 
     const onStatusChange = (status: Status) => {
         console.log("Selected status:", status);
@@ -58,6 +61,18 @@ export default function DoctorAppointmentsConsole() {
     const goBack = () => {
         window.history.back();
     }
+
+    const fetchHistoryAppointments = async () => {
+        if (!state) return;
+        console.log(state.appointment.patientId);
+        try {
+            const lang = i18n.language || "pl";
+            const response = await get.getUserAppointments(lang, false, true, false, state?.appointment.patientId);
+            setHistoryAppointments(response as Appointment[]);
+        } catch (err) {
+            console.error("Failed to fetch history appointments");
+        }
+    };
 
     useEffect(() => {
 
@@ -210,6 +225,15 @@ export default function DoctorAppointmentsConsole() {
                             </Typography>
                         </Box>
                         <Box sx={{ justifyContent: "center", gap: 1, display: "flex" }}>
+                            <Button onClick={async () => {
+                                await fetchHistoryAppointments();
+                                setOpenDrawer(true)
+                            }
+                            }
+                                variant="outlined"
+                                sx={{ color: colors.color5, borderColor: colors.color5, textTransform: 'none', ":hover": { borderColor: colors.color4 } }}>
+                                {t("doctorAppointmentConsole.showHistory")}
+                            </Button>
                             <Button onClick={saveChanges} variant="contained" sx={{ backgroundColor: colors.color3, color: colors.white, textTransform: 'none', ":hover": { backgroundColor: colors.color4 } }}>
                                 {t("doctorAppointmentConsole.saveChanges")}
                             </Button>
@@ -296,6 +320,117 @@ export default function DoctorAppointmentsConsole() {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Drawer
+                open={openDrawer}
+                onClose={() => setOpenDrawer(false)}
+                anchor="right"
+            >
+                <Box sx={{ width: { xs: 300, sm: 400 }, p: 3, backgroundColor: colors.color2, height: '100%' }}>
+                    <Typography variant="h5" sx={{ color: colors.color5, mb: 2 }}>
+                        {t("doctorAppointmentConsole.historyTitle")}
+                    </Typography>
+                    {historyAppointments.length === 0 ? (
+                        <Typography sx={{ color: colors.color5 }}>
+                            {t("doctorAppointmentConsole.noHistory")}
+                        </Typography>
+                    ) : (
+                        historyAppointments.map((appointment) => (
+                            <Box
+                                key={appointment.appointmentGroupId}
+                                sx={{
+                                    mb: 2,
+                                    p: 2.5,
+                                    border: `2px solid ${colors.color4}`,
+                                    borderRadius: 3,
+                                    backgroundColor: colors.white,
+                                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
+                                        transform: 'translateY(-2px)'
+                                    }
+                                }}
+                            >
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
+                                    <Box
+                                        sx={{
+                                            width: 8,
+                                            height: 8,
+                                            borderRadius: '50%',
+                                            backgroundColor: colors.color3
+                                        }}
+                                    />
+                                    <Typography sx={{ color: colors.black, fontWeight: 'bold', fontSize: '1.1rem' }}>
+                                        {new Date(appointment.startTime).toLocaleDateString(`${i18n.language}`, {
+                                            weekday: 'long',
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                        })}
+                                    </Typography>
+                                </Box>
+
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5, ml: 2 }}>
+                                    <Typography sx={{ color: colors.color3, fontWeight: '600' }}>
+                                        🕐 {appointment.startTime.slice(11, 16)} - {appointment.endTime.slice(11, 16)}
+                                    </Typography>
+                                </Box>
+
+                                <Box sx={{ ml: 2, mb: appointment.notes ? 1.5 : 0 }}>
+                                    <Typography
+                                        variant="caption"
+                                        sx={{
+                                            color: colors.color3,
+                                            textTransform: 'uppercase',
+                                            fontWeight: '600',
+                                            letterSpacing: 0.5
+                                        }}
+                                    >
+                                        {t("userAppointments.services")}:
+                                    </Typography>
+                                    <Typography sx={{ color: colors.black, mt: 0.5 }}>
+                                        {appointment.services.map(service => service.name).join(" • ")}
+                                    </Typography>
+                                </Box>
+
+                                {appointment.notes && (
+                                    <Box
+                                        sx={{
+                                            mt: 1.5,
+                                            pt: 1.5,
+                                            borderTop: `1px dashed ${colors.color4}40`,
+                                            ml: 2
+                                        }}
+                                    >
+                                        <Typography
+                                            variant="caption"
+                                            sx={{
+                                                color: colors.color3,
+                                                textTransform: 'uppercase',
+                                                fontWeight: '600',
+                                                letterSpacing: 0.5
+                                            }}
+                                        >
+                                            📝 {t("userAppointments.note")}:
+                                        </Typography>
+                                        <Typography
+                                            sx={{
+                                                color: colors.black,
+                                                mt: 0.5,
+                                                fontStyle: 'italic',
+                                                fontSize: '0.95rem'
+                                            }}
+                                        >
+                                            {appointment.notes}
+                                        </Typography>
+                                    </Box>
+                                )}
+                            </Box>
+                        ))
+                    )}
+                </Box>
+            </Drawer>
+
         </Box>
     );
 }

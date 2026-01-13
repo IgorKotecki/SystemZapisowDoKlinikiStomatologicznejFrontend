@@ -11,6 +11,7 @@ interface AppointmentDetailsDialogContentProps {
 
 export default function AppointmentDetailsDialogContent({ selectedAppointmentDetail }: AppointmentDetailsDialogContentProps) {
     const { t } = useTranslation();
+    
     return (
         <DialogContent sx={{ p: 3 }}>
               <Box sx={{ display: 'grid', gap: 3 }}>
@@ -210,10 +211,10 @@ export default function AppointmentDetailsDialogContent({ selectedAppointmentDet
                         fontSize: '14px',
                         color: colors.black,
                         lineHeight: 1.6,
-                        fontStyle: !selectedAppointmentDetail?.Note ? 'italic' : 'normal',
-                        opacity: !selectedAppointmentDetail?.Note ? 0.5 : 1
+                        fontStyle: !selectedAppointmentDetail?.notes ? 'italic' : 'normal',
+                        opacity: !selectedAppointmentDetail?.notes ? 0.5 : 1
                       }}>
-                        {selectedAppointmentDetail?.Note || t("userAppointments.noNotes")}
+                        {selectedAppointmentDetail?.notes || t("userAppointments.noNotes")}
                       </Typography>
                     </Box>
                   </Box>

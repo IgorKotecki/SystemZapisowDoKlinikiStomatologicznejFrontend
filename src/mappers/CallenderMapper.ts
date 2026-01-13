@@ -62,6 +62,7 @@ export class CalendarMapper {
       status: apiAppointment.status,
       doctor: apiAppointment.doctor,
       cancellationReason: apiAppointment.cancellationReason,
+      notes: apiAppointment.notes,
     };
   }
 
@@ -82,6 +83,7 @@ export class CalendarMapper {
       status: doctorAppointment.status,
       additionalInformation: doctorAppointment.additionalInformation,
       cancellationReason: doctorAppointment.cancellationReason,
+      notes: doctorAppointment.notes,
     };
   }
 

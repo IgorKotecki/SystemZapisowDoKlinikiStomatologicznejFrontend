@@ -205,7 +205,9 @@
     "note": "Note",
     "cancellationReason": "Cancellation Reason",
     "noCancellationReason": "No cancellation reason provided.",
-    "noNotes": "No notes for this appointment."
+    "noNotes": "No notes for this appointment.",
+    "alreadyCancelled": "This appointment has already been cancelled and cannot be cancelled again.",
+    "alreadyCompleted": "This appointment has been completed and cannot be cancelled."
   },
   "userMakeAppointment": {
     "title": "Book an Appointment",
@@ -486,7 +488,10 @@
     "completeError": "An error occurred while completing the appointment.",
     "completeTitle": "Complete Appointment",
     "completeSubtitle": "Once the appointment is completed, no further changes can be made. Below you can add a note regarding the appointment.",
-    "notePlaceholder": "Enter a note about the appointment..."
+    "notePlaceholder": "Enter a note about the appointment...",
+    "showHistory": "Show patient's appointment history",
+    "noHistory": "No appointment history to display.",
+    "historyTitle": "Patient Appointment History"
   },
   "doctorAppointments": {
     "title": "My Appointments",

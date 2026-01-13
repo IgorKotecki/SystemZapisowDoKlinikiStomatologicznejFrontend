@@ -1,11 +1,15 @@
 import api from "./axios";
 
-export const getUserAppointments = async (lang: string) => {
-  const response = await api.get(`/api/Appointment/registered/appointments?lang=${lang}`);
+export const getUserAppointments = async (lang: string, showCancelled: boolean, showCompleted: boolean, showPlanned: boolean, userId?: number) => {
+  if (userId === undefined) {
+    userId = 0;
+  }
+  const response = await api.get(`/api/Appointment/registered/appointments?lang=${lang}&showCancelled=${showCancelled}&showCompleted=${showCompleted}&showPlanned=${showPlanned}&userId=${userId}`);
   return response.data;
 }
 
 export const getDoctorAppointments = async (lang: string, date: string, showCancelled: boolean, showCompleted: boolean) => {
+  
   const response = await api.get(`/api/Appointment/doctor/appointments?lang=${lang}&date=${date}&showCancelled=${showCancelled}&showCompleted=${showCompleted}`);
   return response.data;
 }
