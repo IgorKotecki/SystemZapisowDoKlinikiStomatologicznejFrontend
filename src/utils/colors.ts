@@ -3,7 +3,7 @@ export const colors = {
     color2: "#004f5f",
     color3: "#007987",
     color4: "#00b2b9",
-    color5: "#00faf1",
+    color5: "#00FFF7",
     color6: '#77767c',
     white: "#f5f5f5",
     pureWhite: "#ffffff",
@@ -26,4 +26,6 @@ export const colors = {
     doctor3: "#80d9ffb7",
     doctor4: "#a7ffea9f",
     doctor5: "#cbff90b6",
+    cancelled : "#AE1409",
+    cancelledDark : "#750606"
 };

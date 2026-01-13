@@ -3,7 +3,6 @@ import {
   Box,
   Typography,
   CircularProgress,
-  DialogContent,
   Drawer,
   Switch,
   FormControlLabel,
@@ -25,6 +24,7 @@ import { Dialog, DialogTitle, DialogActions, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CancellationModal from "../../components/CancellationModal";
 import { showAlert } from "../../utils/GlobalAlert";
+import AppointmentDetailsDialogContent from "../../components/AppointmentDetailsDialogContent";
 
 const ReceptionistCalendar: React.FC = () => {
   const { t } = useTranslation();
@@ -121,7 +121,7 @@ const ReceptionistCalendar: React.FC = () => {
       name: selectedAppointment?.patientFirstName!,
       surname: selectedAppointment?.patientLastName!,
       email: selectedAppointment?.patientEmail!,
-      phoneNumber: selectedAppointment?.patienPhoneNumber!,
+      phoneNumber: selectedAppointment?.patientPhoneNumber!,
     }
     navigate(`/receptionist/appointment`, { state: { user: info as User } });
   };
@@ -182,7 +182,7 @@ const ReceptionistCalendar: React.FC = () => {
               }}
               eventDidMount={(info) => {
                 const appointment = info.event.extendedProps as IDoctorAppointment;
-                const tooltipText = `${appointment.servicesName.toString() ?? ''}\nStatus: ${appointment.status}\nPacjent: ${appointment.patientFirstName} ${appointment.patientLastName}\nEmail: ${appointment.patientEmail}\nTelefon: ${appointment.patienPhoneNumber ?? ''}`;
+                const tooltipText = `${appointment.services.map(service => service.name).join(", ") ?? ''}\nStatus: ${appointment.status}\nPacjent: ${appointment.patientFirstName} ${appointment.patientLastName}\nEmail: ${appointment.patientEmail}\nTelefon: ${appointment.patientPhoneNumber ?? ''}`;
                 info.el.setAttribute('title', tooltipText);
               }}
               height="auto"
@@ -216,7 +216,7 @@ const ReceptionistCalendar: React.FC = () => {
               backgroundColor: colors.color2,
               color: colors.white,
               borderRadius: 3,
-              minWidth: 300,
+              minWidth: 700,
               p: 4,
             },
           }}
@@ -226,63 +226,11 @@ const ReceptionistCalendar: React.FC = () => {
               {t("receptionistCalendar.appointmentDetails")}
             </Typography>
           </DialogTitle>
-          <DialogContent sx={{ display: "flex", justifyContent: "space-between", gap: 4 }}>
-            <Box>
-              <Typography sx={{ fontWeight: "bold" }}>
-                {t("receptionistCalendar.patient")}:
-              </Typography>
-              <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
-                <Typography >
-                  {`${selectedAppointment?.patientFirstName} ${selectedAppointment?.patientLastName}`}
-                </Typography>
-                <Typography >
-                  {selectedAppointment?.patientEmail}
-                </Typography>
-                <Typography >
-                  {selectedAppointment?.patienPhoneNumber}
-                </Typography>
-              </Box>
-              <Typography sx={{ fontWeight: "bold" }}>
-                {t("receptionistCalendar.doctor")}:
-              </Typography>
-              <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
-                <Typography >
-                  {`${selectedAppointment?.doctor.name} ${selectedAppointment?.doctor.surname}`}
-                </Typography>
-              </Box>
-              <Typography sx={{ fontWeight: "bold" }}>
-                {t("receptionistCalendar.date")} - {t("receptionistCalendar.time")}:
-              </Typography>
-              <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
-                <Typography >
-                  {selectedAppointment?.date}
-                </Typography>
-                <Typography >
-                  {selectedAppointment?.timeStart?.slice(0, 5)} - {selectedAppointment?.timeEnd?.slice(0, 5)}
-                </Typography>
-              </Box>
-            </Box>
-            <Box>
-              <Typography sx={{ fontWeight: "bold" }}>
-                {t("receptionistCalendar.services")}
-              </Typography>
-              <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
-                {selectedAppointment?.servicesName.map((service, index) => (
-                  <Typography key={index}>
-                    - {service}
-                  </Typography>
-                ))}
-              </Box>
-              <Typography sx={{ fontWeight: "bold" }}>
-                Status:
-              </Typography>
-              <Box sx={{ mb: 2, pl: 2, borderLeft: `4px solid ${colors.color3}` }}>
-                <Typography >
-                  - {selectedAppointment?.status}
-                </Typography>
-              </Box>
-            </Box>
-          </DialogContent>
+          {selectedAppointment && (
+            <AppointmentDetailsDialogContent
+              selectedAppointmentDetail={CalendarMapper.DoctorAppointmentToApiAppointment(selectedAppointment)}
+            />
+          )}
           <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
             <Button
               variant="outlined"
@@ -297,7 +245,7 @@ const ReceptionistCalendar: React.FC = () => {
             <Button
               variant="contained"
               onClick={cancelAppointment}
-              sx={{ backgroundColor: colors.color3, color: colors.white }}
+              sx={{ backgroundColor: colors.cancelled, color: colors.white }}
             >
               {t("receptionistCalendar.cancelAppointment")}
             </Button>
@@ -361,7 +309,7 @@ const ReceptionistCalendar: React.FC = () => {
                 await fetchDoctorsAppointemtAsync(currentWeekStart, newValue, showCompleted);
               }} />}
               label={t("receptionistCalendar.showCancelled")}
-              sx={{color: colors.white}}
+              sx={{ color: colors.white }}
             />
             <FormControlLabel
               control={<Switch checked={showCompleted} onChange={async (e) => {
@@ -370,9 +318,9 @@ const ReceptionistCalendar: React.FC = () => {
                 await fetchDoctorsAppointemtAsync(currentWeekStart, showCancelled, newValue);
               }} />}
               label={t("receptionistCalendar.showCompleted")}
-              sx={{color: colors.white}}
+              sx={{ color: colors.white }}
             />
-            
+
           </Box>
         </Drawer>
       </Box>

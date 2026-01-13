@@ -26,11 +26,11 @@ export default function AppointemtInfoRenderer({ appointment }: AppointemtInfoRe
 
             <h2 style={{ color: colors.black }}>{t('appointmentInfo.title')}</h2>
             <p><strong>{t('appointmentInfo.patient')}:</strong> {appointment.patientFirstName} {appointment.patientLastName}</p>
-            <p><strong>{t('appointmentInfo.phone')}:</strong> {appointment.patienPhoneNumber}</p>
+            <p><strong>{t('appointmentInfo.phone')}:</strong> {appointment.patientPhoneNumber}</p>
             <p><strong>{t('appointmentInfo.email')}:</strong> {appointment.patientEmail}</p>
             <p><strong>{t('appointmentInfo.date')}:</strong> {new Date(appointment.date).toLocaleDateString()}</p>
             <p><strong>{t('appointmentInfo.time')}:</strong> {appointment.timeStart} - {appointment.timeEnd}</p>
-            <p><strong>{t('appointmentInfo.service')}:</strong> {appointment.servicesName.toString()}</p>
+            <p><strong>{t('appointmentInfo.service')}:</strong> {appointment.services.map(service => service.name).join(", ")}</p>
         </Box>
     );
 }

@@ -56,7 +56,7 @@ const DoctorAppointments: React.FC = () => {
       title: `${a.patientFirstName} ${a.patientLastName}`,
       start: `${a.date}T${a.timeStart}`,
       end: `${a.date}T${a.timeEnd}`,
-      description: a.servicesName.toString(),
+      description: a.services.map(service => service.name).join(", "),
       extendedProps: a,
       backgroundColor: applayStatusColor(a.status),
     })),

@@ -106,15 +106,6 @@ const ReceptionistUsers: React.FC = () => {
     },
   ];
 
-  // const handleUserClick = (userId: number) => {
-  //   const role = userRole;
-  //   if (role === "Doctor") {
-  //     navigate(`/doctor/users/${userId}`);
-  //   } else if (role === "Receptionist") {
-  //     navigate(`/receptionist/users/${userId}`);
-  //   }
-  // };
-
   const handleUserClick = (userId: number) => {
     setSelectedUserId(userId);
     setIsEditModalOpen(true);
@@ -144,7 +135,6 @@ const ReceptionistUsers: React.FC = () => {
             {t("receptionistUsers.subtitle")}
           </Typography>
 
-          {/* Search Box */}
           <Box sx={{ mb: 2 }}>
             <TextField
               fullWidth
@@ -183,7 +173,7 @@ const ReceptionistUsers: React.FC = () => {
               backgroundColor: colors.pureWhite,
               borderRadius: 3,
               overflow: 'hidden',
-              p: 2
+              padding: 1,
             }}
           >
             <DataGrid

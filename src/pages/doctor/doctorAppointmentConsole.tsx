@@ -245,7 +245,7 @@ export default function DoctorAppointmentsConsole() {
                 }}
             >
                 <DialogTitle>
-                    <Typography variant="h5" sx={{ color: colors.color5, fontWeight: "bold" }}>
+                    <Typography variant="h5" sx={{ color: colors.white, fontWeight: "bold" }}>
                         {t("doctorAppointmentConsole.completeTitle")}
                     </Typography>
                 </DialogTitle>

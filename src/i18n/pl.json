@@ -194,12 +194,23 @@
     "pageInfo": "Przeglądaj swoje przeszłe i nadchodzące wizyty stomatologiczne",
     "date": "Data",
     "hour": "Godzina",
-    "service": "Zabieg",
+    "services": "Zabiegi",
     "dentist": "Dentysta",
     "price": "Cena",
     "state": "Status",
     "additionalInformation": "D.I.",
-    "noInformation": "Brak infromacji"
+    "noInformation": "Brak infromacji",
+    "cancelAppointment": "Anuluj wizytę",
+    "viewDetails": "Szczegóły",
+    "loading": "Ładowanie wizyt...",
+    "noAppointments": "Brak zaplanowanych wizyt",
+    "cancelError": "Wystąpił błąd podczas anulowania wizyty.",
+    "cancelSuccess": "Wizyta została pomyślnie anulowana.",
+    "cancelSubtitle": "Czy na pewno chcesz anulować tę wizytę?",
+    "note": "Notatka",
+    "cancellationReason": "Powód anulowania",
+    "noCancellationReason": "Brak podanego powodu anulowania",
+    "noNotes": "Brak notatek do wyświetlenia"
   },
   "userMakeAppointment": {
     "title": "Umów wizytę",
@@ -598,5 +609,6 @@
     "deleteError": "Wystąpił błąd podczas usuwania informacji.",
     "body": "Treść"
   },
-  "cancellationSuccess": "Wizyta została pomyślnie anulowana."
+  "cancellationSuccess": "Wizyta została pomyślnie anulowana.",
+  "close": "Zamknij"
 }

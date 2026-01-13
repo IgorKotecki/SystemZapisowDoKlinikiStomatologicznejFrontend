@@ -2,48 +2,165 @@ import { useEffect, useState } from "react";
 import {
   Box,
   Typography,
+  Button,
   Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   CircularProgress,
-  Tooltip,
-  IconButton,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { colors } from "../../utils/colors";
 import type { Appointment } from "../../Interfaces/Appointment";
 import get from "../../api/get";
-import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
+import { showAlert } from "../../utils/GlobalAlert";
+import LoadingScreen from "../../components/Loading";
+import type { GridColDef } from "@mui/x-data-grid/models/colDef";
+import { DataGrid } from "@mui/x-data-grid";
+import type { Service } from "../../Interfaces/Service";
+import { InfoOutline } from "@mui/icons-material";
+import put from "../../api/put";
+import AppointmentDetailsDialogContent from "../../components/AppointmentDetailsDialogContent";
 
 export default function VisitsHistoryPage() {
-
   const { t, i18n } = useTranslation();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [cancellationDialogOpen, setCancellationDialogOpen] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [selectedAppointmentCancel, setSelectedAppointmentCancel] = useState<Appointment | null>(null);
+  const [selectedAppointmentDetail, setSelectedAppointmentDetail] = useState<Appointment | null>(null);
+
+  const columns: GridColDef<Appointment>[] = [
+    {
+      field: 'startTime',
+      headerName: t("userAppointments.date"),
+      width: 100,
+      valueFormatter: (params) => {
+        const date = new Date(params);
+        return date.toLocaleDateString();
+      },
+    },
+    {
+      field: 'timeRange',
+      headerName: t("userAppointments.hour"),
+      width: 110,
+      valueGetter: (_, row) => {
+        const start = new Date(row.startTime);
+        const end = new Date(row.endTime);
+        return `${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      },
+    },
+    {
+      field: 'services',
+      headerName: t("userAppointments.services"),
+      width: 250,
+      // @ts-ignore
+      flex: 1,
+      // @ts-ignore
+      valueFormatter: (params: Service) => params.map(s => s.name).join(", "),
+    },
+    {
+      field: 'status',
+      headerName: t("userAppointments.state"),
+      width: 120,
+      renderCell: (params) => {
+        let color = colors.black;
+        if (params.value === "Completed" || params.value === "Zakończona") {
+          color = colors.greenTooth;
+        } else if (params.value === "Cancelled" || params.value === "Anulowana") {
+          color = colors.cancelled;
+        }
+        return (
+          <Box
+            sx={{
+              justifyContent: 'left',
+              alignItems: 'center',
+              display: 'flex',
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            <Typography sx={{ color, fontSize: '14px' }}>{params.value}</Typography>
+          </Box>
+        );
+      },
+    },
+    {
+      field: 'action',
+      headerName: t("receptionistUsers.action"),
+      width: 300,
+      sortable: false,
+      renderCell: (params) => (
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', height: '100%', justifyContent: 'center' }}>
+          <Button
+            variant="contained"
+            sx={{ color: colors.white, backgroundColor: colors.cancelled, '&:hover': { backgroundColor: colors.cancelledDark } }}
+            size="small"
+            onClick={() => { setCancellationDialogOpen(true); setSelectedAppointmentCancel(params.row) }}
+          >
+            {t("userAppointments.cancelAppointment")}
+          </Button>
+          <Button
+            variant="contained"
+            sx={{ color: colors.white, backgroundColor: colors.color3, '&:hover': { backgroundColor: colors.color4 } }}
+            size="small"
+            onClick={() => { setDetailDialogOpen(true); setSelectedAppointmentDetail(params.row) }}
+          >
+            <InfoOutline sx={{ height: '20px', marginRight: '5px' }} />
+            {t("userAppointments.viewDetails")}
+          </Button>
+        </Box>
+      ),
+    },
+  ];
+
+  const fetchAppointments = async () => {
+    try {
+      setLoading(true);
+      const lang = i18n.language || "pl";
+      const response = await get.getUserAppointments(lang);
+      console.log(response);
+      setAppointments(response);
+    } catch (err) {
+      showAlert({ type: "error", message: t("userAppointments.fetchError") });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        setLoading(true);
-        const lang = i18n.language || "pl";
-        const response = await get.getUserAppointments(lang);
-        console.log(response);
-        setAppointments(response);
-      } catch (err) {
-        setError("Nie udało się pobrać wizyt.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchAppointments();
   }, [i18n.language]);
+
+  const cancellAppointment = async () => {
+    if (!selectedAppointmentCancel) return;
+    try {
+      setCancelling(true);
+
+      await put.cancellation(
+        {
+          appointmentGuid: selectedAppointmentCancel.appointmentGroupId,
+          reason: "",
+        }
+      );
+      showAlert({ type: "success", message: t("userAppointments.cancelSuccess") });
+      setCancellationDialogOpen(false);
+      setSelectedAppointmentCancel(null);
+      fetchAppointments();
+    } catch (err) {
+      console.error(err);
+      showAlert({ type: "error", message: t("userAppointments.cancelError") });
+    } finally {
+      setCancelling(false);
+    }
+  };
+
+
+  if (loading) return <LoadingScreen />;
 
   return (
     <Box
@@ -56,7 +173,6 @@ export default function VisitsHistoryPage() {
       }}
     >
       <UserNavigation />
-
       <Box
         component="main"
         sx={{
@@ -73,151 +189,123 @@ export default function VisitsHistoryPage() {
           <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
             {t("userAppointments.title")}
           </Typography>
-          <Typography variant="subtitle1" sx={{ mb: 4 }}>
+          <Typography variant="subtitle1" sx={{ mb: 1 }}>
             {t("userAppointments.pageInfo")}
           </Typography>
-
-          {loading && (
-            <Box sx={{ display: "flex", justifyContent: "center", py: 10 }}>
-              <CircularProgress sx={{ color: colors.color5 }} />
-            </Box>
-          )}
-
-          {error && (
-            <Typography sx={{ color: "red", mb: 3 }}>{error}</Typography>
-          )}
-
-          {!loading && !error && (
-            <Paper
-              elevation={4}
+          <Paper
+            elevation={6}
+            sx={{
+              backgroundColor: colors.pureWhite,
+              borderRadius: 3,
+              overflow: 'hidden',
+              padding: 1,
+            }}
+          >
+            <DataGrid
+              rows={appointments}
+              columns={columns}
+              loading={loading}
+              autoHeight
+              initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
+              pageSizeOptions={[5, 10, 20, 50]}
+              disableRowSelectionOnClick
+              disableAutosize
+              disableColumnResize
+              disableColumnMenu
+              showToolbar={true}
               sx={{
-                p: 3,
-                borderRadius: 3,
-                backgroundColor: colors.color2,
-                overflowX: "auto",
+                border: 'none',
+                '& .MuiDataGrid-cell:focus': { outline: 'none' },
+                '& .MuiDataGrid-columnHeaders': {
+                  backgroundColor: '#f5f5f5',
+                  color: colors.color1,
+                  fontWeight: 'bold',
+                },
               }}
-            >
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell sx={{ color: colors.color5, fontWeight: "bold" }}>
-                        {t("userAppointments.date")}
-                      </TableCell>
-                      <TableCell sx={{ color: colors.color5, fontWeight: "bold" }}>
-                        {t("userAppointments.hour")}
-                      </TableCell>
-                      <TableCell sx={{ color: colors.color5, fontWeight: "bold" }}>
-                        {t("userAppointments.service")}
-                      </TableCell>
-                      <TableCell sx={{ color: colors.color5, fontWeight: "bold" }}>
-                        {t("userAppointments.dentist")}
-                      </TableCell>
-                      <TableCell sx={{ color: colors.color5, fontWeight: "bold" }}>
-                        {t("userAppointments.price")}
-                      </TableCell>
-                      <TableCell sx={{ color: colors.color5, fontWeight: "bold" }}>
-                        {t("userAppointments.state")}
-                      </TableCell>
-                      <TableCell sx={{ color: colors.color5, fontWeight: "bold" }}>
-                        {t("userAppointments.additionalInformation")}
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-
-                  <TableBody>
-                    {appointments.map((a) => {
-                      console.log(a.additionalInformation)
-                      const date = new Date(a.startTime);
-                      const price = a.services.reduce(
-                        (sum, s) => sum + (s.highPrice || 0),
-                        0
-                      );
-
-                      return (
-                        <TableRow
-                          key={a.appointmentGroupId}
-                          sx={{
-                            "&:nth-of-type(odd)": {
-                              backgroundColor: colors.color3 + "22",
-                            },
-                            "&:hover": {
-                              backgroundColor: colors.color4 + "33",
-                            },
-                          }}
-                        >
-                          <TableCell sx={{ color: colors.white }}>
-                            {date.toLocaleDateString()}
-                          </TableCell>
-
-                          <TableCell sx={{ color: colors.white }}>
-                            {date.toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </TableCell>
-
-                          <TableCell sx={{ color: colors.white }}>
-                            {a.services.map((s) => s.name).join(", ")}
-                          </TableCell>
-
-                          <TableCell sx={{ color: colors.white }}>
-                            {a.doctor.name} {a.doctor.surname}
-                          </TableCell>
-
-                          <TableCell sx={{ color: colors.white }}>
-                            {price} zł
-                          </TableCell>
-
-                          <TableCell
-                            sx={{
-                              color:
-                                (a.status === "Completed" || a.status === "Zakończona")
-                                  ? "#8ef58a"
-                                  : (a.status === "Canceled" || a.status === "Anulowana")
-                                    ? "#f58a8a"
-                                    : "#fff68a",
-                            }}
-                          >
-                            {a.status}
-                          </TableCell>
-
-                          <TableCell sx={{ textAlign: 'center' }}>
-                            {a.additionalInformation && a.additionalInformation.length > 0 ? (
-                              <Tooltip
-                                title={"- " + a.additionalInformation.map((i) => i.body).join("\n - ")}
-                                slotProps={{
-                                  tooltip: {
-                                    sx: {
-                                      whiteSpace: "pre-line", 
-                                      padding: "10px",
-                                      fontSize: 15
-                                    }
-
-                                  }
-                                }}
-                                arrow
-                              >
-                                <IconButton size="small" sx={{ color: colors.color5 }}>
-                                  <InfoOutlineIcon fontSize="small" />
-                                </IconButton>
-                              </Tooltip>
-                            ) : (
-                              <Typography variant="body2" sx={{color: colors.white, opacity: 0.5, fontSize: "italic" }}>
-                                {t("userAppointments.noInformation")}
-                              </Typography>
-                            )} 
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Paper>
-          )}
+              getRowId={(row) => row.appointmentGroupId}
+            />
+          </Paper>
+          <Dialog
+            open={cancellationDialogOpen}
+            PaperProps={{
+              sx: {
+                backgroundColor: colors.color2,
+                color: colors.white,
+                borderRadius: 3,
+                p: 2,
+                minWidth: { xs: "90%", sm: 400 }
+              }
+            }}
+          >
+            <DialogTitle>
+              <Typography variant="h5" sx={{ color: colors.white, fontWeight: "bold" }}>
+                {t("userAppointments.cancelAppointment")}
+              </Typography>
+            </DialogTitle>
+            <DialogContent>
+              <Typography sx={{ mb: 2, opacity: 0.8 }}>
+                {t("userAppointments.cancelSubtitle")}
+              </Typography>
+              <Typography sx={{ mb: 2, fontWeight: "bold" }}>
+                {selectedAppointmentCancel?.startTime && new Date(selectedAppointmentCancel.startTime).toLocaleString()}
+              </Typography>
+            </DialogContent>
+            <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
+              <Button
+                onClick={() => {
+                  setCancellationDialogOpen(false);
+                }}
+                sx={{ color: colors.white, textTransform: "none" }}
+              >
+                {t("global.cancel")}
+              </Button>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: colors.color3,
+                  color: colors.white,
+                  textTransform: "none",
+                  px: 4,
+                  "&:hover": { backgroundColor: colors.color4 }
+                }}
+                onClick={cancellAppointment}
+              >
+                {cancelling ? <CircularProgress size={24} color="inherit" /> : t("global.confirm")}
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog
+            open={detailDialogOpen}
+            PaperProps={{
+              sx: {
+                backgroundColor: colors.color2,
+                color: colors.white,
+                borderRadius: 3,
+                p: 2,
+                minWidth: 800,
+              }
+            }}
+          >
+            <DialogTitle>
+              <Typography variant="h5" sx={{ color: colors.white, fontWeight: "bold" }}>
+                {t("userAppointments.viewDetails")}
+              </Typography>
+            </DialogTitle>
+            <AppointmentDetailsDialogContent
+             selectedAppointmentDetail={selectedAppointmentDetail} />
+            <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
+              <Button
+                onClick={() => {
+                  setDetailDialogOpen(false);
+                }}
+                sx={{ color: colors.white, textTransform: "none" }}
+              >
+                {t("close")}
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       </Box>
-    </Box>
+    </Box >
   );
 }

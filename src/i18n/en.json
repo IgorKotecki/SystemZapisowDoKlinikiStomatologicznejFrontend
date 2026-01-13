@@ -189,12 +189,23 @@
     "pageInfo": "View your past and upcoming dental appointments",
     "date": "Date",
     "hour": "Hour",
-    "service": "Service",
+    "services": "Services",
     "dentist": "Dentist",
     "price": "Price",
     "state": "State",
     "additionalInformation": "AI",
-    "noInformation": "No information"
+    "noInformation": "No information",
+    "cancelAppointment": "Cancel Appointment",
+    "viewDetails": "Details",
+    "loading": "Loading appointments...",
+    "noAppointments": "No appointments found.",
+    "cancelError": "An error occurred while cancelling the appointment.",
+    "cancelSuccess": "Appointment has been cancelled successfully.",
+    "cancelSubtitle": "Are you sure you want to cancel this appointment?",
+    "note": "Note",
+    "cancellationReason": "Cancellation Reason",
+    "noCancellationReason": "No cancellation reason provided.",
+    "noNotes": "No notes for this appointment."
   },
   "userMakeAppointment": {
     "title": "Book an Appointment",
@@ -513,7 +524,8 @@
     "errorFetchingDoctors": "Error fetching doctors. Please try again later.",
     "showCancelled": "Show Cancelled Appointments",
     "showCompleted": "Show Completed Appointments",
-    "filters": "Filters"
+    "filters": "Filters",
+    "cancelAppointment": "Cancel Appointment"
   },
   "contactPage": {
     "title": "Contact Us",

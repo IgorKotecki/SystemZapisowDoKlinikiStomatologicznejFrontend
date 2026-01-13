@@ -52,16 +52,36 @@ export class CalendarMapper {
       patientId: apiAppointment.user.id,
       patientFirstName: apiAppointment.user.name,
       patientLastName: apiAppointment.user.surname,
-      servicesName: apiAppointment.services.map((s: any) => s.name),
+      services: apiAppointment.services,
       date: apiAppointment.startTime.split("T")[0],
       timeStart: apiAppointment.startTime.split("T")[1],
       timeEnd: apiAppointment.endTime.split("T")[1],
       patientEmail: apiAppointment.user.email,
-      patienPhoneNumber: apiAppointment.user.phoneNumber,
+      patientPhoneNumber: apiAppointment.user.phoneNumber,
       additionalInformation: apiAppointment.additionalInformation,
       status: apiAppointment.status,
       doctor: apiAppointment.doctor,
-      cancellatingReason: apiAppointment.cancellatingReason,
+      cancellationReason: apiAppointment.cancellationReason,
+    };
+  }
+
+  public static DoctorAppointmentToApiAppointment(doctorAppointment: IDoctorAppointment): Appointment {
+    return {
+      appointmentGroupId: doctorAppointment.id,
+      user: {
+        id: doctorAppointment.patientId,
+        name: doctorAppointment.patientFirstName,
+        surname: doctorAppointment.patientLastName,
+        email: doctorAppointment.patientEmail,
+        phoneNumber: doctorAppointment.patientPhoneNumber,
+      },
+      startTime: `${doctorAppointment.date}T${doctorAppointment.timeStart}`,
+      endTime: `${doctorAppointment.date}T${doctorAppointment.timeEnd}`,
+      doctor: doctorAppointment.doctor,
+      services: doctorAppointment.services,
+      status: doctorAppointment.status,
+      additionalInformation: doctorAppointment.additionalInformation,
+      cancellationReason: doctorAppointment.cancellationReason,
     };
   }
 

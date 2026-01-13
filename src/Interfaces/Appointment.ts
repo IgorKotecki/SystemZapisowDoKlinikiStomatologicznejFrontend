@@ -12,5 +12,5 @@ export interface Appointment {
   status: string;
   additionalInformation: AddInfo[];
   Note?: string;
-  cancellatingReason?: string;
+  cancellationReason?: string;
 }
