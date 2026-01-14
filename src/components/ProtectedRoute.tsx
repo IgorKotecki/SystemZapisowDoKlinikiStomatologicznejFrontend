@@ -9,7 +9,7 @@ type UserRole =
   | "Admin";
 
 interface Props {
-  children: React.Component;
+  children: React.ReactNode;
   allowedRoles?: UserRole[];
 }
 
