@@ -593,6 +593,8 @@
   "ALREADY_CANCELLED": "Appointment has already been cancelled.",
   "CANNOT_CANCEL_COMPLETED": "Cannot cancel an appointment that has already been completed.",
   "APPOINTMENT_IN_PAST": "Appointment cannot be scheduled in the past.",
+  "INVALID_WORKING_HOURS_DELETION": "Cannot delete working hours that have already passed.",
+  "INVALID_WORKING_HOURS_ADDITION": "Cannot add working hours in the past.",
   "globalAlert": {
     "errorLoadingData": "Error loading data. Please try again later."
   },

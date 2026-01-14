@@ -610,6 +610,8 @@
   "ALREADY_CANCELLED": "Wizyta została już anulowana.",
   "CANNOT_CANCEL_COMPLETED": "Nie można anulować wizyty, która już się odbyła.",
   "APPOINTMENT_IN_PAST": "Wizyta nie może być zaplanowana w przeszłości.",
+  "INVALID_WORKING_HOURS_DELETION": "Nie można usunąć godzin pracy, które już minęły.",
+  "INVALID_WORKING_HOURS_ADDITION": "Nie można dodać godzin pracy w przeszłości.",
   "globalAlert": {
     "errorLoadingData": "Błąd podczas ładowania danych. Spróbuj ponownie później."
   },
