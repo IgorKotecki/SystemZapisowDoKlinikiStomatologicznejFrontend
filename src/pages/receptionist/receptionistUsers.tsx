@@ -185,6 +185,7 @@ const ReceptionistUsers: React.FC = () => {
               onPaginationModelChange={setPaginationModel}
               pageSizeOptions={[5, 10, 20, 50]}
               disableRowSelectionOnClick
+              disableColumnResize
               sx={{
                 border: 'none',
                 '& .MuiDataGrid-cell:focus': { outline: 'none' },
