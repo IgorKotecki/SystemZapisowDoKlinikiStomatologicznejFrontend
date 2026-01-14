@@ -378,7 +378,9 @@
     "category": "Kategorie",
     "delete": "Usuń",
     "deleteService": "Usuń serwis",
-    "deleteConfirmText": "Czy na pewno chcesz usunąć ten serwis?"
+    "deleteConfirmText": "Czy na pewno chcesz usunąć ten serwis?",
+    "saveSuccess": "Zmiany zostały zapisane pomyślnie!",
+    "saveError": "Wystąpił błąd podczas zapisywania zmian."
   },
   "doctorProfile": {
     "title": "Profil lekarza",

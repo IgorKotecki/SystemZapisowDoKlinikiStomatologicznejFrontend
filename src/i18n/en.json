@@ -372,7 +372,9 @@
     "delete": "Dekete",
     "deleteService": "Delete service",
     "deleteConfirmText": "Are you sure you want to delete the service?",
-    "category": "Category"
+    "category": "Category",
+    "saveSuccess": "Changes have been saved successfully!",
+    "saveError": "An error occurred while saving changes."
   },
   "doctorProfile": {
     "title": "Doctor Profile",
