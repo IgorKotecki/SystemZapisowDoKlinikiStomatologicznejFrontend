@@ -80,12 +80,6 @@ const EditService: React.FC = () => {
     setServiceData((prev) => (prev ? { ...prev, [name]: value } : prev));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
-    }
-  };
-
   const handleDelete = async () => {
     try {
       await serviceDelete.deleteService(serviceId);

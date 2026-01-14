@@ -8,6 +8,19 @@
   "loginText": "Zaloguj się",
   "dropLine": "Napisz do nas",
   "phoneNumber": "zadzwoń +48 123-456-789",
+  "components": {
+    "before": "Przed",
+    "after": "Po"
+  },
+  "metamorphosis": {
+    "title": "Metamorfozy Uśmiechu",
+    "subtitle": "Zobacz efekty pracy naszych specjalistów.",
+    "shortDescription": "Wyjątkowa przemiana estetyczna wykonana przy użyciu nowoczesnych licówek porcelanowych.",
+    "readMore": "Czytaj więcej",
+    "longDescription": "Prezentujemy szczegółowy opis przypadku klinicznego. Pacjent zgłosił się z przebarwieniami oraz nierównościami zębów frontowych. Po konsultacji zdecydowano o założeniu 6 licówek porcelanowych w górnym łuku. Cały proces trwał zaledwie dwie wizyty i pozwolił na uzyskanie naturalnego, śnieżnobiałego uśmiechu, który całkowicie odmienił pewność siebie pacjenta.",
+    "back": "Powrót do galerii",
+    "description": "Opis przypadku"
+  },
   "appointment": {
     "title": "Umów wizytę",
     "date": "Wybierz datę",
@@ -593,7 +606,7 @@
   "GENERIC_ERROR": "Wystąpił błąd. Spróbuj ponownie.",
   "DAY_HAS_APPOINTMENTS": "Dzień ma zaplanowane wizyty i nie może zostać usunięty.",
   "WORKING_HOURS_ALREADY_EXIST": "Godziny pracy dla tego dnia już istnieją.",
-  "CANNOT_COMPLETE":"Nie można zapisać zmiań dla wizyty która dopiero ma się odbyć.",
+  "CANNOT_COMPLETE": "Nie można zapisać zmiań dla wizyty która dopiero ma się odbyć.",
   "ALREADY_CANCELLED": "Wizyta została już anulowana.",
   "CANNOT_CANCEL_COMPLETED": "Nie można anulować wizyty, która już się odbyła.",
   "APPOINTMENT_IN_PAST": "Wizyta nie może być zaplanowana w przeszłości.",

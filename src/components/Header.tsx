@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem, Box, Avatar, Dialog, DialogTitle, DialogContent, DialogActions,
+  AppBar, Toolbar, Typography, Button, Menu, MenuItem, Box, Avatar, Dialog, DialogTitle, DialogContent, DialogActions,
 } from '@mui/material';
 import LanguageIcon from '@mui/icons-material/Language';
 import AccountCircle from '@mui/icons-material/AccountCircle';

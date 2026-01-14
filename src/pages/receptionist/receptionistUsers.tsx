@@ -36,13 +36,11 @@ const ReceptionistUsers: React.FC = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
-  // Debounce search term
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-      // Reset to first page when search changes
       setPaginationModel(prev => ({ ...prev, page: 0 }));
-    }, 500); // 500ms delay
+    }, 500); 
 
     return () => clearTimeout(timer);
   }, [searchTerm]);

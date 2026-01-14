@@ -124,7 +124,7 @@ export default function DoctorProfile() {
       const response = await api.put(`/api/User/edit/${userId}`, dto);
       const mappedUpdatedData = mapUserData(response.data);
 
-      updateUserPhoto(mappedUpdatedData.photoUrl);
+      updateUserPhoto(mappedUpdatedData.photoUrl ?? null);
       setUserData(mappedUpdatedData);
       setOriginalUserData(mappedUpdatedData);
       setIsEditing(false);

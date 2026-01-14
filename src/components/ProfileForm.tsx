@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {
-  Box, Typography, TextField, Button, Grid, Paper, 
+  Box, TextField, Button, Grid, Paper, 
   CircularProgress, Avatar, IconButton, Alert
 } from "@mui/material";
 import { Camera } from "lucide-react";
@@ -51,6 +51,7 @@ export default function ProfileForm({ user, onUpdate, userId }: UserProfileFormP
         surname: userData.surname,
         phoneNumber: userData.phoneNumber,
         email: userData.email,
+        photoUrl: finalPhotoUrl || "",
         PhotoURL: finalPhotoUrl,
       };
 

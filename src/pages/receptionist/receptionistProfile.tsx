@@ -111,18 +111,27 @@ export default function ReceptionistProfile() {
         finalPhotoUrl = await uploadImageToCloudinary(selectedFile);
       }
 
+      // const dto: UserUpdate & { PhotoURL?: string } = {
+      //   name: userData.name,
+      //   surname: userData.surname,
+      //   phoneNumber: userData.phoneNumber,
+      //   email: userData.email,
+      //   PhotoURL: finalPhotoUrl,
+      // };
+
       const dto: UserUpdate & { PhotoURL?: string } = {
         name: userData.name,
         surname: userData.surname,
         phoneNumber: userData.phoneNumber,
         email: userData.email,
+        photoUrl: finalPhotoUrl || "",
         PhotoURL: finalPhotoUrl,
       };
 
       const response = await api.put(`/api/User/edit/${userId}`, dto);
       const mappedUpdatedData = mapUserData(response.data);
 
-      updateUserPhoto(mappedUpdatedData.photoUrl);
+      updateUserPhoto(mappedUpdatedData.photoUrl ?? null);
 
       setUserData(mappedUpdatedData);
       setOriginalUserData(mappedUpdatedData);
