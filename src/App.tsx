@@ -44,7 +44,7 @@ const App = () => {
       <Router>
         <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
           <Header />
-          <main style={{ flex: 1, display: 'flex' }}>
+          <main style={{ flex: 1}}>
             <Suspense fallback={<div>Loading...</div>}>
               <Routes>
                 <Route path="/" element={<Home />} />
