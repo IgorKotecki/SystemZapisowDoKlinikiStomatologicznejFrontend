@@ -597,6 +597,7 @@
   "APPOINTMENT_IN_PAST": "Appointment cannot be scheduled in the past.",
   "INVALID_WORKING_HOURS_DELETION": "Cannot delete working hours that have already passed.",
   "INVALID_WORKING_HOURS_ADDITION": "Cannot add working hours in the past.",
+  "CANCELLATION_OF_PAST_APPOINTMENT": "Cannot cancel an appointment that has already occurred.",
   "globalAlert": {
     "errorLoadingData": "Error loading data. Please try again later."
   },

@@ -158,7 +158,7 @@ export default function UserAppointmentPage() {
         "GENERIC_ERROR";
       setNotification({
         type: "error",
-        message: errorCode,
+        message: t(errorCode),
       });
     } finally {
       setLoading(false);

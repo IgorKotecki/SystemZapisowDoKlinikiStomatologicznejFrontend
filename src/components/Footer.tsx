@@ -9,7 +9,7 @@ export default function Footer() {
   const { t } = useTranslation();
 
   return (
-    <Box sx={{ bgcolor: colors.white, py: 6, mt: 10 }}>
+    <Box sx={{ bgcolor: colors.white, py: 6}}>
       <Container maxWidth="lg">
         <Grid container spacing={6} justifyContent={"space-between"} component="div">
         {/* <Grid container spacing={6} justifyContent="space-between"> */}
@@ -17,14 +17,14 @@ export default function Footer() {
             <Typography variant="subtitle1" gutterBottom sx={{ color: colors.black }}>
               {t("footer.contact")}
             </Typography>
-            <Typography variant="body2" sx={{ color: colors.color6 }}>+1 23 456 78</Typography>
-            <Typography variant="body2" sx={{ color: colors.color6 }}>paweł@szeliSzeliga.com</Typography>
+            <Typography variant="body2" sx={{ color: colors.color6 }}>+48 223 456 778</Typography>
+            <Typography variant="body2" sx={{ color: colors.color6 }}>dentalClinic.s27030@gmail.com</Typography>
 
             <Typography variant="subtitle1" sx={{ mt: 2, color: colors.color6 }} gutterBottom>
               {t("footer.address")}
             </Typography>
             <Typography variant="body2" sx={{ color: colors.color6 }}>
-              Ul. Jakaś tam 12/23a, Warszawa 02-021
+              Ul. Przykładowa 12/23a, Warszawa 02-021
             </Typography>
 
             <Box sx={{ mt: 2 }}>

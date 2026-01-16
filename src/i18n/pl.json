@@ -614,6 +614,7 @@
   "APPOINTMENT_IN_PAST": "Wizyta nie może być zaplanowana w przeszłości.",
   "INVALID_WORKING_HOURS_DELETION": "Nie można usunąć godzin pracy, które już minęły.",
   "INVALID_WORKING_HOURS_ADDITION": "Nie można dodać godzin pracy w przeszłości.",
+  "CANCELLATION_OF_PAST_APPOINTMENT": "Nie można anulować wizyty, która już się odbyła.",
   "globalAlert": {
     "errorLoadingData": "Błąd podczas ładowania danych. Spróbuj ponownie później."
   },
