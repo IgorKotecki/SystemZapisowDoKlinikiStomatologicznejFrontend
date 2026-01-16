@@ -195,7 +195,8 @@
     "deleteAccount": "Delete account",
     "confirmDeleteTitle": "Account deleting process",
     "confirmDeleteMessage": "Deleting account process is irreversible! Do you still want to proceed?",
-    "saveSuccess": "Data updated successfully"
+    "saveSuccess": "Data updated successfully",
+    "saveError": "An error occurred while saving changes"
   },
   "userAppointments": {
     "title": "Appointment history",
