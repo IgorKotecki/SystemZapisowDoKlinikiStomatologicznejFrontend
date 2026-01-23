@@ -385,12 +385,13 @@
     "descriptionPl": "Description in polish",
     "descriptionEn": "Description in english",
     "categories": "Categories",
-    "delete": "Dekete",
+    "delete": "Delete",
     "deleteService": "Delete service",
     "deleteConfirmText": "Are you sure you want to delete the service?",
     "category": "Category",
     "saveSuccess": "Changes have been saved successfully!",
-    "saveError": "An error occurred while saving changes."
+    "saveError": "An error occurred while saving changes.",
+    "deleteError": "An error occurred while deleting the information."
   },
   "doctorProfile": {
     "title": "Doctor Profile",

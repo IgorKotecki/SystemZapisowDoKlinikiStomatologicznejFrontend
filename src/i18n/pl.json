@@ -396,7 +396,8 @@
     "deleteService": "Usuń serwis",
     "deleteConfirmText": "Czy na pewno chcesz usunąć ten serwis?",
     "saveSuccess": "Zmiany zostały zapisane pomyślnie!",
-    "saveError": "Wystąpił błąd podczas zapisywania zmian."
+    "saveError": "Wystąpił błąd podczas zapisywania zmian.",
+    "deleteError": "Wystąpił błąd podczas usuwania informacji."
   },
   "doctorProfile": {
     "title": "Profil lekarza",
