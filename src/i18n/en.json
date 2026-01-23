@@ -45,7 +45,9 @@
     "errorPhone": "Enter tel. number",
     "errorService": "Choose service",
     "errorDoctor": "Choose doctor",
-    "errorHour": "Choose hour"
+    "errorHour": "Choose hour",
+    "errorPastDate": "You cannot select a date in the past.",
+    "errorPastTime": "The selected time has already passed. Please choose another."
   },
   "footer": {
     "contact": "Contact",
@@ -236,7 +238,19 @@
     "success": "The appointment has been booked successfully!",
     "errorFields": "Please fill in all fields.",
     "errorOccurred": "An error occurred during booking.",
-    "search": "Search services..."
+    "search": "Search services...",
+    "noAvailableHours": "No available hours for the selected date and doctor."
+  },
+  "summary": {
+    "title": "Appointment Booked!",
+    "subtitle": "A reminder will be sent in the morning, day of the visit:",
+    "details": "APPOINTMENT DETAILS",
+    "date": "Date and Time",
+    "doctor": "Doctor",
+    "services": "Selected Services",
+    "duration": "Estimated Duration",
+    "backHome": "Back to Home Page",
+    "noData": "Appointment data not found."
   },
   "dentalChart": {
     "back": "Back",
@@ -352,7 +366,8 @@
     "errorTime": "Service duration must be greater than 0",
     "errorCategory": "You must select at least one category",
     "addSuccess": "Service added successfully",
-    "addError": "An error occurred during server communication"
+    "addError": "An error occurred during server communication",
+    "errorPricesMissing": "Price is required! Enter at least one of the prices."
   },
   "editService": {
     "title": "Edit Service",
@@ -373,10 +388,13 @@
     "descriptionPl": "Description in polish",
     "descriptionEn": "Description in english",
     "categories": "Categories",
-    "delete": "Dekete",
+    "delete": "Delete",
     "deleteService": "Delete service",
     "deleteConfirmText": "Are you sure you want to delete the service?",
-    "category": "Category"
+    "category": "Category",
+    "saveSuccess": "Changes have been saved successfully!",
+    "saveError": "An error occurred while saving changes.",
+    "deleteError": "An error occurred while deleting the information."
   },
   "doctorProfile": {
     "title": "Doctor Profile",

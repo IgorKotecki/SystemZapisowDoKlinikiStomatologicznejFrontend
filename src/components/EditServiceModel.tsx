@@ -51,10 +51,27 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({ open, onClose, serv
             showAlert({ type: "error", message: t("receptionistServices.errorEmptyFields") });
             return false;
         }
-        if (Number(serviceData.lowPrice) < 1 || Number(serviceData.highPrice) < 1) {
-            showAlert({ type: "error", message: t("receptionistServices.errorPrices") });
+        // if ( (Number(serviceData.lowPrice) < 1 && Number(serviceData.lowPrice) > Number(serviceData.highPrice)) || Number(serviceData.highPrice) < 1) {
+        //     showAlert({ type: "error", message: t("receptionistServices.errorPrices") });
+        //     return false;
+        // }
+        const low = Number(serviceData.lowPrice);
+        const high = Number(serviceData.highPrice);
+
+        const hasValidLow = low > 1;
+        const hasValidHigh = high > 1;
+        const isRangeInvalid = hasValidLow && hasValidHigh && low > high;
+
+        if (!hasValidLow && !hasValidHigh) {
+            showAlert({ type: "error", message: t("receptionistServices.errorPricesMissing") });
             return false;
         }
+
+        if (isRangeInvalid) {
+            showAlert({ type: "error", message: t("receptionistServices.errorPriceRange") });
+            return false;
+        }
+
         return true;
     };
 

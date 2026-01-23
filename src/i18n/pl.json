@@ -45,7 +45,9 @@
     "errorPhone": "Podaj numer telefonu",
     "errorService": "Wybierz usługę",
     "errorDoctor": "Wybierz lekarza",
-    "errorHour": "Wybierz godzinę"
+    "errorHour": "Wybierz godzinę",
+    "errorPastDate": "Nie można wybrać daty z przeszłości.",
+    "errorPastTime": "Wybrana godzina już minęła. Proszę wybrać inną."
   },
   "footer": {
     "contact": "Kontakt",
@@ -241,7 +243,19 @@
     "success": "Wizyta została pomyślnie zarezerwowana!",
     "errorFields": "Uzupełnij wszystkie pola.",
     "errorOccurred": "Wystąpił błąd podczas rezerwacji.",
-    "search": "Szukaj usług..."
+    "search": "Szukaj usług...",
+    "noAvailableHours": "Brak dostępnych godzin dla wybranej daty i lekarza."
+  },
+  "summary": {
+    "title": "Wizyta zarezerwowana!",
+    "subtitle": "Przypomnienie zostanie wysłane w dniu wizyty:",
+    "details": "SZCZEGÓŁY WIZYTY",
+    "date": "Data i godzina",
+    "doctor": "Lekarz",
+    "services": "Wybrane usługi",
+    "duration": "Przewidywany czas",
+    "backHome": "Wróć do strony głównej",
+    "noData": "Nie znaleziono danych wizyty."
   },
   "dentalChart": {
     "back": "Powrót",
@@ -359,7 +373,8 @@
     "errorTime": "Czas trwania usługi musi być większy niż 0",
     "errorCategory": "Musisz wybrać przynajmniej jedną kategorię",
     "addSuccess": "Usługa została pomyślnie dodana",
-    "addError": "Wystąpił błąd podczas komunikacji z serwerem"
+    "addError": "Wystąpił błąd podczas komunikacji z serwerem",
+    "errorPricesMissing": "Cena musi być podana! Wproadz przynajmniej jedną z cen."
   },
   "editService": {
     "title": "Edycja usługi",
@@ -382,7 +397,10 @@
     "category": "Kategorie",
     "delete": "Usuń",
     "deleteService": "Usuń serwis",
-    "deleteConfirmText": "Czy na pewno chcesz usunąć ten serwis?"
+    "deleteConfirmText": "Czy na pewno chcesz usunąć ten serwis?",
+    "saveSuccess": "Zmiany zostały zapisane pomyślnie!",
+    "saveError": "Wystąpił błąd podczas zapisywania zmian.",
+    "deleteError": "Wystąpił błąd podczas usuwania informacji."
   },
   "doctorProfile": {
     "title": "Profil lekarza",
@@ -438,7 +456,7 @@
     "users": "Użytkownicy",
     "scheduleVisit": "Zaplanowane wizyty",
     "mySchedule": "Mój grafik",
-    "editServices": "Edit Services",
+    "editServices": "Edytuj serwisy",
     "additionalInfo": "Dodatkowe informacje"
   },
   "forget": {

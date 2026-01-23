@@ -329,19 +329,33 @@ export default function UserAppointmentPage() {
                       <CircularProgress size={20} />
                     </MenuItem>
                   ) : (
-                    timeBlocks
-                      .filter((b) => b.isAvailable)
-                      .map((b) => {
+
+                    (() => {
+                      const availableBlocks = timeBlocks.filter((b) => b.isAvailable);
+
+                      if (availableBlocks.length === 0) {
+                        return (
+                          <MenuItem disabled>
+                            <Typography variant="body2" color="textSecondary">
+                              {t("userMakeAppointment.noAvailableHours")}
+                            </Typography>
+                          </MenuItem>
+                        );
+                      }
+
+                      return availableBlocks.map((b) => {
                         const time = new Date(b.timeStart).toLocaleTimeString([], {
                           hour: "2-digit",
                           minute: "2-digit",
                         });
+
                         return (
                           <MenuItem key={b.doctorBlockId} value={b.doctorBlockId}>
                             {time}
                           </MenuItem>
                         );
-                      })
+                      });
+                    })()
                   )}
                 </Select>
               </FormControl>

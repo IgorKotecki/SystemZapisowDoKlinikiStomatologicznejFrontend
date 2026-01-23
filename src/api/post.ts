@@ -3,7 +3,8 @@ import get from "./get";
 
 export const bookAppointmentGuest = async (payload: any) => {
     const response = await api.post(`/api/Appointment/guest/appointment`, payload);
-    return response.data;
+    console.log(response);
+    return response.status;
 };
 
 export const bookAppointmentRegistered = async (payload: any) => {
