@@ -45,7 +45,9 @@
     "errorPhone": "Enter tel. number",
     "errorService": "Choose service",
     "errorDoctor": "Choose doctor",
-    "errorHour": "Choose hour"
+    "errorHour": "Choose hour",
+    "errorPastDate": "You cannot select a date in the past.",
+    "errorPastTime": "The selected time has already passed. Please choose another."
   },
   "footer": {
     "contact": "Contact",
@@ -195,7 +197,8 @@
     "deleteAccount": "Delete account",
     "confirmDeleteTitle": "Account deleting process",
     "confirmDeleteMessage": "Deleting account process is irreversible! Do you still want to proceed?",
-    "saveSuccess": "Data updated successfully"
+    "saveSuccess": "Data updated successfully",
+    "saveError": "An error occurred while saving changes"
   },
   "userAppointments": {
     "title": "Appointment history",
@@ -234,6 +237,17 @@
     "errorFields": "Please fill in all fields.",
     "errorOccurred": "An error occurred during booking.",
     "search": "Search services..."
+  },
+  "summary": {
+    "title": "Appointment Booked!",
+    "subtitle": "A confirmation has been sent to the email address:",
+    "details": "APPOINTMENT DETAILS",
+    "date": "Date and Time",
+    "doctor": "Doctor",
+    "services": "Selected Services",
+    "duration": "Estimated Duration",
+    "backHome": "Back to Home Page",
+    "noData": "Appointment data not found."
   },
   "dentalChart": {
     "back": "Back",
@@ -348,7 +362,8 @@
     "errorTime": "Service duration must be greater than 0",
     "errorCategory": "You must select at least one category",
     "addSuccess": "Service added successfully",
-    "addError": "An error occurred during server communication"
+    "addError": "An error occurred during server communication",
+    "errorPricesMissing": "Price is required! Enter at least one of the prices."
   },
   "editService": {
     "title": "Edit Service",

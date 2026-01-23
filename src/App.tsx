@@ -10,6 +10,7 @@ const Home = lazy(() => import("./pages/Home"));
 const LogIn = lazy(() => import("./pages/LogIn"));
 const Register = lazy(() => import("./pages/Register"));
 const Appointment = lazy(() => import("./pages/Appointment"));
+const ConfirmPage = lazy(() => import("./pages/ConfirmPage"));
 const Team = lazy(() => import("./pages/Team"));
 const About = lazy(() => import("./pages/About"));
 const Services = lazy(() => import("./pages/Services"));
@@ -58,6 +59,7 @@ const App = () => {
                 <Route path="/contacts" element={<Contact />} />
                 <Route path="/resetpassword" element={<ResetPassword />} />
                 <Route path="/register/gratulation" element={<RegisterGratulation />} />
+                <Route path="/confirm" element={<ConfirmPage />} />
 
                 {/* USER */}
 

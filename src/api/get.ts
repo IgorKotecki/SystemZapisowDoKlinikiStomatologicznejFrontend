@@ -115,6 +115,7 @@ export const getServiceCategories = async () => {
   const response = await api.get(`/api/Service/serviceCategories`);
   return response.data;
 }
+
 export const getDoctorWorkingHours = async (date: string) => {
   const response = await api.get(`/api/time-blocks/working-hours`, {
     params: {
@@ -125,6 +126,16 @@ export const getDoctorWorkingHours = async (date: string) => {
 }
 export const getNextScheduleDate = async () => {
   const response = await api.get(`/api/Doctor/next-schedule`);
+  return response.data;
+}
+
+export const getAllServicesWithOutGrouping = async (lang: string) => {
+  const response = await api.get(`/api/Service/services-no-categories?lang=${lang}`);
+  return response.data;
+}
+
+export const getServiceNameTrans = async (serviceId: number) => {
+  const response = await api.get(`/api/Service/service-name/${serviceId}`);
   return response.data;
 }
 
@@ -150,4 +161,6 @@ export default {
   getDoctorWorkingHours,
   getUserById,
   getNextScheduleDate,
+  getAllServicesWithOutGrouping,
+  getServiceNameTrans,
 };

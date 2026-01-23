@@ -371,10 +371,12 @@ export default function DoctorProfile() {
       {alert && (
         <Alert
           severity={alert.type}
-          variant="filled"
           sx={{
-            position: "fixed", bottom: 24, right: 24, zIndex: 9999,
-            minWidth: 300, boxShadow: "0px 4px 12px rgba(0,0,0,0.5)"
+            position: "fixed",
+            bottom: 16,
+            right: 16,
+            zIndex: 1500,
+            minWidth: 300
           }}
         >
           {alert.message}

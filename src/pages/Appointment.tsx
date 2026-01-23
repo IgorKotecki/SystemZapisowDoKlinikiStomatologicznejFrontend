@@ -11,9 +11,11 @@ import { TextField, Grid } from "@mui/material";
 import post from "../api/post";
 import get from "../api/get";
 import { showAlert } from "../utils/GlobalAlert";
+import { useNavigate } from 'react-router-dom';
 
 export default function Appointment() {
     const { t, i18n } = useTranslation();
+    const navigate = useNavigate();
     const [date, setDate] = useState<Date | null>(null);
     const [servicesIds, setServicesIds] = useState<number[]>([]);
     const [doctorId, setDoctorId] = useState<number | "">("");
@@ -37,41 +39,88 @@ export default function Appointment() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const validate = () => {
-        if (!servicesIds || servicesIds.length === 0 || !doctorId || !timeBlockId || !date) {
+    // const validate = () => {
+    //     if (!servicesIds || servicesIds.length === 0 || !doctorId || !timeBlockId || !date) {
+    //         showAlert({ type: 'error', message: t("userMakeAppointment.errorFields") });
+    //         return false;
+    //     }
+
+    //     if (!formData.firstName || formData.firstName.trim() === "") {
+    //         showAlert({ type: 'error', message: t("appointment.errorFirstName") });
+    //         return false;
+    //     }
+    //     if (!formData.lastName || formData.lastName.trim() === "") {
+    //         showAlert({ type: 'error', message: t("appointment.errorLastName") });
+    //         return false;
+    //     }
+    //     if (!formData.email || formData.email.trim() === "") {
+    //         showAlert({ type: 'error', message: t("appointment.errorEmail") });
+    //         return false;
+    //     }
+    //     if (!formData.phone || formData.phone.trim() === "") {
+    //         showAlert({ type: 'error', message: t("appointment.errorPhone") });
+    //         return false;
+    //     }
+
+    //     if (formData.email.indexOf("@") === -1) {
+    //         showAlert({ type: 'error', message: t("appointment.errorEmail") });
+    //         return false;
+    //     }
+
+    //     if (formData.phone.match(/[^0-9+\-()\s]/)) {
+    //         showAlert({ type: 'error', message: t("appointment.errorPhone") });
+    //         return false;
+    //     }
+
+    //     return true;
+    // }
+    const validate = (startTime: string | undefined): boolean => {
+        // 1. Sprawdzenie czy wszystkie ID są wybrane
+        if (!servicesIds.length || !doctorId || !timeBlockId || !date || !startTime) {
             showAlert({ type: 'error', message: t("userMakeAppointment.errorFields") });
             return false;
         }
 
-        if (!formData.firstName || formData.firstName.trim() === "") {
+        const now = new Date();
+        const selectedFullDate = new Date(startTime); // Używamy startTime, bo ma w sobie i dzień i godzinę
+
+        // 2. Walidacja czy termin nie jest w przeszłości
+        if (selectedFullDate < now) {
+            // Sprawdzamy czy to ten sam dzień, czy zupełnie przeszły
+            const isToday = new Date(selectedFullDate).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0);
+
+            const errorMessage = isToday
+                ? t("appointment.errorPastTime")
+                : t("appointment.errorPastDate");
+
+            showAlert({ type: 'error', message: errorMessage });
+            return false;
+        }
+
+        // 3. Walidacja danych osobowych
+        if (!formData.firstName?.trim()) {
             showAlert({ type: 'error', message: t("appointment.errorFirstName") });
             return false;
         }
-        if (!formData.lastName || formData.lastName.trim() === "") {
+        if (!formData.lastName?.trim()) {
             showAlert({ type: 'error', message: t("appointment.errorLastName") });
             return false;
         }
-        if (!formData.email || formData.email.trim() === "") {
-            showAlert({ type: 'error', message: t("appointment.errorEmail") });
-            return false;
-        }
-        if (!formData.phone || formData.phone.trim() === "") {
-            showAlert({ type: 'error', message: t("appointment.errorPhone") });
-            return false;
-        }
 
-        if (formData.email.indexOf("@") === -1) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!formData.email || !emailRegex.test(formData.email)) {
             showAlert({ type: 'error', message: t("appointment.errorEmail") });
             return false;
         }
 
-        if (formData.phone.match(/[^0-9+\-()\s]/)) {
+        const phoneRegex = /^[0-9+\-()\s]{7,15}$/; // Dodana walidacja długości (opcjonalnie)
+        if (!formData.phone || !phoneRegex.test(formData.phone)) {
             showAlert({ type: 'error', message: t("appointment.errorPhone") });
             return false;
         }
 
         return true;
-    }
+    };
 
 
     useEffect(() => {
@@ -107,7 +156,6 @@ export default function Appointment() {
                 const response = await get.getDoctors();
                 setDoctors(response);
             } catch (err) {
-                console.error("Błąd pobierania lekarzy:", err);
                 setDoctors([]);
             } finally {
                 setLoadingDoctors(false);
@@ -152,7 +200,7 @@ export default function Appointment() {
 
         try {
 
-            if (!validate()) {
+            if (!validate(startTime)) {
                 return;
             }
 
@@ -169,7 +217,7 @@ export default function Appointment() {
                 servicesIds,
             };
 
-            await post.bookAppointmentGuest(payload)
+            const response = await post.bookAppointmentGuest(payload);
 
             showAlert({
                 type: 'success',
@@ -186,6 +234,17 @@ export default function Appointment() {
                 email: '',
                 phone: '',
             });
+
+            if (response === 204) {
+                showAlert({ type: 'success', message: t("userMakeAppointment.success") });
+                navigate("/confirm", {
+                    state: {
+                        appointmentData: payload,
+                        doctorName: doctors.find(d => d.id === doctorId)?.name,
+                        doctorSurename: doctors.find(d => d.id === doctorId)?.surname
+                    }
+                });
+            }
         } catch (err: any) {
             console.error(err);
             let errorCode = err.response?.data?.title ??
@@ -375,7 +434,7 @@ export default function Appointment() {
                                 </Select>
                             </FormControl>
                             <Grid container spacing={2} sx={{ mt: 2 }}>
-                                {/* <Grid item xs={12} sm={6}> */}
+
                                 <Grid size={{ xs: 12, md: 6 }} component="div">
                                     <TextField
                                         name="firstName"
@@ -386,7 +445,7 @@ export default function Appointment() {
                                         sx={{ backgroundColor: colors.white, borderRadius: 1 }}
                                     />
                                 </Grid>
-                                {/* <Grid item xs={12} sm={6}> */}
+
                                 <Grid size={{ xs: 12, md: 6 }} component="div">
                                     <TextField
                                         name="lastName"
@@ -397,7 +456,7 @@ export default function Appointment() {
                                         sx={{ backgroundColor: colors.white, borderRadius: 1 }}
                                     />
                                 </Grid>
-                                {/* <Grid item xs={12} sm={6}> */}
+
                                 <Grid size={{ xs: 12, md: 6 }} component="div">
                                     <TextField
                                         name="email"
@@ -409,7 +468,7 @@ export default function Appointment() {
                                         sx={{ backgroundColor: colors.white, borderRadius: 1 }}
                                     />
                                 </Grid>
-                                {/* <Grid item xs={12} sm={6}> */}
+
                                 <Grid size={{ xs: 12, md: 6 }} component="div">
                                     <TextField
                                         name="phone"

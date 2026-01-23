@@ -306,10 +306,12 @@ export default function VisitsHistoryPage() {
               </Button>
               <Button
                 variant="contained"
+                disabled={cancelling}
                 sx={{
                   backgroundColor: colors.color3,
                   color: colors.white,
                   textTransform: "none",
+
                   px: 4,
                   "&:hover": { backgroundColor: colors.color4 }
                 }}
