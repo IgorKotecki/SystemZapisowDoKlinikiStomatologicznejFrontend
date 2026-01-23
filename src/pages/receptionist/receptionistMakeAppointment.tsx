@@ -287,6 +287,8 @@ export default function ReceptionistAppointment() {
                 <InputLabel sx={{ color: colors.black }}>
                   {t("userMakeAppointment.doctor")}
                 </InputLabel>
+
+
                 <Select
                   value={doctorId}
                   onChange={(e) => setDoctorId(Number(e.target.value))}
@@ -315,7 +317,7 @@ export default function ReceptionistAppointment() {
                   {t("userMakeAppointment.hour")}
                 </InputLabel>
 
-                <Select
+                {/* <Select
                   value={timeBlockId}
                   onChange={(e) => setTimeBlockId(Number(e.target.value))}
                   sx={{ backgroundColor: colors.white }}
@@ -340,9 +342,48 @@ export default function ReceptionistAppointment() {
                         );
                       })
                   )}
+                </Select> */}
+                <Select
+                  value={timeBlockId}
+                  onChange={(e) => setTimeBlockId(Number(e.target.value))}
+                  sx={{ backgroundColor: colors.white }}
+                >
+                  {loadingBlocks ? (
+                    <MenuItem disabled>
+                      <CircularProgress size={20} />
+                    </MenuItem>
+                  ) : (
+
+                    (() => {
+                      const availableBlocks = timeBlocks.filter((b) => b.isAvailable);
+
+                      if (availableBlocks.length === 0) {
+                        return (
+                          <MenuItem disabled>
+                            <Typography variant="body2" color="textSecondary">
+                              {t("userMakeAppointment.noAvailableHours")}
+                            </Typography>
+                          </MenuItem>
+                        );
+                      }
+
+                      return availableBlocks.map((b) => {
+                        const time = new Date(b.timeStart).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        });
+
+                        return (
+                          <MenuItem key={b.doctorBlockId} value={b.doctorBlockId}>
+                            {time}
+                          </MenuItem>
+                        );
+                      });
+                    })()
+                  )}
                 </Select>
               </FormControl>
-              
+
 
               <Button
                 type="submit"

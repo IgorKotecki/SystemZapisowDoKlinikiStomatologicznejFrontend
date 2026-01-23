@@ -405,7 +405,7 @@ export default function Appointment() {
                                 <InputLabel sx={{ color: colors.black }}>
                                     {t("userMakeAppointment.hour")}
                                 </InputLabel>
-
+                                
                                 <Select
                                     value={timeBlockId}
                                     onChange={(e) => setTimeBlockId(Number(e.target.value))}
@@ -416,9 +416,21 @@ export default function Appointment() {
                                             <CircularProgress size={20} />
                                         </MenuItem>
                                     ) : (
-                                        timeBlocks
-                                            .filter((b) => b.isAvailable)
-                                            .map((b) => {
+                                        
+                                        (() => {
+                                            const availableBlocks = timeBlocks.filter((b) => b.isAvailable);
+
+                                            if (availableBlocks.length === 0) {
+                                                return (
+                                                    <MenuItem disabled>
+                                                        <Typography variant="body2" color="textSecondary">
+                                                            {t("userMakeAppointment.noAvailableHours")}
+                                                        </Typography>
+                                                    </MenuItem>
+                                                );
+                                            }
+
+                                            return availableBlocks.map((b) => {
                                                 const time = new Date(b.timeStart).toLocaleTimeString([], {
                                                     hour: "2-digit",
                                                     minute: "2-digit",
@@ -429,7 +441,8 @@ export default function Appointment() {
                                                         {time}
                                                     </MenuItem>
                                                 );
-                                            })
+                                            });
+                                        })()
                                     )}
                                 </Select>
                             </FormControl>

@@ -236,11 +236,12 @@
     "success": "The appointment has been booked successfully!",
     "errorFields": "Please fill in all fields.",
     "errorOccurred": "An error occurred during booking.",
-    "search": "Search services..."
+    "search": "Search services...",
+    "noAvailableHours": "No available hours for the selected date and doctor."
   },
   "summary": {
     "title": "Appointment Booked!",
-    "subtitle": "A confirmation has been sent to the email address:",
+    "subtitle": "A reminder will be sent in the morning, day of the visit:",
     "details": "APPOINTMENT DETAILS",
     "date": "Date and Time",
     "doctor": "Doctor",

@@ -241,11 +241,12 @@
     "success": "Wizyta została pomyślnie zarezerwowana!",
     "errorFields": "Uzupełnij wszystkie pola.",
     "errorOccurred": "Wystąpił błąd podczas rezerwacji.",
-    "search": "Szukaj usług..."
+    "search": "Szukaj usług...",
+    "noAvailableHours": "Brak dostępnych godzin dla wybranej daty i lekarza."
   },
   "summary": {
     "title": "Wizyta zarezerwowana!",
-    "subtitle": "Potwierdzenie zostało wysłane na adres email:",
+    "subtitle": "Przypomnienie zostanie wysłane w dniu wizyty:",
     "details": "SZCZEGÓŁY WIZYTY",
     "date": "Data i godzina",
     "doctor": "Lekarz",
