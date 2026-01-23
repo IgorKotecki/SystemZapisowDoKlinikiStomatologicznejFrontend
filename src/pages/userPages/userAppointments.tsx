@@ -167,9 +167,9 @@ export default function VisitsHistoryPage() {
       setCancellationDialogOpen(false);
       setSelectedAppointmentCancel(null);
       fetchAppointments(showCancelled, showCompleted);
-    } catch (err) {
-      console.error(err);
-      showAlert({ type: "error", message: t("userAppointments.cancelError") });
+    } catch (err : any) {
+      let error = err.response?.data?.title || "userAppointments.cancelError";
+      showAlert({ type: "error", message: t(error) });
     } finally {
       setCancelling(false);
     }
