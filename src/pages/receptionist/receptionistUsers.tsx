@@ -70,16 +70,21 @@ const ReceptionistUsers: React.FC = () => {
     fetchUsers();
   }, [paginationModel.page, paginationModel.pageSize, debouncedSearchTerm]);
 
+  const showAppointments = (user: User) => {
+    console.log(user.id);
+    navigate(`/receptionist/userAppointments`, { state: { userId: user.id } });
+  }
+
   const columns: GridColDef<User>[] = [
     { field: 'name', headerName: t("receptionistUsers.firstName"), width: 150 },
     { field: 'surname', headerName: t("receptionistUsers.lastName"), width: 150 },
     // @ts-ignore
-    { field: 'email', headerName: 'Email', width: 250, felx: 1 },
-    { field: 'phoneNumber', headerName: t("receptionistUsers.phone"), width: 180 },
+    { field: 'email', headerName: 'Email', width: 250, flex: 1 },
+    { field: 'phoneNumber', headerName: t("receptionistUsers.phone"), width: 150 },
     {
       field: 'action',
       headerName: t("receptionistUsers.action"),
-      width: 350,
+      width: 420,
       sortable: false,
       renderCell: (params) => (
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', height: '100%', justifyContent: 'center' }}>
@@ -98,6 +103,14 @@ const ReceptionistUsers: React.FC = () => {
             onClick={() => handleUserClick(params.row.id)}
           >
             {t("receptionistUsers.viewEdit")}
+          </Button>
+          <Button
+            variant="outlined"
+            sx={{ color: colors.color1, borderColor: colors.color1, '&:hover': { borderColor: colors.color3 } }}
+            size="small"
+            onClick={() => showAppointments(params.row)}
+          >
+            {t("receptionistUsers.viewAppointments")}
           </Button>
         </Box>
       ),

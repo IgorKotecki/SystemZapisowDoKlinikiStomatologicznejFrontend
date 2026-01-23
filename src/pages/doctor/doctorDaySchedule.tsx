@@ -63,6 +63,7 @@ export default function DoctorDaySchedule() {
         const payload = {
             daysSchemes: CalendarMapper.CalendarDayScheduletoApi(daySchedule),
         };
+        
         try {
             await put.updateDoctorWeekSchedule(payload);
             showAlert({ type: 'success', message: t('doctorDaySchedule.updateSuccess') });

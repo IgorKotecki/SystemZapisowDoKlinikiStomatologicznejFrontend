@@ -23,6 +23,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from "@mui/material/IconButton";
 import { showAlert } from "../../utils/GlobalAlert";
 import type { Appointment } from "../../Interfaces/Appointment";
+import { se } from "date-fns/locale";
 
 export default function DoctorAppointmentsConsole() {
     const location = useLocation();
@@ -40,6 +41,7 @@ export default function DoctorAppointmentsConsole() {
     const [saving, setSaving] = useState(false);
     const [openDrawer, setOpenDrawer] = useState(false);
     const [historyAppointments, setHistoryAppointments] = useState<Appointment[]>([]);
+    const [completing, setCompleting] = useState(false);
 
     const onStatusChange = (status: Status) => {
         console.log("Selected status:", status);
@@ -118,15 +120,16 @@ export default function DoctorAppointmentsConsole() {
 
     const saveChanges = async () => {
         try {
+            setSaving(true);
             const payload = {
                 userId: state?.appointment.patientId,
                 teeth: teeth.map(tooth => ({
                     toothNumber: tooth.toothNumber,
                     statusId: tooth.status ? tooth.status.statusId : null,
                 })),
+                appointmentGuid: state?.appointment.id,
             };
             await put.updateTeethModel(payload);
-            console.log("Zmiany zebów zapisane:");
 
             const appointmentPayload = {
                 Id: state?.appointment.id,
@@ -148,6 +151,8 @@ export default function DoctorAppointmentsConsole() {
                 type: 'error',
                 message: t(errorCode),
             });
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -156,7 +161,7 @@ export default function DoctorAppointmentsConsole() {
     }
 
     const completeAppointment = async () => {
-        setSaving(true);
+        setCompleting(true);
         await saveChanges();
         try {
             if (!state) return;
@@ -179,7 +184,7 @@ export default function DoctorAppointmentsConsole() {
                 message: t(errorCode),
             });
         } finally {
-            setSaving(false);
+            setCompleting(false);
         }
     };
 
@@ -234,8 +239,8 @@ export default function DoctorAppointmentsConsole() {
                                 sx={{ color: colors.color5, borderColor: colors.color5, textTransform: 'none', ":hover": { borderColor: colors.color4 } }}>
                                 {t("doctorAppointmentConsole.showHistory")}
                             </Button>
-                            <Button onClick={saveChanges} variant="contained" sx={{ backgroundColor: colors.color3, color: colors.white, textTransform: 'none', ":hover": { backgroundColor: colors.color4 } }}>
-                                {t("doctorAppointmentConsole.saveChanges")}
+                            <Button onClick={saveChanges} disabled={saving} variant="contained" sx={{ backgroundColor: colors.color3, color: colors.white, textTransform: 'none', ":hover": { backgroundColor: colors.color4 } }}>
+                                {saving ? <CircularProgress size={24} color="inherit" /> : t("doctorAppointmentConsole.saveChanges")}
                             </Button>
                             <Button onClick={completeAppointmentModal} variant="contained" sx={{ backgroundColor: colors.color3, color: colors.white, textTransform: 'none', ":hover": { backgroundColor: colors.color4 } }}>
                                 {t("doctorAppointmentConsole.completeAppointment")}
@@ -308,6 +313,7 @@ export default function DoctorAppointmentsConsole() {
                     <Button
                         variant="contained"
                         onClick={completeAppointment}
+                        disabled={completing}
                         sx={{
                             backgroundColor: colors.color3,
                             color: colors.white,
@@ -316,7 +322,7 @@ export default function DoctorAppointmentsConsole() {
                             "&:hover": { backgroundColor: colors.color4 }
                         }}
                     >
-                        {saving ? <CircularProgress size={24} color="inherit" /> : t("global.confirm")}
+                        {completing ? <CircularProgress size={24} color="inherit" /> : t("global.confirm")}
                     </Button>
                 </DialogActions>
             </Dialog>

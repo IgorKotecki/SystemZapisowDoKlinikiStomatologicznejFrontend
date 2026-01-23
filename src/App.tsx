@@ -5,6 +5,7 @@ const Header = lazy(() => import("./components/Header"));
 const Footer = lazy(() => import("./components/Footer"));
 import { GlobalAlert } from "./utils/GlobalAlert";
 import ProtectedRoute from "./components/ProtectedRoute";
+import UserAppointmentsHistory from "./pages/receptionist/userAppointemntsHistoty";
 
 const Home = lazy(() => import("./pages/Home"));
 const LogIn = lazy(() => import("./pages/LogIn"));
@@ -141,6 +142,14 @@ const App = () => {
                   element={
                     <ProtectedRoute allowedRoles={["Receptionist", "Doctor"]}>
                       <EditService />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/receptionist/userAppointments"
+                  element={
+                    <ProtectedRoute allowedRoles={["Receptionist", "Doctor"]}>
+                      <UserAppointmentsHistory />
                     </ProtectedRoute>
                   }
                 />

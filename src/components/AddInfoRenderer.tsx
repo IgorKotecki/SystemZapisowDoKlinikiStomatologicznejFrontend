@@ -33,6 +33,7 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
     const { t } = useTranslation();
     const [openModal, setOpenModal] = useState(false);
     const [alert, setAlert] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+    const [submitting, setSubmitting] = useState(false);
 
     if (!addInfo || !checked || !setChecked || !setAddInfo) {
         return <div>Loading...</div>;
@@ -67,6 +68,7 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
     }
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+        setSubmitting(true);
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
@@ -97,6 +99,9 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
             .catch((error) => {
                 console.error('Error adding additional info:', error);
                 setAlert({ type: 'error', message: t('addInfo.error') });
+            })
+            .finally(() => {
+                setSubmitting(false);
             });
     }
 
@@ -139,7 +144,7 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
                 })}
             </List>
 
-            <IconButton aria-label="add" sx={{ width: 40, height: 40, mt: 2 }} onClick={handleAddAdditionalInfo}>
+            <IconButton aria-label="add" sx={{ width: 40, height: 40, mt: 2 }} onClick={handleAddAdditionalInfo} disabled={submitting}>
                 <AddIcon />
             </IconButton>
 
@@ -194,6 +199,7 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
                         variant="contained"
                         type="submit"
                         form="addinfo-form"
+                        disabled={submitting}
                         sx={{ backgroundColor: colors.color3, color: colors.white }}
                     >
                         {t("addInfo.addInfoButton")}
