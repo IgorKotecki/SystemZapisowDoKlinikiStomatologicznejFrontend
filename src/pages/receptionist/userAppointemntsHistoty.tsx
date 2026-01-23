@@ -11,7 +11,6 @@ import type { Appointment } from "../../Interfaces/Appointment";
 import { showAlert } from "../../utils/GlobalAlert";
 import get from "../../api/get";
 import put from "../../api/put";
-import type { User } from "../../Interfaces/User";
 import { useLocation } from "react-router-dom";
 
 export default function UserAppointmentsHistory() {

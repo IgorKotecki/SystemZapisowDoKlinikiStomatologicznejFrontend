@@ -23,7 +23,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from "@mui/material/IconButton";
 import { showAlert } from "../../utils/GlobalAlert";
 import type { Appointment } from "../../Interfaces/Appointment";
-import { se } from "date-fns/locale";
 
 export default function DoctorAppointmentsConsole() {
     const location = useLocation();

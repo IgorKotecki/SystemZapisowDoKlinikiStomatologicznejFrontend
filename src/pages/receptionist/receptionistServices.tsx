@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect} from "react";
 import { Box, Typography, Paper, Button } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import UserNavigation from "../../components/userComponents/userNavigation";
@@ -6,7 +6,6 @@ import AddServiceModal from "../../components/AddService";
 import EditServiceModal from "../../components/EditServiceModel";
 import { useTranslation } from "react-i18next";
 import { colors } from "../../utils/colors";
-import type { Service } from "../../Interfaces/Service";
 import type { ServiceCategory } from "../../Interfaces/ServiceCategory";
 import type { NewService } from "../../Interfaces/NewService";
 import get from "../../api/get";
@@ -84,6 +83,7 @@ const ReceptionistServices: React.FC = () => {
     {
       field: 'name',
       headerName: t("receptionistServices.name"),
+      // @ts-ignore
       flex: 1
     },
     {
