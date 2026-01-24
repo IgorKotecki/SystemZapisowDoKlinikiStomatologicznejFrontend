@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Paper, Button } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import UserNavigation from "../../components/userComponents/userNavigation";
@@ -6,40 +6,10 @@ import AddServiceModal from "../../components/AddService";
 import EditServiceModal from "../../components/EditServiceModel";
 import { useTranslation } from "react-i18next";
 import { colors } from "../../utils/colors";
-import type { Service } from "../../Interfaces/Service";
 import type { ServiceCategory } from "../../Interfaces/ServiceCategory";
 import type { NewService } from "../../Interfaces/NewService";
 import get from "../../api/get";
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
-
-// const ReceptionistServices: React.FC = () => {
-//   const { t, i18n } = useTranslation();
-
-//   const [groupedServices, setGroupedServices] = useState<Record<string, Service[]>>({});
-//   const [categories, setCategories] = useState<ServiceCategory[]>([]);
-//   const [loading, setLoading] = useState(true);
-//   const [openAddModal, setOpenAddModal] = useState(false);
-//   const [openEditModal, setOpenEditModal] = useState(false);
-//   const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
-
-//   const services = useMemo(() => Object.values(groupedServices).flat(), [groupedServices]);
-
-//   const fetchInitialData = async () => {
-//     setLoading(true);
-//     try {
-//       const lang = i18n.language || 'pl';
-//       const [servicesData, categoriesData] = await Promise.all([
-//         get.getAllServices(lang),
-//         get.getServiceCategories()
-//       ]);
-//       setGroupedServices(servicesData.servicesByCategory);
-//       setCategories(categoriesData);
-//     } catch (error) {
-//       console.error('Error fetching services:', error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
 
 const ReceptionistServices: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -80,7 +50,7 @@ const ReceptionistServices: React.FC = () => {
   };
 
   const columns: GridColDef<NewService>[] = [
-    { field: 'id', headerName: 'ID', width: 90 },
+    // { field: 'id', headerName: 'ID', width: 90 },
     {
       field: 'name',
       headerName: t("receptionistServices.name"),

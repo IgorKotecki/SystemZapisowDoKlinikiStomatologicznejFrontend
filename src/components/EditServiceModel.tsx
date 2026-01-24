@@ -46,34 +46,30 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({ open, onClose, serv
         }
     }, [open, serviceId, t]);
 
+
     const validate = (): boolean => {
-        if (!serviceData?.namePl?.trim() || !serviceData?.nameEn?.trim()) {
-            showAlert({ type: "error", message: t("receptionistServices.errorEmptyFields") });
-            return false;
-        }
-        // if ( (Number(serviceData.lowPrice) < 1 && Number(serviceData.lowPrice) > Number(serviceData.highPrice)) || Number(serviceData.highPrice) < 1) {
-        //     showAlert({ type: "error", message: t("receptionistServices.errorPrices") });
-        //     return false;
-        // }
-        const low = Number(serviceData.lowPrice);
-        const high = Number(serviceData.highPrice);
+    if (!serviceData?.namePl?.trim() || !serviceData?.nameEn?.trim()) {
+        showAlert({ type: "error", message: t("receptionistServices.errorEmptyFields") });
+        return false;
+    }
 
-        const hasValidLow = low > 1;
-        const hasValidHigh = high > 1;
-        const isRangeInvalid = hasValidLow && hasValidHigh && low > high;
+    const low = Number(serviceData.lowPrice || 0);
+    const high = Number(serviceData.highPrice || 0);
+    if (low <= 0 && high <= 0) {
+        showAlert({ type: "error", message: t("receptionistServices.errorPriceRequired") });
+        return false;
+    }
+    if (low > 0 && high > 0 && high <= low) {
+        showAlert({ type: "error", message: t("receptionistServices.errorPriceRange") });
+        return false;
+    }
+    if (!serviceData.serviceCategoryIds || serviceData.serviceCategoryIds.length === 0) {
+        showAlert({ type: "error", message: t("receptionistServices.errorCategory") });
+        return false;
+    }
 
-        if (!hasValidLow && !hasValidHigh) {
-            showAlert({ type: "error", message: t("receptionistServices.errorPricesMissing") });
-            return false;
-        }
-
-        if (isRangeInvalid) {
-            showAlert({ type: "error", message: t("receptionistServices.errorPriceRange") });
-            return false;
-        }
-
-        return true;
-    };
+    return true;
+};
 
     const handleSave = async () => {
         if (!serviceData || !serviceId || !validate()) return;
@@ -143,37 +139,55 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({ open, onClose, serv
                                         onChange={(e) => setServiceData({ ...serviceData, nameEn: e.target.value })}
                                     />
                                 </Grid>
-                                <Grid size={{ xs: 12, md: 4 }}>
+
+                                <Grid size={{ xs: 12, md: 6 }}>
                                     <TextField
                                         fullWidth
                                         type="number"
-                                        label={t("editService.lowPrice")}
+                                        label={t("receptionistServices.minPrice")}
                                         sx={textFieldStyle}
-                                        value={serviceData.lowPrice}
+                                        value={serviceData.lowPrice === 0 ? "" : serviceData.lowPrice}
                                         onChange={(e) => setServiceData({ ...serviceData, lowPrice: Number(e.target.value) })}
                                     />
                                 </Grid>
-                                <Grid size={{ xs: 12, md: 4 }}>
+
+                                <Grid size={{ xs: 12, md: 6 }}>
                                     <TextField
                                         fullWidth
                                         type="number"
-                                        label={t("editService.highPrice")}
+                                        label={t("receptionistServices.maxPrice")}
                                         sx={textFieldStyle}
-                                        value={serviceData.highPrice}
-                                        onChange={(e) => setServiceData({ ...serviceData, highPrice: Number(e.target.value) })}
+                                        value={serviceData.highPrice === 0 ? "" : serviceData.highPrice}
+                                        onChange={(e) => {
+                                            const val = e.target.value === "" ? 0 : Number(e.target.value);
+                                            setServiceData({ ...serviceData, highPrice: Math.max(0, val) });
+                                        }}
                                     />
                                 </Grid>
 
-                                <Grid size={{ xs: 12, md: 4 }}>
+                                {/* <Grid size={{ xs: 12, md: 4 }}>
                                     <TextField
                                         fullWidth
                                         type="number"
-                                        label={t("editService.minTime")}
+                                        label={t("receptionistServices.time")}
                                         sx={textFieldStyle}
+                                        inputProps={{ step: 30, min: 30, readOnly: false }}
+                                        onKeyDown={(e) => {
+                                            if (!["ArrowUp", "ArrowDown", "Tab", "Backspace"].includes(e.key)) {
+                                                e.preventDefault();
+                                            }
+                                        }}
                                         value={serviceData.minTime}
-                                        onChange={(e) => setServiceData({ ...serviceData, minTime: Number(e.target.value) })}
+                                        onChange={(e) => {
+                                            const val = Number(e.target.value);
+                                            if (val % 30 === 0) {
+                                                setServiceData({ ...serviceData, minTime: val });
+                                            }
+                                        }}
                                     />
-                                </Grid>
+                                </Grid> */}
+
+
                                 <Grid size={{ xs: 12 }}>
                                     <FormControl fullWidth sx={{ backgroundColor: colors.white, borderRadius: 1 }}>
                                         <InputLabel>{t("editService.category")}</InputLabel>

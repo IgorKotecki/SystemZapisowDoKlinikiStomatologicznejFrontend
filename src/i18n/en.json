@@ -363,7 +363,7 @@
     "technicalDetails": "Additional informations",
     "description": "Description",
     "category": "Category",
-    "time": "Time",
+    "time": "Time [min]",
     "maxPrice": "Max price",
     "minPrice": "Min price",
     "errorEmptyFields": "All name and description fields must be filled",
@@ -400,7 +400,8 @@
     "category": "Category",
     "saveSuccess": "Changes have been saved successfully!",
     "saveError": "An error occurred while saving changes.",
-    "deleteError": "An error occurred while deleting the information."
+    "deleteError": "An error occurred while deleting the information.",
+    "deleteSuccess": "Service deleted successfully."
   },
   "doctorProfile": {
     "title": "Doctor Profile",

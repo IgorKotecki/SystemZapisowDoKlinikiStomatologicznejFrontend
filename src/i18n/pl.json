@@ -370,7 +370,7 @@
     "technicalDetails": "Dodatkowe informacje",
     "description": "Opis",
     "category": "Kategoria",
-    "time": "Czas",
+    "time": "Czas [min]",
     "maxPrice": "Maxymalna cena",
     "minPrice": "Minimalna cena",
     "errorEmptyFields": "Wszystkie pola nazwy i opisu muszą być wypełnione",
@@ -406,7 +406,8 @@
     "deleteConfirmText": "Czy na pewno chcesz usunąć ten serwis?",
     "saveSuccess": "Zmiany zostały zapisane pomyślnie!",
     "saveError": "Wystąpił błąd podczas zapisywania zmian.",
-    "deleteError": "Wystąpił błąd podczas usuwania informacji."
+    "deleteError": "Wystąpił błąd podczas usuwania informacji.",
+    "deleteSuccess": "Serwis został pomyślnie usunięty."
   },
   "doctorProfile": {
     "title": "Profil lekarza",

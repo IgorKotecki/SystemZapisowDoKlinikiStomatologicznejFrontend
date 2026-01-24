@@ -54,26 +54,23 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({ open, onClose, catego
     );
 
     if (!areLanguagesValid) {
-      showAlert({ type: "error", message: t("receptionistServices.errorEmptyFields")});
+      showAlert({ type: "error", message: t("receptionistServices.errorEmptyFields") });
       return false;
     }
 
-    if (newService.lowPrice < 1 || newService.highPrice < 1) {
-      showAlert({ type: "error", message: t("receptionistServices.errorPrices")});
+    const { lowPrice, highPrice } = newService;
+    if (lowPrice <= 0 && highPrice <= 0) {
+      showAlert({ type: "error", message: t("receptionistServices.errorPriceRequired") });
       return false;
     }
 
-    if (newService.lowPrice > newService.highPrice) {
-      showAlert({ type: "error", message: t("receptionistServices.errorPriceRange")});
+    if (lowPrice > 0 && highPrice > 0 && highPrice <= lowPrice) {
+      showAlert({ type: "error", message: t("receptionistServices.errorPriceRange") });
       return false;
     }
 
-    if (newService.minTime <= 0) {
-      showAlert({ type: "error", message: t("receptionistServices.errorTime")});
-      return false;
-    }
     if (newService.serviceCategoriesId.length === 0) {
-      showAlert({ type: "error", message: t("receptionistServices.errorCategory")});
+      showAlert({ type: "error", message: t("receptionistServices.errorCategory") });
       return false;
     }
 
@@ -86,13 +83,13 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({ open, onClose, catego
     setIsSubmitting(true);
     try {
       await post.addNewService(newService);
-      showAlert({ type: "success", message: t("receptionistServices.addSuccess")});
+      showAlert({ type: "success", message: t("receptionistServices.addSuccess") });
       setNewService(initialServiceState);
       onSuccess();
       onClose();
     } catch (error) {
       console.error(error);
-      showAlert({ type: "error", message: t("receptionistServices.addError")});
+      showAlert({ type: "error", message: t("receptionistServices.addError") });
     } finally {
       setIsSubmitting(false);
     }
@@ -117,64 +114,99 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({ open, onClose, catego
         </Typography>
 
         <Grid container spacing={3}>
-          <Grid size={{xs:12}}>
+          <Grid size={{ xs: 12 }}>
             <Typography variant="subtitle1" sx={{ color: colors.color5, fontWeight: 'bold', borderBottom: `1px solid ${colors.color3}`, mb: 1 }}>
               {t("receptionistServices.polishSection")}
             </Typography>
           </Grid>
-          <Grid size={{xs:12, md:6}}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <TextField fullWidth label={t("receptionistServices.name")} sx={textFieldStyle}
               value={newService.languages.find(l => l.code === "pl")?.name}
               onChange={(e) => updateLangField("pl", "name", e.target.value)}
             />
           </Grid>
-          <Grid size={{xs:12, md:6}}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <TextField fullWidth multiline rows={1} label={t("receptionistServices.description")} sx={textFieldStyle}
               value={newService.languages.find(l => l.code === "pl")?.description}
               onChange={(e) => updateLangField("pl", "description", e.target.value)}
             />
           </Grid>
 
-          <Grid size={{xs:12}}>
+          <Grid size={{ xs: 12 }}>
             <Typography variant="subtitle1" sx={{ color: colors.color5, fontWeight: 'bold', borderBottom: `1px solid ${colors.color3}`, mt: 2, mb: 1 }}>
               {t("receptionistServices.englishSection")}
             </Typography>
           </Grid>
-          <Grid size={{xs:12, md:6}}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <TextField fullWidth label={t("receptionistServices.name")} sx={textFieldStyle}
               value={newService.languages.find(l => l.code === "en")?.name}
               onChange={(e) => updateLangField("en", "name", e.target.value)}
             />
           </Grid>
-          <Grid size={{xs:12, md:6}}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <TextField fullWidth multiline rows={1} label={t("receptionistServices.description")} sx={textFieldStyle}
               value={newService.languages.find(l => l.code === "en")?.description}
               onChange={(e) => updateLangField("en", "description", e.target.value)}
             />
           </Grid>
 
-          <Grid size={{xs:12}}>
+          <Grid size={{ xs: 12 }}>
             <Typography variant="subtitle1" sx={{ color: colors.color5, fontWeight: 'bold', borderBottom: `1px solid ${colors.color3}`, mt: 2, mb: 1 }}>
               {t("receptionistServices.technicalDetails")}
             </Typography>
           </Grid>
-          <Grid size={{xs:12, md:4}}>
-            <TextField fullWidth type="number" label={t("receptionistServices.minPrice")} sx={textFieldStyle}
-              value={newService.lowPrice} onChange={(e) => setNewService({ ...newService, lowPrice: Number(e.target.value) })}
-            />
-          </Grid>
-          <Grid size={{xs:12, md:4}}>
-            <TextField fullWidth type="number" label={t("receptionistServices.maxPrice")} sx={textFieldStyle}
-              value={newService.highPrice} onChange={(e) => setNewService({ ...newService, highPrice: Number(e.target.value) })}
-            />
-          </Grid>
-          <Grid size={{xs:12, md:4}}>
-            <TextField fullWidth type="number" label={t("receptionistServices.time")} sx={textFieldStyle}
-              value={newService.minTime} onChange={(e) => setNewService({ ...newService, minTime: Number(e.target.value) })}
+
+          <Grid size={{ xs: 12, md: 4 }}>
+            <TextField
+              fullWidth
+              type="number"
+              label={t("receptionistServices.minPrice")}
+              sx={textFieldStyle}
+              value={newService.lowPrice === 0 ? "" : newService.lowPrice}
+              onChange={(e) => {
+                const val = e.target.value === "" ? 0 : Number(e.target.value);
+                setNewService({ ...newService, lowPrice: Math.max(0, val) });
+              }}
             />
           </Grid>
 
-          <Grid size={{xs:12}}>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <TextField
+              fullWidth
+              type="number"
+              label={t("receptionistServices.maxPrice")}
+              sx={textFieldStyle}
+              value={newService.highPrice === 0 ? "" : newService.highPrice}
+              onChange={(e) => {
+                const val = e.target.value === "" ? 0 : Number(e.target.value);
+                setNewService({ ...newService, highPrice: Math.max(0, val) });
+              }}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 4 }}>
+            <TextField
+              fullWidth
+              type="number"
+              label={t("receptionistServices.time")}
+              sx={textFieldStyle}
+              inputProps={{ step: 30, min: 30, readOnly: false }}
+              onKeyDown={(e) => {
+                if (!["ArrowUp", "ArrowDown", "Tab", "Backspace"].includes(e.key)) {
+                  e.preventDefault();
+                }
+              }}
+              value={newService.minTime}
+              onChange={(e) => {
+                const val = Number(e.target.value);
+                if (val % 30 === 0) {
+                  setNewService({ ...newService, minTime: val });
+                }
+              }}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12 }}>
             <TextField select fullWidth label={t("receptionistServices.category")} sx={textFieldStyle}
               value={newService.serviceCategoriesId[0] || ""}
               onChange={(e) => setNewService({ ...newService, serviceCategoriesId: [Number(e.target.value)] })}
@@ -200,7 +232,7 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({ open, onClose, catego
           </Box>
         </Box>
       </Paper>
-    </Modal>
+    </Modal >
   );
 };
 
