@@ -23,6 +23,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from "@mui/material/IconButton";
 import { showAlert } from "../../utils/GlobalAlert";
 import type { Appointment } from "../../Interfaces/Appointment";
+import post from "../../api/post";
 
 export default function DoctorAppointmentsConsole() {
     const location = useLocation();
@@ -41,6 +42,7 @@ export default function DoctorAppointmentsConsole() {
     const [openDrawer, setOpenDrawer] = useState(false);
     const [historyAppointments, setHistoryAppointments] = useState<Appointment[]>([]);
     const [completing, setCompleting] = useState(false);
+    const [creatingModel, setCreatingModel] = useState(false);
 
     const onStatusChange = (status: Status) => {
         console.log("Selected status:", status);
@@ -74,12 +76,7 @@ export default function DoctorAppointmentsConsole() {
             console.error("Failed to fetch history appointments");
         }
     };
-
-    useEffect(() => {
-
-        const lang = i18n.language || "pl";
-
-        const fetchStatusesAsync = async () => {
+    const fetchStatusesAsync = async (lang: string) => {
             try {
                 const response = await get.getToothStatuses(lang);
                 const map = new Map<string, Status[]>();
@@ -91,7 +88,7 @@ export default function DoctorAppointmentsConsole() {
                 console.error("Failed to fetch statuses");
             }
         };
-        const fetchTeethData = async () => {
+        const fetchTeethData = async (lang: string) => {
             try {
                 if (!state) return;
                 const response = await get.getTeethModel(state.appointment.patientId, lang)
@@ -101,7 +98,7 @@ export default function DoctorAppointmentsConsole() {
             }
         };
 
-        const fetchAddInfoData = async () => {
+        const fetchAddInfoData = async (lang: string) => {
             try {
                 const response = await get.getAdditionalInformation(lang);
                 setAddInfo(response);
@@ -110,9 +107,11 @@ export default function DoctorAppointmentsConsole() {
             }
         };
 
-        fetchTeethData();
-        fetchStatusesAsync();
-        fetchAddInfoData();
+    useEffect(() => {
+        const lang = i18n.language || "pl";
+        fetchTeethData(lang);
+        fetchStatusesAsync(lang);
+        fetchAddInfoData(lang);
         setChecked(state?.appointment.additionalInformation || []);
         setLoading(false);
     }, [t]);
@@ -186,7 +185,22 @@ export default function DoctorAppointmentsConsole() {
             setCompleting(false);
         }
     };
-
+    const createTeethModel = async () => {
+        setCreatingModel(true);
+        try {
+            if (!state) return;
+            const payload = {
+                userId: state.appointment.patientId,
+            };
+            await post.createTeethModel(payload);
+            fetchTeethData(i18n.language || "pl");
+        } catch (error) {
+            showAlert({ type: 'error', message: t('doctorAppointmentConsole.createModelError') });
+            console.error("Błąd tworzenia modelu zębów:", error);
+        } finally {
+            setCreatingModel(false);
+        }
+    }
 
     if (loading) {
         return (
@@ -248,7 +262,7 @@ export default function DoctorAppointmentsConsole() {
                     </Box>
                 </Grid>
                 <Grid size={12}>
-                    <TeethModel teeth={teeth} selectedTooth={selectedTooth} setSelectedTooth={setSelectedTooth} />
+                    <TeethModel teeth={teeth} selectedTooth={selectedTooth} setSelectedTooth={setSelectedTooth} creatingModel={creatingModel} createModel={createTeethModel}/>
                 </Grid>
                 <Grid size={4}>
                     <AppointemtInfoRenderer appointment={state.appointment} />

@@ -261,7 +261,8 @@
     "state": "Condition",
     "notes": "Notes",
     "close": "Close",
-    "noTeethData": "No teeth data available for this user (Probably unregistered)."
+    "noTeethData": "No teeth data available for this user (Probably unregistered).",
+    "createModel": "Create Teeth Model"
   },
   "receptionistNavigation": {
     "profile": "Profile",
@@ -508,7 +509,9 @@
     "removeConfirm": "Are you sure you want to remove this information?",
     "addInfoTitle": "Add new information",
     "error": "An error occurred while processing your request.",
-    "success": "Information has been added successfully."
+    "success": "Information has been added successfully.",
+    "confirmDeleteTitle": "Delete information",
+    "confirmDeleteMessage": "Are you sure you want to delete this information?"
   },
   "doctorAppointmentConsole": {
     "title": "Appointment Console",
@@ -648,5 +651,6 @@
     "service": "Service",
     "price": "Price",
     "notes": "Notes"
-  }
+  },
+  "delete" : "Delete"
 }

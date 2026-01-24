@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Box, Typography, Paper, Button, Dialog, DialogActions, TextField, DialogTitle } from "@mui/material";
+import React, { useState, useEffect, useRef } from "react";
+import { Box, Typography, Paper, Button, Dialog, DialogActions, TextField, DialogTitle, DialogContent } from "@mui/material";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import { useTranslation } from "react-i18next";
 import { colors } from "../../utils/colors";
@@ -20,10 +20,16 @@ const AdditionalInformation: React.FC = () => {
     const [additionalInfo, setAdditionalInfo] = useState<AdditionalInfo[]>([]);
     const [loading, setLoading] = useState(true);
     const [openModal, setOpenModal] = useState(false);
+    const [infoPl, setInfoPl] = useState('');
+    const [infoEn, setInfoEn] = useState('');
+    const [submitting, setSubmitting] = useState(false);
+    const isSubmitting = useRef(false);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [infoToDeleteId, setInfoToDeleteId] = useState<number | null>(null);
 
     const fetchAddInfo = async () => {
         setLoading(true);
-        var language = i18n.language;
+        const language = i18n.language;
         try {
             const response = await get.getAdditionalInformation(language);
             setAdditionalInfo(response);
@@ -37,18 +43,63 @@ const AdditionalInformation: React.FC = () => {
 
     useEffect(() => {
         fetchAddInfo();
-    }, []);
+    }, [i18n.language]);
 
-    const handleDeleteClick = async (id: number) => {
+    const handleDeleteClick = async () => {
+        if (!infoToDeleteId) return;
         try {
-            await deleteApi.deleteAdditionalInformation(id);
+            await deleteApi.deleteAdditionalInformation(infoToDeleteId!);
             showAlert({ type: "success", message: t("additionalInfo.deleteSuccess") });
             fetchAddInfo();
         } catch (error) {
             console.error(error);
             showAlert({ type: "error", message: t("additionalInfo.deleteError") });
+        } finally {
+            setDeleteDialogOpen(false);
+            setInfoToDeleteId(null);
         }
     };
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+        setInfoPl('');
+        setInfoEn('');
+    };
+
+    const submitAddInfo = async () => {
+        if (isSubmitting.current) {
+            console.log('Already submitting, blocked!');
+            return;
+        }
+
+        isSubmitting.current = true;
+        setSubmitting(true);
+
+        const addInfoPayload = {
+            bodyPl: infoPl,
+            bodyEn: infoEn,
+            language: i18n.language,
+        };
+
+        try {
+            const response = await post.addAdditionalInformation(addInfoPayload);
+            const newItem: AdditionalInfo = {
+                id: response.id,
+                body: response.body,
+            };
+
+            setAdditionalInfo([...additionalInfo, newItem]);
+            handleCloseModal();
+            showAlert({ type: 'success', message: t('addInfo.success') });
+        } catch (error) {
+            console.error('Error adding additional info:', error);
+            showAlert({ type: 'error', message: t('addInfo.error') });
+        } finally {
+            setSubmitting(false);
+            isSubmitting.current = false;
+        }
+    };
+    
 
     const columns: GridColDef<AdditionalInfo>[] = [
         // @ts-ignore
@@ -64,7 +115,10 @@ const AdditionalInformation: React.FC = () => {
                         variant="contained"
                         sx={{ color: colors.white, backgroundColor: colors.redTooth, '&:hover': { backgroundColor: colors.calenderBorderDayOff } }}
                         size="small"
-                        onClick={() => handleDeleteClick(params.row.id)}
+                        onClick={() => {
+                            setInfoToDeleteId(params.row.id);
+                            setDeleteDialogOpen(true);
+                        }}
                     >
                         <DeleteIcon />
                     </Button>
@@ -72,43 +126,6 @@ const AdditionalInformation: React.FC = () => {
             ),
         },
     ];
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-
-        const newInfoPl = data.get('infoPl') as string;
-        const newInfoEn = data.get('infoEn') as string;
-
-        const addInfoPayload = {
-            bodyPl: newInfoPl,
-            bodyEn: newInfoEn,
-            language: i18n.language,
-        };
-
-        await post.addAdditionalInformation(addInfoPayload).then((response) => {
-            const newItem: AdditionalInfo = {
-                id: response.id,
-                body: response.body,
-            };
-
-            const currentAddInfo = additionalInfo || [];
-            const newAddInfoArray = [...currentAddInfo, newItem];
-
-            setAdditionalInfo(newAddInfoArray);
-            setOpenModal(false);
-            showAlert({
-                type: 'success', message: t('addInfo.success')
-            });
-        })
-            .catch((error) => {
-                console.error('Error adding additional info:', error);
-                showAlert({
-                    type: 'error', message: t('addInfo.error')
-                });
-            }
-            );
-    }
 
     return (
         <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, width: "100%", minHeight: "100vh", backgroundColor: colors.color1 }}>
@@ -138,6 +155,7 @@ const AdditionalInformation: React.FC = () => {
                             variant="contained"
                             sx={{ ml: 2, color: colors.white, backgroundColor: colors.color3, '&:hover': { backgroundColor: colors.color4 } }}
                             onClick={() => setOpenModal(true)}
+                            disabled={submitting}
                         >
                             {t("addInfo.addInfoButton")}
                         </Button>
@@ -180,9 +198,10 @@ const AdditionalInformation: React.FC = () => {
                         />
                     </Paper>
                 </Box>
+
                 <Dialog
                     open={openModal}
-                    onClose={() => setOpenModal(false)}
+                    onClose={handleCloseModal}
                     PaperProps={{
                         sx: {
                             backgroundColor: colors.color2,
@@ -198,45 +217,85 @@ const AdditionalInformation: React.FC = () => {
                             {t("addInfo.addInfoTitle")}
                         </Typography>
                     </DialogTitle>
-                    <form onSubmit={handleSubmit} id="addinfo-form">
-                        <TextField
-                            label={t("addInfo.newInfoLabelPl")}
-                            variant="outlined"
-                            fullWidth
-                            required
-                            name="infoPl"
-                            key={'infoPl'}
-                            sx={{ mb: 2, backgroundColor: colors.white }}
-                        />
-                        <TextField
-                            label={t("addInfo.newInfoLabelEn")}
-                            variant="outlined"
-                            fullWidth
-                            required
-                            name="infoEn"
-                            key={'infoEn'}
-                            sx={{ mb: 2, backgroundColor: colors.white }}
-                        />
 
-                    </form>
+                    <TextField
+                        label={t("addInfo.newInfoLabelPl")}
+                        variant="outlined"
+                        fullWidth
+                        required
+                        value={infoPl}
+                        onChange={(e) => setInfoPl(e.target.value)}
+                        sx={{ mb: 2, backgroundColor: colors.white }}
+                    />
+                    <TextField
+                        label={t("addInfo.newInfoLabelEn")}
+                        variant="outlined"
+                        fullWidth
+                        required
+                        value={infoEn}
+                        onChange={(e) => setInfoEn(e.target.value)}
+                        sx={{ mb: 2, backgroundColor: colors.white }}
+                    />
+
                     <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
                         <Button
                             variant="outlined"
-                            onClick={() => setOpenModal(false)}
+                            onClick={handleCloseModal}
                             sx={{ borderColor: colors.color3, color: colors.white }}
                         >
                             {t("doctorFreeDays.cancel")}
                         </Button>
                         <Button
                             variant="contained"
-                            type="submit"
-                            form="addinfo-form"
+                            onClick={submitAddInfo}
+                            disabled={submitting || !infoPl || !infoEn}
                             sx={{ backgroundColor: colors.color3, color: colors.white }}
                         >
                             {t("addInfo.addInfoButton")}
                         </Button>
                     </DialogActions>
                 </Dialog>
+                <Dialog
+                        open={deleteDialogOpen}
+                        onClose={() => {
+                            setDeleteDialogOpen(false)
+                            setInfoToDeleteId(null);
+                        }}
+                        disableScrollLock
+                        aria-labelledby="delete-dialog-title"
+                      >
+                        <DialogTitle id="delete-dialog-title">
+                          {t("addInfo.confirmDeleteTitle")}
+                        </DialogTitle>
+                        <DialogContent>
+                          <Typography>
+                            {t("addInfo.confirmDeleteMessage")}
+                          </Typography>
+                        </DialogContent>
+                        <DialogActions sx={{ p: 2, gap: 1 }}>
+                          <Button
+                            onClick={
+                                () => {
+                                    setDeleteDialogOpen(false);
+                                    setInfoToDeleteId(null);
+                                }
+                            }
+                            color="inherit"
+                            sx={{ borderRadius: "20px", px: 3 }}
+                          >
+                            {t("cancel") || t("cancel")}
+                          </Button>
+                          <Button
+                            onClick={handleDeleteClick}
+                            variant="contained"
+                            color="error"
+                            autoFocus
+                            sx={{ borderRadius: "20px", px: 3 }}
+                          >
+                            {t("delete")}
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
             </Box>
         </Box>
     );

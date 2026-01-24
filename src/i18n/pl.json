@@ -266,7 +266,8 @@
     "state": "Stan",
     "notes": "Uwagi",
     "close": "Zamknij",
-    "noTeethData": "Brak danych o zębach dla tego użytkownika (Prawdopodobnie niezarejestrowany)."
+    "noTeethData": "Brak danych o zębach dla tego użytkownika (Prawdopodobnie niezarejestrowany).",
+    "createModel": "Utwórz model zębów"
   },
   "receptionistNavigation": {
     "profile": "Profil",
@@ -515,7 +516,9 @@
     "removeConfirm": "Czy na pewno chcesz usunąć tę informację?",
     "addInfoTitle": "Dodaj nową informację",
     "error": "Wystąpił błąd podczas dodawania informacji.",
-    "success": "Informacja została pomyślnie dodana."
+    "success": "Informacja została pomyślnie dodana.",
+    "confirmDeleteTitle": "Usuń informację",
+    "confirmDeleteMessage": "Czy na pewno chcesz usunąć tę informację?"
   },
   "doctorAppointmentConsole": {
     "title": "Konsola wizyty lekarskiej",
@@ -666,5 +669,6 @@
     "service": "Usługa",
     "price": "Cena",
     "notes": "Notatki"
-  }
+  },
+  "delete": "Usuń"
 }

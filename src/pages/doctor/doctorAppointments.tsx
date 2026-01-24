@@ -6,6 +6,9 @@ import {
   FormControlLabel,
   Switch,
   Button,
+  Dialog,
+  DialogActions,
+  DialogTitle,
 } from "@mui/material";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -23,6 +26,8 @@ import get from "../../api/get";
 import { applayStatusColor } from "../../utils/colorsUtils";
 import { showAlert } from "../../utils/GlobalAlert";
 import { Drawer } from "@mui/material";
+import { se } from "date-fns/locale";
+import AppointmentDetailsDialogContent from "../../components/AppointmentDetailsDialogContent";
 
 const DoctorAppointments: React.FC = () => {
   const { t } = useTranslation();
@@ -32,7 +37,9 @@ const DoctorAppointments: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [showCancelled, setShowCancelled] = useState(true);
   const [showCompleted, setShowCompleted] = useState(true);
+  const [openDetailDialog, setOpenDetailDialog] = useState(false);
   const navigate = useNavigate();
+  const [selectedAppointment, setSelectedAppointment] = useState<IDoctorAppointment | null>(null);
 
   const fetchDoctorsAppointemtAsync = async (date: string, showCancelled: boolean, showCompleted: boolean) => {
     const language = i18n.language;
@@ -66,10 +73,14 @@ const DoctorAppointments: React.FC = () => {
   const handleEventClick = (info: any) => {
     if (info.event.extendedProps.status === 'Cancelled' || info.event.extendedProps.status === 'Anulowana') {
       showAlert({ type: "info", message: t("doctorCalendar.cancelledAppointmentAlert") });
+      setSelectedAppointment(info.event.extendedProps as IDoctorAppointment);
+      setOpenDetailDialog(true);
       return;
     }
     if (info.event.extendedProps.status === 'Completed' || info.event.extendedProps.status === 'Zakończona') {
       showAlert({ type: "info", message: t("doctorCalendar.completedAppointmentAlert") });
+      setSelectedAppointment(info.event.extendedProps as IDoctorAppointment);
+      setOpenDetailDialog(true);
       return;
     }
     navigate(`/doctor/appointmentConsole/${info.event.id}`, { state: { appointment: info.event.extendedProps as IDoctorAppointment } });
@@ -145,6 +156,42 @@ const DoctorAppointments: React.FC = () => {
           </Box>
         )}
       </Box>
+      <Dialog
+          open={openDetailDialog}
+          onClose={() => setOpenDetailDialog(false)}
+          PaperProps={{
+            sx: {
+              backgroundColor: colors.color2,
+              color: colors.white,
+              borderRadius: 3,
+              minWidth: 700,
+              p: 4,
+            },
+          }}
+        >
+          <DialogTitle>
+            <Typography component="h1" variant="h6" sx={{ color: colors.color5, fontWeight: "bold" }}>
+              {t("receptionistCalendar.appointmentDetails")}
+            </Typography>
+          </DialogTitle>
+          {selectedAppointment && (
+            <AppointmentDetailsDialogContent
+              selectedAppointmentDetail={CalendarMapper.DoctorAppointmentToApiAppointment(selectedAppointment)}
+            />
+          )}
+          <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setOpenDetailDialog(false);
+                setSelectedAppointment(null);
+              }}
+              sx={{ borderColor: colors.color3, color: colors.white }}
+            >
+              {t("receptionistCalendar.close")}
+            </Button>
+          </DialogActions>
+        </Dialog>
       <Drawer
         anchor="right"
         open={drawerOpen}

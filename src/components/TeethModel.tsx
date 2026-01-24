@@ -4,6 +4,8 @@ import {
     Paper,
     Tooltip,
     Grid,
+    Button,
+    CircularProgress,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import type { ToothData } from "../Interfaces/ToothData"
@@ -13,9 +15,11 @@ type TeethModelProps = {
     teeth: ToothData[];
     selectedTooth?: ToothData | null;
     setSelectedTooth?: (tooth: ToothData | null) => void;
+    createModel?: () => void;
+    creatingModel?: boolean;
 };
 
-export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth }: TeethModelProps) {
+export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth, createModel, creatingModel }: TeethModelProps) {
     const { t } = useTranslation();
 
     console.log("Selected tooth:", selectedTooth);
@@ -54,7 +58,13 @@ export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth }:
                 <Typography variant="h6" sx={{ mb: 3, color: colors.color5 }}>
                     {t("dentalChart.toothDiagram")}
                 </Typography>
-                {teeth.length === 0 && (<Typography color={colors.white}>{t("dentalChart.noTeethData")}</Typography>
+                {teeth.length === 0 && (
+                    <>
+                        <Typography color={colors.white}>{t("dentalChart.noTeethData")}</Typography>
+                        <Button onClick={createModel} disabled={creatingModel} sx={{ mt: 2, backgroundColor: colors.color3, color: colors.white }}>
+                            {creatingModel ? <CircularProgress size={24} /> : t("dentalChart.createModel")}
+                        </Button>
+                    </>
                 )}
                 <Grid container justifyContent="center" spacing={1} sx={{ mb: 5 }}>
                     {teeth.slice(0, 16).map((tooth) => (
