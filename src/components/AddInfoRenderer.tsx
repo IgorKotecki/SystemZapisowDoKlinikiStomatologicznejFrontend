@@ -15,12 +15,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import TextField from '@mui/material/TextField';
-import api from "../api/axios";
 import Alert from '@mui/material/Alert';
-import { useEffect } from "react";
 import i18n from "../i18n";
+import post from "../api/post";
 
 type AddInfoRendererProps = {
     addInfo?: AddInfo[];
@@ -34,6 +33,9 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
     const [openModal, setOpenModal] = useState(false);
     const [alert, setAlert] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
     const [submitting, setSubmitting] = useState(false);
+    const [infoPl, setInfoPl] = useState('');
+    const [infoEn, setInfoEn] = useState('');
+    const isSubmitting = useRef(false);
 
     if (!addInfo || !checked || !setChecked || !setAddInfo) {
         return <div>Loading...</div>;
@@ -44,7 +46,6 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
             const timer = setTimeout(() => {
                 setAlert(null);
             }, 3000);
-
 
             return () => clearTimeout(timer);
         }
@@ -65,45 +66,41 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
 
     const handleAddAdditionalInfo = () => {
         setOpenModal(true);
-    }
+    };
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
+    const handleCloseModal = () => {
+        setOpenModal(false);
+        setInfoPl('');
+        setInfoEn('');
+    };
+
+    const submitAddInfo = async () => {
+        if (isSubmitting.current) {
+            console.log('Already submitting, blocked!');
+            return;
+        }
+
+        isSubmitting.current = true;
         setSubmitting(true);
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-
-        const newInfoPl = data.get('infoPl') as string;
-        const newInfoEn = data.get('infoEn') as string;
 
         const addInfoPayload = {
-            bodyPl: newInfoPl,
-            bodyEn: newInfoEn,
+            bodyPl: infoPl,
+            bodyEn: infoEn,
             language: i18n.language,
         };
 
-        await api.post<AddInfo>('/api/additional-information', addInfoPayload)
-            .then((response) => {
-                console.log('Additional info added:', response.data);
-                const newItem: AddInfo = {
-                    id: response.data.id,
-                    body: response.data.body,
-                };
-
-                const currentAddInfo = addInfo || [];
-                const newAddInfoArray = [...currentAddInfo, newItem];
-
-                setAddInfo(newAddInfoArray);
-                setOpenModal(false);
-                setAlert({ type: 'success', message: t('addInfo.success') });
-            })
-            .catch((error) => {
-                console.error('Error adding additional info:', error);
-                setAlert({ type: 'error', message: t('addInfo.error') });
-            })
-            .finally(() => {
-                setSubmitting(false);
-            });
-    }
+        try {
+            const response = await post.addAdditionalInformation(addInfoPayload);
+            setAddInfo([...addInfo, response]);
+            setAlert({ type: 'success', message: t('addInfo.addInfoSuccess') });
+            handleCloseModal();
+        } catch (error) {
+            setAlert({ type: 'error', message: t('addInfo.addInfoError') });
+        } finally {
+            setSubmitting(false);
+            isSubmitting.current = false;
+        }
+    };
 
     return (
         <Box sx={{
@@ -144,13 +141,18 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
                 })}
             </List>
 
-            <IconButton aria-label="add" sx={{ width: 40, height: 40, mt: 2 }} onClick={handleAddAdditionalInfo} disabled={submitting}>
+            <IconButton 
+                aria-label="add" 
+                sx={{ width: 40, height: 40, mt: 2 }} 
+                onClick={handleAddAdditionalInfo} 
+                disabled={submitting}
+            >
                 <AddIcon />
             </IconButton>
 
             <Dialog
                 open={openModal}
-                onClose={() => setOpenModal(false)}
+                onClose={handleCloseModal}
                 PaperProps={{
                     sx: {
                         backgroundColor: colors.color2,
@@ -166,48 +168,59 @@ export default function AddInfoRenderer({ addInfo, checked, setChecked, setAddIn
                         {t("addInfo.addInfoTitle")}
                     </Typography>
                 </DialogTitle>
-                <form onSubmit={handleSubmit} id="addinfo-form">
-                    <TextField
-                        label={t("addInfo.newInfoLabelPl")}
-                        variant="outlined"
-                        fullWidth
-                        required
-                        name="infoPl"
-                        key={'infoPl'}
-                        sx={{ mb: 2, backgroundColor: colors.white }}
-                    />
-                    <TextField
-                        label={t("addInfo.newInfoLabelEn")}
-                        variant="outlined"
-                        fullWidth
-                        required
-                        name="infoEn"
-                        key={'infoEn'}
-                        sx={{ mb: 2, backgroundColor: colors.white }}
-                    />
 
-                </form>
+                <TextField
+                    label={t("addInfo.newInfoLabelPl")}
+                    variant="outlined"
+                    fullWidth
+                    required
+                    value={infoPl}
+                    onChange={(e) => setInfoPl(e.target.value)}
+                    sx={{ mb: 2, backgroundColor: colors.white }}
+                />
+                <TextField
+                    label={t("addInfo.newInfoLabelEn")}
+                    variant="outlined"
+                    fullWidth
+                    required
+                    value={infoEn}
+                    onChange={(e) => setInfoEn(e.target.value)}
+                    sx={{ mb: 2, backgroundColor: colors.white }}
+                />
+
                 <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
                     <Button
                         variant="outlined"
-                        onClick={() => setOpenModal(false)}
+                        onClick={handleCloseModal}
                         sx={{ borderColor: colors.color3, color: colors.white }}
                     >
                         {t("doctorFreeDays.cancel")}
                     </Button>
                     <Button
                         variant="contained"
-                        type="submit"
-                        form="addinfo-form"
-                        disabled={submitting}
+                        onClick={submitAddInfo}
+                        disabled={submitting || !infoPl || !infoEn}
                         sx={{ backgroundColor: colors.color3, color: colors.white }}
                     >
                         {t("addInfo.addInfoButton")}
                     </Button>
                 </DialogActions>
             </Dialog>
+
             {alert &&
-                <Alert style={{ position: "fixed", bottom: 24, right: 24, zIndex: 2000, minWidth: 300, boxShadow: "0px 4px 12px rgba(0,0,0,0.3)" }} severity={alert.type}>{alert.message}</Alert>
+                <Alert 
+                    style={{ 
+                        position: "fixed", 
+                        bottom: 24, 
+                        right: 24, 
+                        zIndex: 2000, 
+                        minWidth: 300, 
+                        boxShadow: "0px 4px 12px rgba(0,0,0,0.3)" 
+                    }} 
+                    severity={alert.type}
+                >
+                    {alert.message}
+                </Alert>
             }
         </Box>
     );
