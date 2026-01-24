@@ -103,59 +103,6 @@ export default function ProfilePage() {
     }
   };
 
-  // const handleSave = async () => {
-  //   if (!userData) return;
-  //   setUploading(true);
-
-  //   try {
-  //     let finalPhotoUrl = userData.photoUrl;
-
-  //     if (selectedFile) {
-  //       finalPhotoUrl = await uploadImageToCloudinary(selectedFile);
-  //     }
-
-  //     // const dto: UserUpdate & { PhotoURL?: string } = {
-  //     //   name: userData.name,
-  //     //   surname: userData.surname,
-  //     //   phoneNumber: userData.phoneNumber,
-  //     //   email: userData.email,
-  //     //   PhotoURL: finalPhotoUrl,
-  //     // };
-  //     const dto: UserUpdate & { PhotoURL?: string } = {
-  //       name: userData.name,
-  //       surname: userData.surname,
-  //       phoneNumber: userData.phoneNumber,
-  //       email: userData.email,
-  //       photoUrl: finalPhotoUrl || "",
-  //       PhotoURL: finalPhotoUrl,
-  //     };
-
-  //     const response = await api.put(`/api/User/edit/${userId}`, dto);
-
-  //     const mappedUpdatedData = mapUserData(response.data);
-  //     updateUserPhoto(mappedUpdatedData.photoUrl ?? null);
-  //     setUserData(mappedUpdatedData);
-  //     setOriginalUserData(mappedUpdatedData);
-  //     setIsEditing(false);
-  //     setSelectedFile(null);
-  //     setPreviewUrl(null);
-  //     setAlert({
-  //       type: "success",
-  //       message: t("userProfile.saveSuccess")
-  //     });
-
-  //   } catch (err: any) {
-  //     console.error("Błąd zapisu:", err);
-  //     setAlert({
-  //       type: "error",
-  //       message: t("userProfile.saveError")
-  //     });
-
-  //   } finally {
-  //     setUploading(false);
-  //   }
-  // };
-
   const handleSave = async () => {
     if (!userData) return;
 
@@ -207,7 +154,7 @@ export default function ProfilePage() {
       if (selectedFile) {
         finalPhotoUrl = await uploadImageToCloudinary(selectedFile);
       }
-
+      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
       const dto: UserUpdate & { PhotoURL?: string } = {
         name: userData.name.trim(),
         surname: userData.surname.trim(),
@@ -216,6 +163,7 @@ export default function ProfilePage() {
         photoUrl: finalPhotoUrl || "",
         PhotoURL: finalPhotoUrl,
       };
+      console.log(dto);
 
       const response = await api.put(`/api/User/edit/${userId}`, dto);
 
@@ -242,7 +190,7 @@ export default function ProfilePage() {
 
       if (err.response) {
         console.log("Status serwera:", err.response.status);
-        console.log("Tytuł błędu:", err.response.data.title); 
+        console.log("Tytuł błędu:", err.response.data.title);
         console.log("Szczegóły walidacji:", err.response.data.errors);
       }
     } finally {

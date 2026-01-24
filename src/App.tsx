@@ -24,6 +24,7 @@ const User = lazy(() => import("./pages/userPages/userProfile"));
 const Appointments = lazy(() => import("./pages/userPages/userAppointments"));
 const UserMakeAppointment = lazy(() => import("./pages/userPages/userMakeAppointment"));
 const DentalChartPage = lazy(() => import("./pages/userPages/DentalChartPage"));
+const UserAppointmentConfirmation = lazy(() => import("./pages/userPages/ConfirmAppointment"));
 
 const ReceptionistProfile = lazy(() => import("./pages/receptionist/receptionistProfile"));
 const ReceptionistCalendar = lazy(() => import("./pages/receptionist/receptionistCalendar"));
@@ -93,6 +94,14 @@ const App = () => {
                   element={
                     <ProtectedRoute allowedRoles={['Registered_user']}>
                       <DentalChartPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/user/confirmAppointment"
+                  element={
+                    <ProtectedRoute allowedRoles={['Registered_user']}>
+                      <UserAppointmentConfirmation />
                     </ProtectedRoute>
                   }
                 />

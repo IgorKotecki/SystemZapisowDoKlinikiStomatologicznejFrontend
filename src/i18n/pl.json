@@ -212,7 +212,9 @@
     "invalidSurnameFormat": "Nazwisko może zawierać tylko litery, spacje, myślniki i apostrofy. Powyżej 2 znaków.",
     "nameTooLong": "Imię jest za długie",
     "surnameTooLong": "Nazwisko jest za długie",
-    "mailTaken": "Adres email jest już w użyciu"
+    "mailTaken": "Adres email jest już w użyciu",
+    "deleteSuccess": "Konto zostało pomyślnie usunięte",
+    "deleteError": "Wystąpił błąd podczas usuwania konta."
   },
   "userAppointments": {
     "title": "Historia Wizyt",
@@ -264,7 +266,8 @@
     "services": "Wybrane usługi",
     "duration": "Przewidywany czas wizyty",
     "backHome": "Wróć do strony głównej",
-    "noData": "Nie znaleziono danych wizyty."
+    "noData": "Nie znaleziono danych wizyty.",
+    "userPage": "Wróć do panelu użytkownika"
   },
   "dentalChart": {
     "back": "Powrót",

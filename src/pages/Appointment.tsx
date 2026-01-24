@@ -75,18 +75,18 @@ export default function Appointment() {
     //     return true;
     // }
     const validate = (startTime: string | undefined): boolean => {
-        // 1. Sprawdzenie czy wszystkie ID są wybrane
+
         if (!servicesIds.length || !doctorId || !timeBlockId || !date || !startTime) {
             showAlert({ type: 'error', message: t("userMakeAppointment.errorFields") });
             return false;
         }
 
         const now = new Date();
-        const selectedFullDate = new Date(startTime); // Używamy startTime, bo ma w sobie i dzień i godzinę
+        const selectedFullDate = new Date(startTime); 
 
-        // 2. Walidacja czy termin nie jest w przeszłości
+        
         if (selectedFullDate < now) {
-            // Sprawdzamy czy to ten sam dzień, czy zupełnie przeszły
+            
             const isToday = new Date(selectedFullDate).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0);
 
             const errorMessage = isToday
@@ -96,8 +96,6 @@ export default function Appointment() {
             showAlert({ type: 'error', message: errorMessage });
             return false;
         }
-
-        // 3. Walidacja danych osobowych
         if (!formData.firstName?.trim()) {
             showAlert({ type: 'error', message: t("appointment.errorFirstName") });
             return false;
@@ -113,7 +111,7 @@ export default function Appointment() {
             return false;
         }
 
-        const phoneRegex = /^[0-9+\-()\s]{7,15}$/; // Dodana walidacja długości (opcjonalnie)
+        const phoneRegex = /^[0-9+\-()\s]{7,15}$/; 
         if (!formData.phone || !phoneRegex.test(formData.phone)) {
             showAlert({ type: 'error', message: t("appointment.errorPhone") });
             return false;

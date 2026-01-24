@@ -259,7 +259,10 @@
     "services": "Selected Services",
     "duration": "Estimated Duration Visit Time",
     "backHome": "Back to Home Page",
-    "noData": "Appointment data not found."
+    "noData": "Appointment data not found.",
+    "userPage": "Back to User Page",
+    "deleteSuccess": "Account has been successfully deleted",
+    "deleteError": "An error occurred while deleting the information."
   },
   "dentalChart": {
     "back": "Back",

@@ -28,9 +28,12 @@ import type { Doctor } from "../../Interfaces/Doctor";
 import type { TimeBlock } from "../../Interfaces/TimeBlock";
 import post from "../../api/post";
 import get from "../../api/get";
+import { useNavigate } from 'react-router-dom';
+import { showAlert } from "../../utils/GlobalAlert";
 
 export default function UserAppointmentPage() {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const [date, setDate] = useState<Date | null>(null);
   const [servicesIds, setServicesIds] = useState<number[]>([]);
   const [doctorId, setDoctorId] = useState<number | "">("");
@@ -140,11 +143,24 @@ export default function UserAppointmentPage() {
         servicesIds,
       };
 
+      // const response = await post.bookAppointmentRegistered(payload);
+      
       await post.bookAppointmentRegistered(payload);
       setNotification({
         type: "success",
         message: t("userMakeAppointment.success"),
       });
+
+      // if (response === 204) {
+      showAlert({ type: 'success', message: t("userMakeAppointment.success") });
+      navigate("/user/confirmAppointment", {
+        state: {
+          appointmentData: payload,
+          doctorName: doctors.find(d => d.id === doctorId)?.name,
+          doctorSurename: doctors.find(d => d.id === doctorId)?.surname
+        }
+      });
+      // }
 
       setServicesIds([]);
       setDoctorId("");

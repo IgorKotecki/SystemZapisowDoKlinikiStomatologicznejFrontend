@@ -119,7 +119,7 @@ export default function ReceptionistProfile() {
   //     //   PhotoURL: finalPhotoUrl,
   //     // };
 
-  //     const dto: UserUpdate & { PhotoURL?: string } = {
+  //     const dto: UserUpdate    & { PhotoURL?: string } = {
   //       name: userData.name,
   //       surname: userData.surname,
   //       phoneNumber: userData.phoneNumber,
@@ -152,38 +152,30 @@ export default function ReceptionistProfile() {
   //     setUploading(false);
   //   }
   // };
+
   const handleSave = async () => {
     if (!userData) return;
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^[0-9\s+]{7,15}$/;
     const nameRegex = /^[a-zA-ZĄĆĘŁŃÓŚŹŻąćęłńóśźż]{2,}$/;
 
-    if (!userData.name?.trim()) {
-      setAlert({ type: "error", message: t("userProfile.nameRequired") });
-      return;
-    }
-    if (userData.name.trim().length > 50) {
-      setAlert({ type: "error", message: t("userProfile.nameTooLong") });
-      return;
-    }
-    if (!nameRegex.test(userData.name.trim())) {
-      setAlert({ type: "error", message: t("userProfile.invalidNameFormat") });
+
+    if (!userData.name?.trim() || userData.name.trim().length > 50 || !nameRegex.test(userData.name.trim())) {
+      const msg = !userData.name?.trim() ? t("userProfile.nameRequired")
+        : userData.name.trim().length > 50 ? t("userProfile.nameTooLong")
+          : t("userProfile.invalidNameFormat");
+      setAlert({ type: "error", message: msg });
       return;
     }
 
-    if (!userData.surname?.trim()) {
-      setAlert({ type: "error", message: t("userProfile.surnameRequired") });
+    if (!userData.surname?.trim() || userData.surname.trim().length > 50 || !nameRegex.test(userData.surname.trim())) {
+      const msg = !userData.surname?.trim() ? t("userProfile.surnameRequired")
+        : userData.surname.trim().length > 50 ? t("userProfile.surnameTooLong")
+          : t("userProfile.invalidSurnameFormat");
+      setAlert({ type: "error", message: msg });
       return;
     }
-    if (userData.surname.trim().length > 50) {
-      setAlert({ type: "error", message: t("userProfile.surnameTooLong") });
-      return;
-    }
-    if (!nameRegex.test(userData.surname.trim())) {
-      setAlert({ type: "error", message: t("userProfile.invalidSurnameFormat") });
-      return;
-    }
+
 
     if (!userData.email || !emailRegex.test(userData.email)) {
       setAlert({ type: "error", message: t("userProfile.invalidEmail") });
@@ -208,20 +200,21 @@ export default function ReceptionistProfile() {
         name: userData.name.trim(),
         surname: userData.surname.trim(),
         phoneNumber: userData.phoneNumber?.trim(),
-        email: userData.email.trim().toLowerCase(),
-        photoUrl: finalPhotoUrl || "",
+        email: userData.email.trim().toLowerCase(), 
+        photoUrl: finalPhotoUrl || null,
         PhotoURL: finalPhotoUrl,
       };
 
       const response = await api.put(`/api/User/edit/${userId}`, dto);
-
       const mappedUpdatedData = mapUserData(response.data);
+
       updateUserPhoto(mappedUpdatedData.photoUrl ?? null);
       setUserData(mappedUpdatedData);
       setOriginalUserData(mappedUpdatedData);
       setIsEditing(false);
       setSelectedFile(null);
       setPreviewUrl(null);
+
       setAlert({
         type: "success",
         message: t("userProfile.saveSuccess")
@@ -229,17 +222,14 @@ export default function ReceptionistProfile() {
 
     } catch (err: any) {
       console.error("Błąd zapisu:", err);
+
       const serverMessage = err?.response?.data?.title;
 
       setAlert({
         type: "error",
         message: serverMessage ? t("userProfile.mailTaken") : t("userProfile.saveError")
       });
-      if (err.response) {
-        console.log("Status serwera:", err.response.status);
-        console.log("Tytuł błędu:", err.response.data.title);
-        console.log("Szczegóły walidacji:", err.response.data.errors);
-      }
+
     } finally {
       setUploading(false);
     }
