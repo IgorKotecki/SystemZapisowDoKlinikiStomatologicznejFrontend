@@ -26,7 +26,6 @@ import get from "../../api/get";
 import { applayStatusColor } from "../../utils/colorsUtils";
 import { showAlert } from "../../utils/GlobalAlert";
 import { Drawer } from "@mui/material";
-import { se } from "date-fns/locale";
 import AppointmentDetailsDialogContent from "../../components/AppointmentDetailsDialogContent";
 
 const DoctorAppointments: React.FC = () => {
