@@ -255,9 +255,23 @@ export default function ReceptionistAppointment() {
                     {filteredRows.map((row) => {
                       const isSelected = servicesIds.includes(row.id);
                       return (
-                        <ListItem key={row.id} divider disablePadding
+                        <ListItem
+                          key={row.id}
+                          divider
+                          disablePadding
                           sx={{ cursor: "pointer", borderRadius: 1 }}
-                          alignItems="center">
+                          alignItems="center"
+                          secondaryAction={
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', mr: 2 }}>
+                              <Typography variant="body2" fontWeight="bold" color="primary">
+                                {row.lowPrice ?? row.highPrice} PLN
+                              </Typography>
+                              <Typography variant="caption" color="text.secondary">
+                                {row.minTime * 30} min
+                              </Typography>
+                            </Box>
+                          }
+                        >
                           <ListItemIcon sx={{ minWidth: 40, alignItems: "center", justifyContent: "center", paddingLeft: 2, borderRadius: 1 }}>
                             <Checkbox
                               edge="start"
@@ -271,7 +285,10 @@ export default function ReceptionistAppointment() {
                             primary={row.name}
                             secondary={row.description}
                             onClick={() => toggleSelect(row.id)}
-                            sx={{ margin: 1 }}
+                            sx={{
+                              margin: 1,
+                              maxWidth: '80%',
+                            }}
                           />
                         </ListItem>
                       );

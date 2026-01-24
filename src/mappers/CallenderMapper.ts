@@ -1,6 +1,6 @@
 import type { ApiDaySchedule } from "../Interfaces/ApiDaySchedule";
 import type { CalendarDaySchedule } from "../Interfaces/CalendarDaySchedule";
-import { formatISO, startOfWeek, addDays, setHours, setMinutes} from "date-fns";
+import { formatISO, startOfWeek, addDays, setHours, setMinutes } from "date-fns";
 import { colors } from "../utils/colors";
 import type { IDoctorAppointment } from "../Interfaces/IDoctorAppointment";
 import type { Appointment } from "../Interfaces/Appointment";
@@ -17,8 +17,8 @@ export class CalendarMapper {
   static CalendarDayScheduletoApi(calendarData: CalendarDaySchedule[]): ApiDaySchedule[] {
     return calendarData.map(e => ({
       dayOfWeek: Number(e.dayOfWeek),
-      startHour: e.start.slice(11, 16),
-      endHour: e.end.slice(11, 16),
+      startHour: e.start.slice(11, 16) + ":00",
+      endHour: e.end.slice(11, 16) + ":00",
     }));
   }
 

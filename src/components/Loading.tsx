@@ -9,7 +9,6 @@ export default function LoadingScreen() {
         minHeight: "100vh",
         display: "flex",
         flexDirection: "row",
-        justifyContent: "center",
         alignItems: "center",
         backgroundColor: colors.color1,
         color: colors.white,

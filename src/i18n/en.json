@@ -232,7 +232,9 @@
     "noCancellationReason": "No cancellation reason provided.",
     "noNotes": "No notes for this appointment.",
     "alreadyCancelled": "This appointment has already been cancelled and cannot be cancelled again.",
-    "alreadyCompleted": "This appointment has been completed and cannot be cancelled."
+    "alreadyCompleted": "This appointment has been completed and cannot be cancelled.",
+    "noAdditionalInfo": "No additional information to display.",
+    "additionalIfno": "Additional Information"
   },
   "userMakeAppointment": {
     "title": "Book an Appointment",
@@ -268,7 +270,8 @@
     "state": "Condition",
     "notes": "Notes",
     "close": "Close",
-    "noTeethData": "No teeth data available for this user (Probably unregistered)."
+    "noTeethData": "No teeth data available for this user (Probably unregistered).",
+    "createModel": "Create Teeth Model"
   },
   "receptionistNavigation": {
     "profile": "Profile",
@@ -312,7 +315,8 @@
     "email": "Email",
     "errorEmptyFields": "All fields must be filled",
     "errorInvalidEmail": "Invalid email format",
-    "searchPlaceholder": "Search by name, surname, email or phone..."
+    "searchPlaceholder": "Search by name, surname, email or phone...",
+    "viewAppointments": "View Appointments"
   },
   "editUser": {
     "title": "Edit Patient Data",
@@ -515,7 +519,9 @@
     "removeConfirm": "Are you sure you want to remove this information?",
     "addInfoTitle": "Add new information",
     "error": "An error occurred while processing your request.",
-    "success": "Information has been added successfully."
+    "success": "Information has been added successfully.",
+    "confirmDeleteTitle": "Delete information",
+    "confirmDeleteMessage": "Are you sure you want to delete this information?"
   },
   "doctorAppointmentConsole": {
     "title": "Appointment Console",
@@ -572,7 +578,8 @@
     "showCancelled": "Show Cancelled Appointments",
     "showCompleted": "Show Completed Appointments",
     "filters": "Filters",
-    "cancelAppointment": "Cancel Appointment"
+    "cancelAppointment": "Cancel Appointment",
+    "showPlanned": "Show Planned Appointments"
   },
   "contactPage": {
     "title": "Contact Us",
@@ -612,19 +619,20 @@
   "SERVICE_NOT_FOUND": "Service not found",
   "APPLICATION_ERROR": "Application error",
   "BLOCK_NOT_AVAILABLE": "Time block not available",
-  "BLOCK_BOOKED": "Time block already booked",
+  "BLOCK_BOOKED": "Time block already booked or coliding with existing appointment due to its duration",
   "NO_APPOINTMENT": "No appointment found",
   "NO_ADD_INFO": "No additional information",
   "GENERIC_ERROR": "An error occurred. Please try again.",
   "DAY_HAS_APPOINTMENTS": "The day has scheduled appointments and cannot be deleted.",
   "WORKING_HOURS_ALREADY_EXIST": "Working hours for this day already exist.",
-  "CANNOT_COMPLETE": "Cannot save changes for an appointment that is yet to take place.",
+  "CANNOT_COMPLETE": "Cannot complete an appointment that is yet to take place.",
   "ALREADY_CANCELLED": "Appointment has already been cancelled.",
   "CANNOT_CANCEL_COMPLETED": "Cannot cancel an appointment that has already been completed.",
   "APPOINTMENT_IN_PAST": "Appointment cannot be scheduled in the past.",
   "INVALID_WORKING_HOURS_DELETION": "Cannot delete working hours that have already passed.",
   "INVALID_WORKING_HOURS_ADDITION": "Cannot add working hours in the past.",
   "CANCELLATION_OF_PAST_APPOINTMENT": "Cannot cancel an appointment that has already occurred.",
+  "APPOINTMENT_IN_FUTURE": "Cannot save changes for appointments that are yet to take place.",
   "globalAlert": {
     "errorLoadingData": "Error loading data. Please try again later."
   },
@@ -642,5 +650,17 @@
     "deleteError": "An error occurred while deleting the information.",
     "body": "Body"
   },
-  "cancellationSuccess": "Appointment has been cancelled successfully."
+  "cancellationSuccess": "Appointment has been cancelled successfully.",
+  "userAppointmentsHistory": {
+    "title": "Patient Appointment History",
+    "pageInfo": "View the patient's dental appointment history",
+    "noHistory": "No appointment history to display.",
+    "date": "Date",
+    "hour": "Hour",
+    "doctor": "Doctor",
+    "service": "Service",
+    "price": "Price",
+    "notes": "Notes"
+  },
+  "delete" : "Delete"
 }

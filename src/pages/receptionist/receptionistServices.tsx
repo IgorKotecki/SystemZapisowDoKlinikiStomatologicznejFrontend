@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import { Box, Typography, Paper, Button } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import UserNavigation from "../../components/userComponents/userNavigation";
@@ -54,6 +54,7 @@ const ReceptionistServices: React.FC = () => {
     {
       field: 'name',
       headerName: t("receptionistServices.name"),
+      // @ts-ignore
       flex: 1
     },
     {

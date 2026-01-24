@@ -29,6 +29,7 @@ import post from "../../api/post";
 import type { EventApi } from "@fullcalendar/core/index.js";
 import CancellationModal from "../../components/CancellationModal";
 import { applayStatusColor } from "../../utils/colorsUtils";
+import AppointmentDetailsDialogContent from "../../components/AppointmentDetailsDialogContent";
 
 const DoctorCalendar: React.FC = () => {
   const { t } = useTranslation();
@@ -46,6 +47,8 @@ const DoctorCalendar: React.FC = () => {
   const [showCancelled, setShowCancelled] = useState(true);
   const [showCompleted, setShowCompleted] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
+  const [openDetailDialog, setOpenDetailDialog] = useState(false);
 
   const fetchDoctorWorkingHours = async (date: string) => {
     try {
@@ -108,10 +111,14 @@ const DoctorCalendar: React.FC = () => {
     if (info.event.extendedProps.type === 'appointment') {
       if (info.event.extendedProps.status === 'Cancelled' || info.event.extendedProps.status === 'Anulowana') {
         showAlert({ type: "info", message: t("doctorCalendar.cancelledAppointmentAlertCancel") });
+        setSelectedAppointment(info.event.extendedProps as Appointment);
+        setOpenDetailDialog(true);
         return;
       }
       if (info.event.extendedProps.status === 'Completed' || info.event.extendedProps.status === 'Zakończona') {
         showAlert({ type: "info", message: t("doctorCalendar.completedAppointmentAlertCancel") });
+        setSelectedAppointment(info.event.extendedProps as Appointment);
+        setOpenDetailDialog(true);
         return;
       }
       setCancelationModalOpen(true);
@@ -346,6 +353,42 @@ const DoctorCalendar: React.FC = () => {
           }}
         />
       </Box>
+      <Dialog
+        open={openDetailDialog}
+        onClose={() => setOpenDetailDialog(false)}
+        PaperProps={{
+          sx: {
+            backgroundColor: colors.color2,
+            color: colors.white,
+            borderRadius: 3,
+            minWidth: 700,
+            p: 4,
+          },
+        }}
+      >
+        <DialogTitle>
+          <Typography component="h1" variant="h6" sx={{ color: colors.color5, fontWeight: "bold" }}>
+            {t("receptionistCalendar.appointmentDetails")}
+          </Typography>
+        </DialogTitle>
+        {selectedAppointment && (
+          <AppointmentDetailsDialogContent
+            selectedAppointmentDetail={selectedAppointment}
+          />
+        )}
+        <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setOpenDetailDialog(false);
+              setSelectedAppointment(null);
+            }}
+            sx={{ borderColor: colors.color3, color: colors.white }}
+          >
+            {t("receptionistCalendar.close")}
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Drawer
         anchor="right"
         open={drawerOpen}

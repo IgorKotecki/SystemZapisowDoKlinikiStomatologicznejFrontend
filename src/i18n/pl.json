@@ -237,7 +237,9 @@
     "noCancellationReason": "Brak podanego powodu anulowania",
     "noNotes": "Brak notatek do wyświetlenia",
     "alreadyCancelled": "Ta wizyta została już anulowana i nie można jej anulować ponownie.",
-    "alreadyCompleted": "Ta wizyta została zakończona i nie można jej anulować."
+    "alreadyCompleted": "Ta wizyta została zakończona i nie można jej anulować.",
+    "noAdditionalInfo": "Brak dodatkowych informacji do wyświetlenia.",
+    "additionalInfo": "Dodatkowe informacje"
   },
   "userMakeAppointment": {
     "title": "Umów wizytę",
@@ -273,7 +275,8 @@
     "state": "Stan",
     "notes": "Uwagi",
     "close": "Zamknij",
-    "noTeethData": "Brak danych o zębach dla tego użytkownika (Prawdopodobnie niezarejestrowany)."
+    "noTeethData": "Brak danych o zębach dla tego użytkownika (Prawdopodobnie niezarejestrowany).",
+    "createModel": "Utwórz model zębów"
   },
   "receptionistNavigation": {
     "profile": "Profil",
@@ -319,7 +322,8 @@
     "email": "Email",
     "dateOfBirth": "Data urodzenia",
     "address": "Adres",
-    "searchPlaceholder": "Wyszukaj według imienia, nazwiska, emailu lub telefonu"
+    "searchPlaceholder": "Wyszukaj według imienia, nazwiska, emailu lub telefonu",
+    "viewAppointments": "Zobacz wizyty"
   },
   "editUser": {
     "title": "Edycja danych pacjenta",
@@ -522,7 +526,9 @@
     "removeConfirm": "Czy na pewno chcesz usunąć tę informację?",
     "addInfoTitle": "Dodaj nową informację",
     "error": "Wystąpił błąd podczas dodawania informacji.",
-    "success": "Informacja została pomyślnie dodana."
+    "success": "Informacja została pomyślnie dodana.",
+    "confirmDeleteTitle": "Usuń informację",
+    "confirmDeleteMessage": "Czy na pewno chcesz usunąć tę informację?"
   },
   "doctorAppointmentConsole": {
     "title": "Konsola wizyty lekarskiej",
@@ -582,7 +588,8 @@
     "errorFetchingDoctors": "Wystąpił błąd podczas pobierania lekarzy.",
     "showCancelled": "Pokaż anulowane wizyty",
     "showCompleted": "Pokaż zakończone wizyty",
-    "filters": "Filtry"
+    "filters": "Filtry",
+    "showPlanned": "Pokaż zaplanowane wizyty"
   },
   "contactPage": {
     "title": "Skontaktuj się z nami",
@@ -629,19 +636,20 @@
   "SERVICE_NOT_FOUND": "Usługa nie została znaleziona.",
   "APPLICATION_ERROR": "Błąd aplikacji.",
   "BLOCK_NOT_AVAILABLE": "Blok czasowy nie jest dostępny.",
-  "BLOCK_BOOKED": "Blok czasowy jest już zarezerwowany.",
+  "BLOCK_BOOKED": "Blok czasowy jest już zarezerwowany lub koliduje z innym przez długość trwania.",
   "NO_APPOINTMENT": "Brak wizyty.",
   "NO_ADD_INFO": "Brak dodatkowych informacji.",
   "GENERIC_ERROR": "Wystąpił błąd. Spróbuj ponownie.",
   "DAY_HAS_APPOINTMENTS": "Dzień ma zaplanowane wizyty i nie może zostać usunięty.",
   "WORKING_HOURS_ALREADY_EXIST": "Godziny pracy dla tego dnia już istnieją.",
-  "CANNOT_COMPLETE": "Nie można zapisać zmiań dla wizyty która dopiero ma się odbyć.",
+  "CANNOT_COMPLETE": "Nie można zakończyć wizyty, która dopiero ma się odbyć.",
   "ALREADY_CANCELLED": "Wizyta została już anulowana.",
   "CANNOT_CANCEL_COMPLETED": "Nie można anulować wizyty, która już się odbyła.",
   "APPOINTMENT_IN_PAST": "Wizyta nie może być zaplanowana w przeszłości.",
   "INVALID_WORKING_HOURS_DELETION": "Nie można usunąć godzin pracy, które już minęły.",
   "INVALID_WORKING_HOURS_ADDITION": "Nie można dodać godzin pracy w przeszłości.",
   "CANCELLATION_OF_PAST_APPOINTMENT": "Nie można anulować wizyty, która już się odbyła.",
+  "APPOINTMENT_IN_FUTURE": "Nie można zapisać zmian dla wizyty, która jeszcze się nie odbyła.",
   "globalAlert": {
     "errorLoadingData": "Błąd podczas ładowania danych. Spróbuj ponownie później."
   },
@@ -660,5 +668,17 @@
     "body": "Treść"
   },
   "cancellationSuccess": "Wizyta została pomyślnie anulowana.",
-  "close": "Zamknij"
+  "close": "Zamknij",
+  "userAppointmentsHistory": {
+    "title": "Historia wizyt pacjenta",
+    "pageInfo": "Przeglądaj historię wizyt stomatologicznych pacjenta",
+    "noHistory": "Brak historii wizyt do wyświetlenia.",
+    "date": "Data",
+    "hour": "Godzina",
+    "doctor": "Lekarz",
+    "service": "Usługa",
+    "price": "Cena",
+    "notes": "Notatki"
+  },
+  "delete": "Usuń"
 }

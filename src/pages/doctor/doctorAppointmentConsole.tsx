@@ -23,6 +23,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from "@mui/material/IconButton";
 import { showAlert } from "../../utils/GlobalAlert";
 import type { Appointment } from "../../Interfaces/Appointment";
+import post from "../../api/post";
 
 export default function DoctorAppointmentsConsole() {
     const location = useLocation();
@@ -40,6 +41,8 @@ export default function DoctorAppointmentsConsole() {
     const [saving, setSaving] = useState(false);
     const [openDrawer, setOpenDrawer] = useState(false);
     const [historyAppointments, setHistoryAppointments] = useState<Appointment[]>([]);
+    const [completing, setCompleting] = useState(false);
+    const [creatingModel, setCreatingModel] = useState(false);
 
     const onStatusChange = (status: Status) => {
         console.log("Selected status:", status);
@@ -73,12 +76,7 @@ export default function DoctorAppointmentsConsole() {
             console.error("Failed to fetch history appointments");
         }
     };
-
-    useEffect(() => {
-
-        const lang = i18n.language || "pl";
-
-        const fetchStatusesAsync = async () => {
+    const fetchStatusesAsync = async (lang: string) => {
             try {
                 const response = await get.getToothStatuses(lang);
                 const map = new Map<string, Status[]>();
@@ -90,7 +88,7 @@ export default function DoctorAppointmentsConsole() {
                 console.error("Failed to fetch statuses");
             }
         };
-        const fetchTeethData = async () => {
+        const fetchTeethData = async (lang: string) => {
             try {
                 if (!state) return;
                 const response = await get.getTeethModel(state.appointment.patientId, lang)
@@ -100,7 +98,7 @@ export default function DoctorAppointmentsConsole() {
             }
         };
 
-        const fetchAddInfoData = async () => {
+        const fetchAddInfoData = async (lang: string) => {
             try {
                 const response = await get.getAdditionalInformation(lang);
                 setAddInfo(response);
@@ -109,24 +107,27 @@ export default function DoctorAppointmentsConsole() {
             }
         };
 
-        fetchTeethData();
-        fetchStatusesAsync();
-        fetchAddInfoData();
+    useEffect(() => {
+        const lang = i18n.language || "pl";
+        fetchTeethData(lang);
+        fetchStatusesAsync(lang);
+        fetchAddInfoData(lang);
         setChecked(state?.appointment.additionalInformation || []);
         setLoading(false);
     }, [t]);
 
     const saveChanges = async () => {
         try {
+            setSaving(true);
             const payload = {
                 userId: state?.appointment.patientId,
                 teeth: teeth.map(tooth => ({
                     toothNumber: tooth.toothNumber,
                     statusId: tooth.status ? tooth.status.statusId : null,
                 })),
+                appointmentGuid: state?.appointment.id,
             };
             await put.updateTeethModel(payload);
-            console.log("Zmiany zebów zapisane:");
 
             const appointmentPayload = {
                 Id: state?.appointment.id,
@@ -148,6 +149,8 @@ export default function DoctorAppointmentsConsole() {
                 type: 'error',
                 message: t(errorCode),
             });
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -156,7 +159,7 @@ export default function DoctorAppointmentsConsole() {
     }
 
     const completeAppointment = async () => {
-        setSaving(true);
+        setCompleting(true);
         await saveChanges();
         try {
             if (!state) return;
@@ -179,10 +182,25 @@ export default function DoctorAppointmentsConsole() {
                 message: t(errorCode),
             });
         } finally {
-            setSaving(false);
+            setCompleting(false);
         }
     };
-
+    const createTeethModel = async () => {
+        setCreatingModel(true);
+        try {
+            if (!state) return;
+            const payload = {
+                userId: state.appointment.patientId,
+            };
+            await post.createTeethModel(payload);
+            fetchTeethData(i18n.language || "pl");
+        } catch (error) {
+            showAlert({ type: 'error', message: t('doctorAppointmentConsole.createModelError') });
+            console.error("Błąd tworzenia modelu zębów:", error);
+        } finally {
+            setCreatingModel(false);
+        }
+    }
 
     if (loading) {
         return (
@@ -234,8 +252,8 @@ export default function DoctorAppointmentsConsole() {
                                 sx={{ color: colors.color5, borderColor: colors.color5, textTransform: 'none', ":hover": { borderColor: colors.color4 } }}>
                                 {t("doctorAppointmentConsole.showHistory")}
                             </Button>
-                            <Button onClick={saveChanges} variant="contained" sx={{ backgroundColor: colors.color3, color: colors.white, textTransform: 'none', ":hover": { backgroundColor: colors.color4 } }}>
-                                {t("doctorAppointmentConsole.saveChanges")}
+                            <Button onClick={saveChanges} disabled={saving} variant="contained" sx={{ backgroundColor: colors.color3, color: colors.white, textTransform: 'none', ":hover": { backgroundColor: colors.color4 } }}>
+                                {saving ? <CircularProgress size={24} color="inherit" /> : t("doctorAppointmentConsole.saveChanges")}
                             </Button>
                             <Button onClick={completeAppointmentModal} variant="contained" sx={{ backgroundColor: colors.color3, color: colors.white, textTransform: 'none', ":hover": { backgroundColor: colors.color4 } }}>
                                 {t("doctorAppointmentConsole.completeAppointment")}
@@ -244,7 +262,7 @@ export default function DoctorAppointmentsConsole() {
                     </Box>
                 </Grid>
                 <Grid size={12}>
-                    <TeethModel teeth={teeth} selectedTooth={selectedTooth} setSelectedTooth={setSelectedTooth} />
+                    <TeethModel teeth={teeth} selectedTooth={selectedTooth} setSelectedTooth={setSelectedTooth} creatingModel={creatingModel} createModel={createTeethModel}/>
                 </Grid>
                 <Grid size={4}>
                     <AppointemtInfoRenderer appointment={state.appointment} />
@@ -308,6 +326,7 @@ export default function DoctorAppointmentsConsole() {
                     <Button
                         variant="contained"
                         onClick={completeAppointment}
+                        disabled={completing}
                         sx={{
                             backgroundColor: colors.color3,
                             color: colors.white,
@@ -316,7 +335,7 @@ export default function DoctorAppointmentsConsole() {
                             "&:hover": { backgroundColor: colors.color4 }
                         }}
                     >
-                        {saving ? <CircularProgress size={24} color="inherit" /> : t("global.confirm")}
+                        {completing ? <CircularProgress size={24} color="inherit" /> : t("global.confirm")}
                     </Button>
                 </DialogActions>
             </Dialog>

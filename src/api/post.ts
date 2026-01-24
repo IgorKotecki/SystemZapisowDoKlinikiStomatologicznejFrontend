@@ -82,7 +82,10 @@ export const createNewWorkingHours = async (payload: any) => {
     const response = await api.post(`/api/time-blocks/working-hours`, payload);
     return response.data;
 }
-
+export const createTeethModel = async (payload: any) => {
+    const response = await api.post(`/api/Tooth/teeth-model`, payload);
+    return response.data;
+}
 
 export default {
     bookAppointmentGuest,
@@ -99,4 +102,5 @@ export default {
     updatePhoto ,
     addNewService,
     createNewWorkingHours,
+    createTeethModel
 };
