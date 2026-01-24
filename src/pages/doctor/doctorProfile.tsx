@@ -105,6 +105,47 @@ export default function DoctorProfile() {
 
   const handleSave = async () => {
     if (!userData) return;
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[0-9\s+]{7,15}$/;
+    const nameRegex = /^[a-zA-ZĄĆĘŁŃÓŚŹŻąćęłńóśźż]{2,}$/;
+
+    if (!userData.name?.trim()) {
+      setAlert({ type: "error", message: t("userProfile.nameRequired") });
+      return;
+    }
+    if (userData.name.trim().length > 50) {
+      setAlert({ type: "error", message: t("userProfile.nameTooLong") });
+      return;
+    }
+    if (!nameRegex.test(userData.name.trim())) {
+      setAlert({ type: "error", message: t("userProfile.invalidNameFormat") });
+      return;
+    }
+
+    if (!userData.surname?.trim()) {
+      setAlert({ type: "error", message: t("userProfile.surnameRequired") });
+      return;
+    }
+    if (userData.surname.trim().length > 50) {
+      setAlert({ type: "error", message: t("userProfile.surnameTooLong") });
+      return;
+    }
+    if (!nameRegex.test(userData.surname.trim())) {
+      setAlert({ type: "error", message: t("userProfile.invalidSurnameFormat") });
+      return;
+    }
+
+    if (!userData.email || !emailRegex.test(userData.email)) {
+      setAlert({ type: "error", message: t("userProfile.invalidEmail") });
+      return;
+    }
+
+    if (userData.phoneNumber && !phoneRegex.test(userData.phoneNumber)) {
+      setAlert({ type: "error", message: t("userProfile.invalidPhone") });
+      return;
+    }
+
     setUploading(true);
 
     try {

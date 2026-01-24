@@ -126,7 +126,7 @@ const AppointmentSummary: React.FC = () => {
 
                         <Typography variant="body2" color="text.secondary">{t("summary.duration")}</Typography>
                         <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
-                            {appointmentData.duration} min
+                            {appointmentData.duration * 30} min
                         </Typography>
                     </Box>
 

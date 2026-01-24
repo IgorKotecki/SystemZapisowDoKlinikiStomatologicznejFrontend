@@ -100,8 +100,101 @@ export default function ReceptionistProfile() {
     }
   };
 
+  // const handleSave = async () => {
+  //   if (!userData) return;
+  //   setUploading(true);
+
+  //   try {
+  //     let finalPhotoUrl = userData.photoUrl;
+
+  //     if (selectedFile) {
+  //       finalPhotoUrl = await uploadImageToCloudinary(selectedFile);
+  //     }
+
+  //     // const dto: UserUpdate & { PhotoURL?: string } = {
+  //     //   name: userData.name,
+  //     //   surname: userData.surname,
+  //     //   phoneNumber: userData.phoneNumber,
+  //     //   email: userData.email,
+  //     //   PhotoURL: finalPhotoUrl,
+  //     // };
+
+  //     const dto: UserUpdate & { PhotoURL?: string } = {
+  //       name: userData.name,
+  //       surname: userData.surname,
+  //       phoneNumber: userData.phoneNumber,
+  //       email: userData.email,
+  //       photoUrl: finalPhotoUrl || "",
+  //       PhotoURL: finalPhotoUrl,
+  //     };
+
+  //     const response = await api.put(`/api/User/edit/${userId}`, dto);
+  //     const mappedUpdatedData = mapUserData(response.data);
+
+  //     updateUserPhoto(mappedUpdatedData.photoUrl ?? null);
+
+  //     setUserData(mappedUpdatedData);
+  //     setOriginalUserData(mappedUpdatedData);
+  //     setIsEditing(false);
+  //     setSelectedFile(null);
+  //     setPreviewUrl(null);
+  //     setAlert({
+  //       type: "success",
+  //       message: t("userProfile.saveSuccess")
+  //     });
+  //   } catch (err: any) {
+  //     console.error("Błąd zapisu:", err);
+  //     setAlert({
+  //       type: "error",
+  //       message: t("userProfile.saveError")
+  //     });
+  //   } finally {
+  //     setUploading(false);
+  //   }
+  // };
   const handleSave = async () => {
     if (!userData) return;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[0-9\s+]{7,15}$/;
+    const nameRegex = /^[a-zA-ZĄĆĘŁŃÓŚŹŻąćęłńóśźż]{2,}$/;
+
+    if (!userData.name?.trim()) {
+      setAlert({ type: "error", message: t("userProfile.nameRequired") });
+      return;
+    }
+    if (userData.name.trim().length > 50) {
+      setAlert({ type: "error", message: t("userProfile.nameTooLong") });
+      return;
+    }
+    if (!nameRegex.test(userData.name.trim())) {
+      setAlert({ type: "error", message: t("userProfile.invalidNameFormat") });
+      return;
+    }
+
+    if (!userData.surname?.trim()) {
+      setAlert({ type: "error", message: t("userProfile.surnameRequired") });
+      return;
+    }
+    if (userData.surname.trim().length > 50) {
+      setAlert({ type: "error", message: t("userProfile.surnameTooLong") });
+      return;
+    }
+    if (!nameRegex.test(userData.surname.trim())) {
+      setAlert({ type: "error", message: t("userProfile.invalidSurnameFormat") });
+      return;
+    }
+
+    if (!userData.email || !emailRegex.test(userData.email)) {
+      setAlert({ type: "error", message: t("userProfile.invalidEmail") });
+      return;
+    }
+
+    if (userData.phoneNumber && !phoneRegex.test(userData.phoneNumber)) {
+      setAlert({ type: "error", message: t("userProfile.invalidPhone") });
+      return;
+    }
+
     setUploading(true);
 
     try {
@@ -111,28 +204,19 @@ export default function ReceptionistProfile() {
         finalPhotoUrl = await uploadImageToCloudinary(selectedFile);
       }
 
-      // const dto: UserUpdate & { PhotoURL?: string } = {
-      //   name: userData.name,
-      //   surname: userData.surname,
-      //   phoneNumber: userData.phoneNumber,
-      //   email: userData.email,
-      //   PhotoURL: finalPhotoUrl,
-      // };
-
       const dto: UserUpdate & { PhotoURL?: string } = {
-        name: userData.name,
-        surname: userData.surname,
-        phoneNumber: userData.phoneNumber,
-        email: userData.email,
+        name: userData.name.trim(),
+        surname: userData.surname.trim(),
+        phoneNumber: userData.phoneNumber?.trim(),
+        email: userData.email.trim().toLowerCase(),
         photoUrl: finalPhotoUrl || "",
         PhotoURL: finalPhotoUrl,
       };
 
       const response = await api.put(`/api/User/edit/${userId}`, dto);
+
       const mappedUpdatedData = mapUserData(response.data);
-
       updateUserPhoto(mappedUpdatedData.photoUrl ?? null);
-
       setUserData(mappedUpdatedData);
       setOriginalUserData(mappedUpdatedData);
       setIsEditing(false);
@@ -142,12 +226,20 @@ export default function ReceptionistProfile() {
         type: "success",
         message: t("userProfile.saveSuccess")
       });
+
     } catch (err: any) {
       console.error("Błąd zapisu:", err);
+      const serverMessage = err?.response?.data?.title;
+
       setAlert({
         type: "error",
-        message: t("userProfile.saveError")
+        message: serverMessage ? t("userProfile.mailTaken") : t("userProfile.saveError")
       });
+      if (err.response) {
+        console.log("Status serwera:", err.response.status);
+        console.log("Tytuł błędu:", err.response.data.title);
+        console.log("Szczegóły walidacji:", err.response.data.errors);
+      }
     } finally {
       setUploading(false);
     }

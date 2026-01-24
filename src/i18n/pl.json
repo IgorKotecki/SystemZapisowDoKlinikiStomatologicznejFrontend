@@ -203,7 +203,16 @@
     "confirmDeleteTitle": "Usuwanie konta",
     "confirmDeleteMessage": "Proces usuwania konta jest nie odwracalny! Czy na pewno chcesz usunąć konto?",
     "saveSuccess": "Dane zostały zaktualizowane pomyślnie",
-    "saveError": "Wystąpił błąd podczas zapisywania zmian"
+    "saveError": "Wystąpił błąd podczas zapisywania zmian",
+    "nameRequired": "Imię nie może być puste",
+    "surnameRequired": "Nazwisko nie może być puste",
+    "invalidPhone": "Nieprawidłowy format numeru telefonu",
+    "invalidEmail": "Nieprawidłowy format adresu email",
+    "invalidNameFormat": "Imię może zawierać tylko litery, spacje, myślniki i apostrofy. Powyżej 2 znaków.",
+    "invalidSurnameFormat": "Nazwisko może zawierać tylko litery, spacje, myślniki i apostrofy. Powyżej 2 znaków.",
+    "nameTooLong": "Imię jest za długie",
+    "surnameTooLong": "Nazwisko jest za długie",
+    "mailTaken": "Adres email jest już w użyciu"
   },
   "userAppointments": {
     "title": "Historia Wizyt",
@@ -251,7 +260,7 @@
     "date": "Data i godzina",
     "doctor": "Lekarz",
     "services": "Wybrane usługi",
-    "duration": "Przewidywany czas",
+    "duration": "Przewidywany czas wizyty",
     "backHome": "Wróć do strony głównej",
     "noData": "Nie znaleziono danych wizyty."
   },

@@ -15,7 +15,7 @@ import {
   ListItem,
   Checkbox,
   ListItemText,
-  ListItemIcon, // Import Alert
+  ListItemIcon,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -373,11 +373,10 @@ export default function UserAppointmentPage() {
           onClose={() => setNotification(null)}
           sx={{
             position: "fixed",
-            bottom: 24,
-            right: 24,
-            zIndex: 2000,
-            minWidth: 300,
-            boxShadow: "0px 4px 12px rgba(0,0,0,0.3)",
+            bottom: 16,
+            right: 16,
+            zIndex: 1500,
+            minWidth: 300
           }}
         >
           {notification.message}
