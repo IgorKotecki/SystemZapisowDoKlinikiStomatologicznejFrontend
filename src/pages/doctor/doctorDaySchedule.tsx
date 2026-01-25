@@ -109,6 +109,7 @@ export default function DoctorDaySchedule() {
     };
 
     const handleDeleteTime = () => {
+        if (!selectedEvent) return;
         setDaySchedule((prev) => prev.filter((f) => f.dayOfWeek != selectedEvent.event.id));
         setSelectedEvent(null);
         setOpenDeleteModal(false);
