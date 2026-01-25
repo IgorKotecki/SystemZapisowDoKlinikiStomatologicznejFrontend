@@ -66,7 +66,10 @@ const CancellationModal: React.FC<CancellationModalProps> = ({
     return (
         <Dialog
             open={open}
-            onClose={loading ? undefined : onClose}
+            onClose={loading ? undefined : () => {
+                onClose();
+                setReason("");
+            }}
             PaperProps={{
                 sx: {
                     backgroundColor: colors.color2,

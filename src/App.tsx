@@ -6,6 +6,7 @@ const Footer = lazy(() => import("./components/Footer"));
 import { GlobalAlert } from "./utils/GlobalAlert";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UserAppointmentsHistory from "./pages/receptionist/userAppointemntsHistoty";
+import ResetSuccess from "./pages/ResetSuccess";
 
 const Home = lazy(() => import("./pages/Home"));
 const LogIn = lazy(() => import("./pages/LogIn"));
@@ -60,6 +61,7 @@ const App = () => {
                 <Route path="/prices" element={<Pricing />} />
                 <Route path="/contacts" element={<Contact />} />
                 <Route path="/resetpassword" element={<ResetPassword />} />
+                <Route path="/resetpassword/success" element={<ResetSuccess />} />
                 <Route path="/register/gratulation" element={<RegisterGratulation />} />
                 <Route path="/confirm" element={<ConfirmPage />} />
 

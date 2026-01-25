@@ -43,10 +43,9 @@ export default function Pricing() {
   };
 
   return (
-    <Box sx={{ width: "100vw", minHeight: "100vh" }}>
+    <Box sx={{ minHeight: "100vh" }}>
       <Box
         sx={{
-          width: "100%",
           minHeight: "100vh",
           backgroundImage:
             'url("/elegant-modern-dental-clinic-interior-with-dark-lu.jpg")',
@@ -58,7 +57,6 @@ export default function Pricing() {
       >
         <Box
           sx={{
-            width: "100%",
             minHeight: "100vh",
             backgroundColor: colors.white,
             py: 8,
