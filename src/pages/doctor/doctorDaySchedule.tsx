@@ -1,13 +1,11 @@
-import { useState, useMemo, useRef } from "react";
-import {
-    Box,
-    Typography,
-    Dialog,
-    DialogTitle,
-    DialogActions,
-    Button,
-    CircularProgress,
-} from "@mui/material";
+import { useState, useMemo, useRef, useEffect } from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -19,7 +17,6 @@ import enLocale from '@fullcalendar/core/locales/en-gb';
 import plLocale from '@fullcalendar/core/locales/pl';
 import type { CalendarDaySchedule as DaySchedule } from "../../Interfaces/CalendarDaySchedule";
 import { CalendarMapper } from "../../mappers/CallenderMapper";
-import { useEffect } from "react";
 import { colors } from "../../utils/colors";
 import get from "../../api/get";
 import put from "../../api/put";
@@ -35,6 +32,7 @@ export default function DoctorDaySchedule() {
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
     const [nextScheduleTime, setNextScheduleTime] = useState<Date | null>(null);
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         const fetchWeekScheme = async () => {
@@ -60,15 +58,20 @@ export default function DoctorDaySchedule() {
 
 
     const updateWeekScheme = async () => {
+        setIsSaving(true);
         const payload = {
             daysSchemes: CalendarMapper.CalendarDayScheduletoApi(daySchedule),
         };
-        
+
         try {
             await put.updateDoctorWeekSchedule(payload);
             showAlert({ type: 'success', message: t('doctorDaySchedule.updateSuccess') });
         } catch (error: any) {
             showAlert({ type: 'error', message: t('doctorDaySchedule.updateError') });
+        } finally {
+            setTimeout(() => {
+                setIsSaving(false);
+            }, 1000);
         }
     };
 
@@ -109,6 +112,7 @@ export default function DoctorDaySchedule() {
     };
 
     const handleDeleteTime = () => {
+        if (!selectedEvent) return;
         setDaySchedule((prev) => prev.filter((f) => f.dayOfWeek != selectedEvent.event.id));
         setSelectedEvent(null);
         setOpenDeleteModal(false);
@@ -122,7 +126,7 @@ export default function DoctorDaySchedule() {
                 <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
                     {t("doctorDaySchedule.title")}
                 </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 , gap:2}}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, gap: 2 }}>
                     <Typography variant="subtitle1" sx={{ mb: 1 }}>
                         {t("doctorDaySchedule.subtitle")}
                     </Typography>
@@ -133,8 +137,9 @@ export default function DoctorDaySchedule() {
                             "&:hover": { backgroundColor: colors.color4 },
                         }}
                         onClick={updateWeekScheme}
+                        disabled={isSaving}
                     >
-                        {t("doctorDaySchedule.saveChanges")}
+                        {isSaving ? <CircularProgress size={24} sx={{ color: colors.color5 }} /> : t("doctorDaySchedule.saveChanges")}
                     </Button>
                 </Box>
                 <Typography variant="subtitle2" sx={{ mb: 3, opacity: 0.8 }}>

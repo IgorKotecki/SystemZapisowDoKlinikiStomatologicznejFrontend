@@ -182,7 +182,9 @@ export default function DoctorAppointmentsConsole() {
                 message: t(errorCode),
             });
         } finally {
-            setCompleting(false);
+            setTimeout(() => {
+                setCompleting(false);
+            }, 3000);
         }
     };
 
@@ -201,7 +203,7 @@ export default function DoctorAppointmentsConsole() {
         } finally {
             setTimeout(() => {
                 setCreatingModel(false);
-            }, 3000); 
+            }, 3000);
         }
     }
 

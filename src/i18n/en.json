@@ -434,7 +434,7 @@
     "save": "Save note",
     "savedNote": "Note has been saved",
     "workingHours": "Working Hours",
-    "subtitle": "Click on a date to add working hours or delete existing ones",
+    "subtitle": "Click on working hours to remove them, select an area on a day to add new working hours. By clicking on an appointment you can view its details.",
     "addWorkingHoursSuccess": "Working hours have been added successfully.",
     "removeWorkingHoursSuccess": "Working hours have been removed successfully.",
     "errorOccurred": "An error occurred while processing your request.",

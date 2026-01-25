@@ -52,14 +52,16 @@ const CancellationModal: React.FC<CancellationModalProps> = ({
         } catch (err: any) {
             console.error(err);
             let errorCode = err.response?.data?.title ??
-                err.response?.data?.Title ?? 
+                err.response?.data?.Title ??
                 "GENERIC_ERROR";
             showAlert({
                 type: 'error',
                 message: t(errorCode),
             });
         } finally {
-            setLoading(false);
+            setTimeout(() => {
+                setLoading(false);
+            }, 1000);
         }
     };
 
@@ -94,7 +96,7 @@ const CancellationModal: React.FC<CancellationModalProps> = ({
                     multiline
                     rows={4}
                     variant="outlined"
-                    disabled={loading} 
+                    disabled={loading}
                     placeholder={t("cancellation.reasonPlaceholder")}
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
@@ -111,7 +113,7 @@ const CancellationModal: React.FC<CancellationModalProps> = ({
             <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
                 <Button
                     onClick={onClose}
-                    disabled={loading} 
+                    disabled={loading}
                     sx={{ color: colors.white, textTransform: "none" }}
                 >
                     {t("global.cancel")}
@@ -126,7 +128,7 @@ const CancellationModal: React.FC<CancellationModalProps> = ({
                         fontWeight: "bold",
                         textTransform: "none",
                         px: 4,
-                        minWidth: "120px", 
+                        minWidth: "120px",
                         "&:hover": { backgroundColor: colors.color4 },
                         "&.Mui-disabled": { backgroundColor: "rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.3)" }
                     }}

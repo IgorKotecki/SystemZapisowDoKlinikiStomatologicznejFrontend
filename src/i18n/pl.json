@@ -440,7 +440,7 @@
     "save": "Zapisz notatkę",
     "savedNote": "Notatka została zapisana",
     "workingHours": "Godziny pracy",
-    "subtitle": "Klikni na godziny pracy aby je usunąć, zaznaczaj obszar w daniu aby dodać nowe godziny pracy. Po kliknieciu na daną wizyte możesz ja odwołać.",
+    "subtitle": "Kliknij na godziny pracy aby je usunąć, zaznaczaj obszar w daniu aby dodać nowe godziny pracy. Po naciśnięciu na daną wizytę wyświetlą się jej szczegóły.",
     "addWorkingHoursSuccess": "Godziny pracy zostały pomyślnie dodane.",
     "removeWorkingHoursSuccess": "Godziny pracy zostały pomyślnie usunięte.",
     "errorOccurred": "Wystąpił błąd podczas przetwarzania Twojego żądania.",

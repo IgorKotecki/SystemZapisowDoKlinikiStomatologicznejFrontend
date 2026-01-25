@@ -30,8 +30,11 @@ import type { EventApi } from "@fullcalendar/core/index.js";
 import CancellationModal from "../../components/CancellationModal";
 import { applayStatusColor } from "../../utils/colorsUtils";
 import AppointmentDetailsDialogContent from "../../components/AppointmentDetailsDialogContent";
+import type { User } from "../../Interfaces/User";
+import { useNavigate } from "react-router-dom";
 
 const DoctorCalendar: React.FC = () => {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [workingHours, setWorkingHours] = useState<WorkingHours[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,12 +46,13 @@ const DoctorCalendar: React.FC = () => {
   const [selectedRange, setSelectedRange] = useState<{ start: string; end: string, dayOfWeek: string } | null>(null);
   const [addTimeModalOpen, setAddTimeModalOpen] = useState(false);
   const [cancelationModalOpen, setCancelationModalOpen] = useState(false);
-  const [appointmentToCancelId, setAppointmentToCancelId] = useState<string | null>(null);
   const [showCancelled, setShowCancelled] = useState(true);
   const [showCompleted, setShowCompleted] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
   const [openDetailDialog, setOpenDetailDialog] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [adding, setAdding] = useState(false);
 
   const fetchDoctorWorkingHours = async (date: string) => {
     try {
@@ -108,28 +112,20 @@ const DoctorCalendar: React.FC = () => {
 
 
   const handleEventClick = (info: any) => {
-    if (info.event.extendedProps.type === 'appointment') {
-      if (info.event.extendedProps.status === 'Cancelled' || info.event.extendedProps.status === 'Anulowana') {
-        showAlert({ type: "info", message: t("doctorCalendar.cancelledAppointmentAlertCancel") });
-        setSelectedAppointment(info.event.extendedProps as Appointment);
-        setOpenDetailDialog(true);
-        return;
-      }
-      if (info.event.extendedProps.status === 'Completed' || info.event.extendedProps.status === 'Zakończona') {
-        showAlert({ type: "info", message: t("doctorCalendar.completedAppointmentAlertCancel") });
-        setSelectedAppointment(info.event.extendedProps as Appointment);
-        setOpenDetailDialog(true);
-        return;
-      }
-      setCancelationModalOpen(true);
-      setAppointmentToCancelId(info.event.extendedProps.appointmentGroupId as string);
-      return;
+    const eventType = info.event.extendedProps.type;
+
+    if (eventType === 'workingHours') {
+      setWorkingDay(info.event);
+      setOpenModal(true);
+    } else if (eventType === 'appointment') {
+      setSelectedAppointment(info.event.extendedProps);
+      setOpenDetailDialog(true);
     }
-    setOpenModal(true);
-    setWorkingDay(info.event);
   };
 
   const handleDelete = async () => {
+    if (!workingDay) return;
+    setDeleting(true);
     try {
       if (!workingDay || !workingDay.start || !workingDay.end) {
         throw new Error('Invalid working day data');
@@ -147,6 +143,7 @@ const DoctorCalendar: React.FC = () => {
       showAlert({ type: 'success', message: t('doctorCalendar.removeWorkingHoursSuccess') });
       await fetchDoctorWorkingHours(currentWeekStart);
       setOpenModal(false);
+      setWorkingDay(null);
     } catch (err: any) {
       console.error(err);
       let errorCode = err.response?.data?.title ??
@@ -154,7 +151,9 @@ const DoctorCalendar: React.FC = () => {
         "GENERIC_ERROR";
       showAlert({ type: 'error', message: t(errorCode) });
     } finally {
-      setWorkingDay(null);
+      setTimeout(() => {
+        setDeleting(false);
+      }, 500);
     }
   };
 
@@ -167,6 +166,8 @@ const DoctorCalendar: React.FC = () => {
   };
 
   const handleAddWorkingHours = async () => {
+    if (!selectedRange) return;
+    setAdding(true);
     try {
       const payload = {
         startTime: selectedRange?.start,
@@ -177,6 +178,8 @@ const DoctorCalendar: React.FC = () => {
       showAlert({ type: 'success', message: t('doctorCalendar.addWorkingHoursSuccess') });
 
       await fetchDoctorWorkingHours(currentWeekStart);
+      setSelectedRange(null);
+      setAddTimeModalOpen(false);
     } catch (err: any) {
       console.error(err);
       let errorCode = err.response?.data?.title ??
@@ -184,9 +187,36 @@ const DoctorCalendar: React.FC = () => {
         "GENERIC_ERROR";
       showAlert({ type: 'error', message: t(errorCode) });
     } finally {
-      setSelectedRange(null);
-      setAddTimeModalOpen(false);
+      setTimeout(() => {
+        setAdding(false);
+      }, 500);
     }
+  };
+
+  const goToAppointment = () => {
+    setOpenModal(false);
+    const info: User = {
+      id: selectedAppointment?.user.id!,
+      name: selectedAppointment?.user.name!,
+      surname: selectedAppointment?.user.surname!,
+      email: selectedAppointment?.user.email!,
+      phoneNumber: selectedAppointment?.user.phoneNumber!,
+    }
+    navigate(`/receptionist/appointment`, { state: { user: info as User } });
+  };
+
+  const cancelAppointment = async () => {
+    if (!selectedAppointment) return;
+    if (selectedAppointment.status === "Cancelled" || selectedAppointment.status === "Anulowana") {
+      showAlert({ type: "error", message: t("userAppointments.alreadyCancelled") });
+      return;
+    }
+    if (selectedAppointment.status === "Completed" || selectedAppointment.status === "Zakończona") {
+      showAlert({ type: "error", message: t("userAppointments.alreadyCompleted") });
+      return;
+    }
+    setOpenDetailDialog(false);
+    setCancelationModalOpen(true);
   };
 
   return (
@@ -301,6 +331,7 @@ const DoctorCalendar: React.FC = () => {
             <Button
               variant="contained"
               onClick={handleDelete}
+              disabled={deleting}
               sx={{ backgroundColor: colors.color3, color: colors.white }}
             >
               {t("yes")}
@@ -336,113 +367,129 @@ const DoctorCalendar: React.FC = () => {
             <Button
               variant="contained"
               onClick={handleAddWorkingHours}
+              disabled={adding}
               sx={{ backgroundColor: colors.color3, color: colors.white }}
             >
               {t("yes")}
             </Button>
           </DialogActions>
         </Dialog>
+        <Dialog
+          open={openDetailDialog}
+          onClose={() => setOpenDetailDialog(false)}
+          PaperProps={{
+            sx: {
+              backgroundColor: colors.color2,
+              color: colors.white,
+              borderRadius: 3,
+              minWidth: 700,
+              p: 4,
+            },
+          }}
+        >
+          <DialogTitle>
+            <Typography component="h1" variant="h6" sx={{ color: colors.color5, fontWeight: "bold" }}>
+              {t("receptionistCalendar.appointmentDetails")}
+            </Typography>
+          </DialogTitle>
+          {selectedAppointment && (
+            <AppointmentDetailsDialogContent
+              selectedAppointmentDetail={selectedAppointment}
+            />
+          )}
+          <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setOpenDetailDialog(false);
+                setSelectedAppointment(null);
+              }}
+              sx={{ borderColor: colors.color3, color: colors.white }}
+            >
+              {t("receptionistCalendar.close")}
+            </Button>
+            <Button
+              variant="contained"
+              onClick={cancelAppointment}
+              sx={{ backgroundColor: colors.cancelled, color: colors.white }}
+            >
+              {t("receptionistCalendar.cancelAppointment")}
+            </Button>
+            <Button
+              variant="contained"
+              onClick={goToAppointment}
+              sx={{ backgroundColor: colors.color3, color: colors.white }}
+            >
+              {t("receptionistCalendar.makeAppointment")}
+            </Button>
+          </DialogActions>
+        </Dialog>
         <CancellationModal
           open={cancelationModalOpen}
           onClose={() => setCancelationModalOpen(false)}
-          appointmentGuid={appointmentToCancelId}
+          appointmentGuid={selectedAppointment?.appointmentGroupId || null}
           onSuccess={() => {
-            setAppointmentToCancelId(null)
-            showAlert({ type: 'success', message: t('cancellationSuccess') });
+            setCancelationModalOpen(false);
+            setOpenDetailDialog(false);
             fetchAppointments(currentWeekStart, showCancelled, showCompleted);
+            showAlert({ type: "success", message: t("doctorCalendar.cancelSuccess") });
           }}
         />
-      </Box>
-      <Dialog
-        open={openDetailDialog}
-        onClose={() => setOpenDetailDialog(false)}
-        PaperProps={{
-          sx: {
-            backgroundColor: colors.color2,
-            color: colors.white,
-            borderRadius: 3,
-            minWidth: 700,
-            p: 4,
-          },
-        }}
-      >
-        <DialogTitle>
-          <Typography component="h1" variant="h6" sx={{ color: colors.color5, fontWeight: "bold" }}>
-            {t("receptionistCalendar.appointmentDetails")}
-          </Typography>
-        </DialogTitle>
-        {selectedAppointment && (
-          <AppointmentDetailsDialogContent
-            selectedAppointmentDetail={selectedAppointment}
-          />
-        )}
-        <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-          <Button
-            variant="outlined"
-            onClick={() => {
-              setOpenDetailDialog(false);
-              setSelectedAppointment(null);
-            }}
-            sx={{ borderColor: colors.color3, color: colors.white }}
-          >
-            {t("receptionistCalendar.close")}
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Drawer
-        anchor="right"
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-      >
-        <Box sx={{ width: 250, p: 2, backgroundColor: colors.color1, height: '100%' }}>
-          <Typography variant="h6" sx={{ color: colors.color5, mb: 2 }}>
-            {t("receptionistCalendar.options")}
-          </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, backgroundColor: colors.white, p: 2, borderRadius: 2 }}>
-            <Typography variant="body1" sx={{ fontWeight: 'bold', color: colors.color1 }}>
-              {t("receptionistCalendar.legend.title")}
+        <Drawer
+          anchor="right"
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+        >
+          <Box sx={{ width: 250, p: 2, backgroundColor: colors.color1, height: '100%' }}>
+            <Typography variant="h6" sx={{ color: colors.color5, mb: 2 }}>
+              {t("receptionistCalendar.options")}
             </Typography>
-            <Typography variant="body2" sx={{ color: colors.color1, display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'gray' }} />
-              - {t("receptionistCalendar.legend.cancelled")}
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, backgroundColor: colors.white, p: 2, borderRadius: 2 }}>
+              <Typography variant="body1" sx={{ fontWeight: 'bold', color: colors.color1 }}>
+                {t("receptionistCalendar.legend.title")}
+              </Typography>
+              <Typography variant="body2" sx={{ color: colors.color1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'gray' }} />
+                - {t("receptionistCalendar.legend.cancelled")}
+              </Typography>
+              <Typography variant="body2" sx={{ color: colors.color1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'green' }} />
+                - {t("receptionistCalendar.legend.completed")}
+              </Typography>
+              <Typography variant="body2" sx={{ color: colors.color1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#3788D8' }} />
+                - {t("receptionistCalendar.legend.scheduled")}
+              </Typography>
+              <Typography variant="body2" sx={{ color: colors.color1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'rgba(14, 172, 0, 0.5)' }} />
+                - {t("doctorCalendar.workingHours")}
+              </Typography>
+            </Box>
+            <Box sx={{ mt: 4, borderTop: `1px solid ${colors.color3}`, pt: 2 }}></Box>
+            <Typography variant="h6" sx={{ color: colors.color5, mb: 2 }}>
+              {t("receptionistCalendar.filters")}
             </Typography>
-            <Typography variant="body2" sx={{ color: colors.color1, display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'green' }} />
-              - {t("receptionistCalendar.legend.completed")}
-            </Typography>
-            <Typography variant="body2" sx={{ color: colors.color1, display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#3788D8' }} />
-              - {t("receptionistCalendar.legend.scheduled")}
-            </Typography>
-            <Typography variant="body2" sx={{ color: colors.color1, display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'rgba(14, 172, 0, 0.5)' }} />
-              - {t("doctorCalendar.workingHours")}
-            </Typography>
+            <FormControlLabel
+              control={<Switch checked={showCancelled} onChange={async (e) => {
+                var newValue = e.target.checked;
+                setShowCancelled(newValue);
+                await fetchAppointments(currentWeekStart, newValue, showCompleted);
+              }} />}
+              label={t("receptionistCalendar.showCancelled")}
+              sx={{ color: colors.white }}
+            />
+            <FormControlLabel
+              control={<Switch checked={showCompleted} onChange={async (e) => {
+                var newValue = e.target.checked;
+                setShowCompleted(newValue);
+                await fetchAppointments(currentWeekStart, showCancelled, newValue);
+              }} />}
+              label={t("receptionistCalendar.showCompleted")}
+              sx={{ color: colors.white }}
+            />
           </Box>
-          <Box sx={{ mt: 4, borderTop: `1px solid ${colors.color3}`, pt: 2 }}></Box>
-          <Typography variant="h6" sx={{ color: colors.color5, mb: 2 }}>
-            {t("receptionistCalendar.filters")}
-          </Typography>
-          <FormControlLabel
-            control={<Switch checked={showCancelled} onChange={async (e) => {
-              var newValue = e.target.checked;
-              setShowCancelled(newValue);
-              await fetchAppointments(currentWeekStart, newValue, showCompleted);
-            }} />}
-            label={t("receptionistCalendar.showCancelled")}
-            sx={{ color: colors.white }}
-          />
-          <FormControlLabel
-            control={<Switch checked={showCompleted} onChange={async (e) => {
-              var newValue = e.target.checked;
-              setShowCompleted(newValue);
-              await fetchAppointments(currentWeekStart, showCancelled, newValue);
-            }} />}
-            label={t("receptionistCalendar.showCompleted")}
-            sx={{ color: colors.white }}
-          />
-        </Box>
-      </Drawer>
+        </Drawer>
+      </Box>
     </Box>
   );
 };
