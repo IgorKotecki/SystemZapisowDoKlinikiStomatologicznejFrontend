@@ -77,35 +77,35 @@ export default function DoctorAppointmentsConsole() {
         }
     };
     const fetchStatusesAsync = async (lang: string) => {
-            try {
-                const response = await get.getToothStatuses(lang);
-                const map = new Map<string, Status[]>();
-                for (const key in response) {
-                    map.set(key, response[key]);
-                }
-                setStatusesByCategories(map);
-            } catch (err) {
-                console.error("Failed to fetch statuses");
+        try {
+            const response = await get.getToothStatuses(lang);
+            const map = new Map<string, Status[]>();
+            for (const key in response) {
+                map.set(key, response[key]);
             }
-        };
-        const fetchTeethData = async (lang: string) => {
-            try {
-                if (!state) return;
-                const response = await get.getTeethModel(state.appointment.patientId, lang)
-                setTeeth(response);
-            } catch (error) {
-                console.error("Błąd pobierania danych o zębach:", error);
-            }
-        };
+            setStatusesByCategories(map);
+        } catch (err) {
+            console.error("Failed to fetch statuses");
+        }
+    };
+    const fetchTeethData = async (lang: string) => {
+        try {
+            if (!state) return;
+            const response = await get.getTeethModel(state.appointment.patientId, lang)
+            setTeeth(response);
+        } catch (error) {
+            console.error("Błąd pobierania danych o zębach:", error);
+        }
+    };
 
-        const fetchAddInfoData = async (lang: string) => {
-            try {
-                const response = await get.getAdditionalInformation(lang);
-                setAddInfo(response);
-            } catch (error) {
-                console.error("Błąd pobierania danych o dodatkowych informacjach:", error);
-            }
-        };
+    const fetchAddInfoData = async (lang: string) => {
+        try {
+            const response = await get.getAdditionalInformation(lang);
+            setAddInfo(response);
+        } catch (error) {
+            console.error("Błąd pobierania danych o dodatkowych informacjach:", error);
+        }
+    };
 
     useEffect(() => {
         const lang = i18n.language || "pl";
@@ -185,6 +185,7 @@ export default function DoctorAppointmentsConsole() {
             setCompleting(false);
         }
     };
+
     const createTeethModel = async () => {
         setCreatingModel(true);
         try {
@@ -198,7 +199,9 @@ export default function DoctorAppointmentsConsole() {
             showAlert({ type: 'error', message: t('doctorAppointmentConsole.createModelError') });
             console.error("Błąd tworzenia modelu zębów:", error);
         } finally {
-            setCreatingModel(false);
+            setTimeout(() => {
+                setCreatingModel(false);
+            }, 3000); 
         }
     }
 
@@ -262,7 +265,7 @@ export default function DoctorAppointmentsConsole() {
                     </Box>
                 </Grid>
                 <Grid size={12}>
-                    <TeethModel teeth={teeth} selectedTooth={selectedTooth} setSelectedTooth={setSelectedTooth} creatingModel={creatingModel} createModel={createTeethModel}/>
+                    <TeethModel teeth={teeth} selectedTooth={selectedTooth} setSelectedTooth={setSelectedTooth} creatingModel={creatingModel} createModel={createTeethModel} />
                 </Grid>
                 <Grid size={4}>
                     <AppointemtInfoRenderer appointment={state.appointment} />

@@ -26,6 +26,7 @@ const AdditionalInformation: React.FC = () => {
     const isSubmitting = useRef(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [infoToDeleteId, setInfoToDeleteId] = useState<number | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const fetchAddInfo = async () => {
         setLoading(true);
@@ -47,6 +48,7 @@ const AdditionalInformation: React.FC = () => {
 
     const handleDeleteClick = async () => {
         if (!infoToDeleteId) return;
+        setIsDeleting(true);
         try {
             await deleteApi.deleteAdditionalInformation(infoToDeleteId!);
             showAlert({ type: "success", message: t("additionalInfo.deleteSuccess") });
@@ -57,6 +59,7 @@ const AdditionalInformation: React.FC = () => {
         } finally {
             setDeleteDialogOpen(false);
             setInfoToDeleteId(null);
+            setIsDeleting(false);
         }
     };
 
@@ -287,6 +290,7 @@ const AdditionalInformation: React.FC = () => {
                           </Button>
                           <Button
                             onClick={handleDeleteClick}
+                            disabled={isDeleting}
                             variant="contained"
                             color="error"
                             autoFocus

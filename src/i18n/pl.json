@@ -477,7 +477,8 @@
     "title": "Resetuj hasło",
     "description": "Wprowadź adres e-mail powiązany z Twoim kontem. Wyślemy link do zresetowania hasła.",
     "sendResetLink": "Wyślij link do resetowania",
-    "sending": "Wysyłanie..."
+    "sending": "Wysyłanie...",
+    "sentTo" : "Wysłano do"
   },
   "reset": {
     "title": "Ustaw nowe hasło",
@@ -552,7 +553,8 @@
     "notePlaceholder": "Wpisz notatkę dotyczącą wizyty...",
     "showHistory": "Pokaż historię wizyt pacjenta",
     "noHistory": "Brak historii wizyt do wyświetlenia.",
-    "historyTitle": "Historia wizyt pacjenta"
+    "historyTitle": "Historia wizyt pacjenta",
+    "createModelError" : "Wystąpił błąd podczas tworzenia modelu zębów pacjenta."
   },
   "doctorAppointments": {
     "title": "Zaplanowane wizyty",
@@ -683,5 +685,10 @@
     "price": "Cena",
     "notes": "Notatki"
   },
-  "delete": "Usuń"
+  "delete": "Usuń",
+  "resetSuccess" : {
+    "title": "Hasło zresetowane pomyślnie!",
+    "message": "Twoje hasło zostało pomyślnie zresetowane. Teraz możesz się zalogować za pomocą nowego hasła.",
+    "goToLogin": "Przejdź do logowania"
+  }
 }

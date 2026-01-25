@@ -11,7 +11,6 @@ export const RegisterGratulation: React.FC = () => {
     return (
         <Box
             sx={{
-                width: '100vw',
                 height: '100vh',
                 backgroundColor: colors.color1,
                 display: 'flex',

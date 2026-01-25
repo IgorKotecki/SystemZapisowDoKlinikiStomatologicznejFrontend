@@ -470,7 +470,8 @@
     "title": "Reset your password",
     "description": "Enter the email address associated with your account. We'll send a link to reset your password.",
     "sendResetLink": "Send reset link",
-    "sending": "Sending..."
+    "sending": "Sending...",
+    "sentTo" : "Sent to"
   },
   "reset": {
     "title": "Set a new password",
@@ -542,7 +543,8 @@
     "notePlaceholder": "Enter a note about the appointment...",
     "showHistory": "Show patient's appointment history",
     "noHistory": "No appointment history to display.",
-    "historyTitle": "Patient Appointment History"
+    "historyTitle": "Patient Appointment History",
+    "createModelError": "An error occurred while creating the dental model for the patient."
   },
   "doctorAppointments": {
     "title": "My Appointments",
@@ -665,5 +667,10 @@
     "price": "Price",
     "notes": "Notes"
   },
-  "delete" : "Delete"
+  "delete" : "Delete",
+  "resetSuccess" : {
+    "title": "Password Reset Successful!",
+    "message": "Your password has been reset successfully. You can now log in with your new password.",
+    "goToLogin": "Go to Login"
+  }
 }

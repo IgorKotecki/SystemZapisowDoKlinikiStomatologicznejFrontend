@@ -160,7 +160,7 @@ export default function ProfilePage() {
         surname: userData.surname.trim(),
         phoneNumber: userData.phoneNumber?.trim(),
         email: userData.email.trim().toLowerCase(),
-        photoUrl: finalPhotoUrl || "",
+        photoUrl: finalPhotoUrl || null,
         PhotoURL: finalPhotoUrl,
       };
       console.log(dto);
@@ -441,6 +441,7 @@ export default function ProfilePage() {
             color="error"
             autoFocus
             sx={{ borderRadius: "20px", px: 3 }}
+            disabled={isDeleting}
           >
             {t("userProfile.deleteAccount") || t("header.logout")}
           </Button>

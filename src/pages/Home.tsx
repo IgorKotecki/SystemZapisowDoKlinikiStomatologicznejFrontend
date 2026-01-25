@@ -21,10 +21,9 @@ export default function Home() {
   };
 
   return (
-    <Box sx={{ width: '100vw', minHeight: '100vh', backgroundColor: colors.white }}>
+    <Box sx={{ minHeight: '100vh', backgroundColor: colors.white }}>
       <Box
         sx={{
-          width: '100%',
           height: { xs: '70vh', md: '90vh' },
           backgroundImage: 'url("/images/tło.png")',
           backgroundSize: 'cover',

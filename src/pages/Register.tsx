@@ -99,16 +99,14 @@ export default function Register() {
     return (
         <Box
             sx={{
-                width: '100vw',
                 height: '100vh',
                 backgroundColor: colors.color1,
                 display: 'flex',
-                alignItems: 'center',
                 justifyContent: 'center',
                 p: 2
             }}
         >
-            <Card sx={{ maxWidth: 500, width: '100%', borderRadius: 3, boxShadow: 5 }}>
+            <Card sx={{ maxWidth: 500, width: '100%', borderRadius: 3, boxShadow: 5, height: 'fit-content' }}>
                 <CardContent sx={{ p: 4 }}>
                     <form onSubmit={handleSubmit}>
                         <Typography variant="h5" sx={{ textAlign: 'center', mb: 3, color: colors.black }}>

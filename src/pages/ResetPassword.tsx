@@ -2,58 +2,16 @@ import {
     Typography,
     TextField,
     Button,
+    Box,
+    Paper,
 } from '@mui/material';
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { colors } from '../utils/colors';
 import post from '../api/post';
 import { showAlert } from '../utils/GlobalAlert';
 
-const styles: Record<string, React.CSSProperties> = {
-    background: {
-        background: colors.color1,
-        flex: 1,
-    },
-    container: {
-        maxWidth: 420,
-        margin: "48px auto",
-        padding: 24,
-        border: "1px solid #eee",
-        borderRadius: 8,
-        boxShadow: "0 4px 14px rgba(0,0,0,0.03)",
-        fontFamily: "Inter, Roboto, system-ui, -apple-system, 'Segoe UI', sans-serif",
-        background: colors.white
-    },
-    title: { margin: "0 0 8px", fontSize: 22, color: "black" },
-    description: { margin: "0 0 18px", color: "#555", fontSize: 14 },
-    field: { display: "flex", flexDirection: "column", marginBottom: 12 },
-    label: { marginBottom: 6, fontSize: 13 },
-    input: {
-        padding: "10px 12px",
-        fontSize: 14,
-        borderRadius: 6,
-        border: "1px solid #ccd",
-        outline: "none",
-    },
-    button: {
-        padding: "10px 14px",
-        fontSize: 15,
-        borderRadius: 6,
-        border: "none",
-        background: "#0b69ff",
-        color: "white",
-        cursor: "pointer",
-    },
-    altButton: {
-        marginLeft: 8,
-        background: "#f3f4f6",
-        color: "#111",
-    },
-    hint: { marginTop: 12, fontSize: 13, color: "#666" },
-    error: { color: "crimson", marginTop: 10 },
-    success: { color: "green", marginTop: 10 },
-};
 
 function getQueryParam(name: string) {
     try {
@@ -69,6 +27,10 @@ export default function ResetPassword() {
     const [confirm, setConfirm] = useState("");
     const [token, setToken] = useState<string | null>(null);
     const [sentTo, setSentTo] = useState<string | null>(null);
+    const [sending, setSending] = useState(false);
+    const [resetting, setResetting] = useState(false);
+    const isSubmittingRequest = useRef(false);
+    const isSubmittingReset = useRef(false);
     const navigate = useNavigate();
     const { t } = useTranslation();
 
@@ -79,12 +41,20 @@ export default function ResetPassword() {
         if (e) setEmail(e);
     }, []);
 
-    async function requestReset(e?: React.FormEvent) {
-        e?.preventDefault();
+    async function requestReset() {
+        if (isSubmittingRequest.current) {
+            console.log('Already submitting request, blocked!');
+            return;
+        }
+
         if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
             showAlert({ type: "error", message: t('reset.enterValidEmail') });
             return;
         }
+
+        isSubmittingRequest.current = true;
+        setSending(true);
+
         try {
             const payload = {
                 email: email
@@ -97,11 +67,18 @@ export default function ResetPassword() {
             showAlert({ type: "success", message: t('reset.resetLinkSent') });
         } catch (err: any) {
             showAlert({ type: "error", message: err?.message || t('reset.requestFailed') });
+        } finally {
+            setSending(false);
+            isSubmittingRequest.current = false;
         }
     }
 
-    async function submitNewPassword(e?: React.FormEvent) {
-        e?.preventDefault();
+    async function submitNewPassword() {
+        if (isSubmittingReset.current) {
+            console.log('Already submitting reset, blocked!');
+            return;
+        }
+
         if (!token) {
             showAlert({ type: "error", message: t('reset.missingToken') });
             return;
@@ -114,117 +91,139 @@ export default function ResetPassword() {
             showAlert({ type: "error", message: t('reset.passwordMismatch') });
             return;
         }
-        try {
 
+        isSubmittingReset.current = true;
+        setResetting(true);
+
+        try {
             const payload = {
                 token: token,
                 newPassword: newPassword
             };
 
-            var res = await post.resetPassword(payload);
+            await post.resetPassword(payload);
 
             showAlert({ type: "success", message: t('reset.successMessage') });
             setNewPassword("");
             setConfirm("");
 
-            if (res.status === 200) {
-                setTimeout(() => {
-                    navigate('/login');
-                }, 1000);
-            }
+            navigate('/resetpassword/success');
 
         } catch (err: any) {
             showAlert({ type: "error", message: err?.message || "Reset failed." });
+        } finally {
+            setResetting(false);
+            isSubmittingReset.current = false;
         }
     }
 
     return (
-        <div style={styles.background}>
-            <div style={styles.container}>
+        <Box
+            sx={{
+                height: '100vh',
+                backgroundColor: colors.color1,
+                display: 'flex',
+                justifyContent: 'center',
+                p: 2
+            }}
+        >
+            <Paper
+                elevation={3}
+                sx={{
+                    maxWidth: 420,
+                    width: '100%',
+                    padding: 4,
+                    borderRadius: 3,
+                    textAlign: 'center',
+                    backgroundColor: colors.pureWhite,
+                    height: 'fit-content',
+                }}
+            >
                 {!token ? (
                     <>
-                        <Typography variant="h5" sx={{ textAlign: 'center', mb: 3, color: colors.color1 }}>
+                        <Typography variant="h5" sx={{ textAlign: 'center', mb: 3, color: colors.black }}>
                             {t('forget.title')}
                         </Typography>
-                        <p style={styles.description}>
+                        <Typography variant="body2" sx={{ mb: 2, color: colors.black, opacity: 0.8 }}>
                             {t('forget.description')}
-                        </p>
-                        <form onSubmit={requestReset}>
-                            <TextField
-                                label={t('login.email')}
-                                name="email"
-                                fullWidth
-                                margin="normal"
-                                value={email}
-                                onChange={(s) => setEmail(s.target.value)}
-                                sx={{ backgroundColor: colors.white, borderRadius: 1 }}
-                            />
-            
-                            {sentTo && <div style={styles.hint}>Sent to: {sentTo}</div>}
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                fullWidth
-                                sx={{
-                                    mt: 3,
-                                    backgroundColor: colors.color3,
-                                    '&:hover': { backgroundColor: colors.color4 },
-                                    textTransform: 'none'
-                                }}
-                            >
-                                {t('forget.sendResetLink')}
-                            </Button>
-                        </form>
+                        </Typography>
+
+                        <TextField
+                            label={t('login.email')}
+                            name="email"
+                            fullWidth
+                            margin="normal"
+                            value={email}
+                            onChange={(s) => setEmail(s.target.value)}
+                            sx={{ backgroundColor: colors.white, borderRadius: 1 }}
+                        />
+
+                        {sentTo && <Typography variant="body2" sx={{ mt: 1, color: colors.black, opacity: 0.8 }}>{t('forget.sentTo')}: {sentTo}</Typography>}
+
+                        <Button
+                            onClick={requestReset}
+                            variant="contained"
+                            disabled={sending || !email}
+                            fullWidth
+                            sx={{
+                                mt: 3,
+                                backgroundColor: colors.color3,
+                                '&:hover': { backgroundColor: colors.color4 },
+                                textTransform: 'none'
+                            }}
+                        >
+                            {t('forget.sendResetLink')}
+                        </Button>
                     </>
                 ) : (
                     <>
-                        <Typography variant="h5" sx={{ textAlign: 'center', mb: 3, color: colors.color1 }}>
+                        <Typography variant="h5" sx={{ textAlign: 'center', mb: 3, color: colors.black }}>
                             {t('reset.title')}
                         </Typography>
-                        <p style={styles.description}>{t('reset.description')}</p>
+                        <Typography variant="body2" sx={{ mb: 2, color: colors.black, opacity: 0.8 }}>
+                            {t('reset.description')}
+                        </Typography>
 
-                        <form onSubmit={submitNewPassword}>
-                            <TextField
-                                label={t('reset.newPassword')}
-                                name="newPassword"
-                                type="password"
-                                fullWidth
-                                margin="normal"
-                                value={newPassword}
-                                onChange={(s) => setNewPassword(s.target.value)}
-                                sx={{ backgroundColor: colors.white, borderRadius: 1 }}
-                                required
-                            />
-                            <TextField
-                                label={t('reset.confirmNewPassword')}
-                                name="confirm"
-                                type="password"
-                                fullWidth
-                                margin="normal"
-                                value={confirm}
-                                onChange={(s) => setConfirm(s.target.value)}
-                                sx={{ backgroundColor: colors.white, borderRadius: 1 }}
-                                required
-                            />
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                fullWidth
-                                sx={{
-                                    mt: 3,
-                                    backgroundColor: colors.color3,
-                                    '&:hover': { backgroundColor: colors.color4 },
-                                    textTransform: 'none'
-                                }}
-                            >
-                                {t('reset.changePassword')}
-                            </Button>
+                        <TextField
+                            label={t('reset.newPassword')}
+                            name="newPassword"
+                            type="password"
+                            fullWidth
+                            margin="normal"
+                            value={newPassword}
+                            onChange={(s) => setNewPassword(s.target.value)}
+                            sx={{ backgroundColor: colors.white, borderRadius: 1 }}
+                            required
+                        />
+                        <TextField
+                            label={t('reset.confirmNewPassword')}
+                            name="confirm"
+                            type="password"
+                            fullWidth
+                            margin="normal"
+                            value={confirm}
+                            onChange={(s) => setConfirm(s.target.value)}
+                            sx={{ backgroundColor: colors.white, borderRadius: 1 }}
+                            required
+                        />
 
-                        </form>
-                        
+                        <Button
+                            onClick={submitNewPassword}
+                            variant="contained"
+                            disabled={resetting || !newPassword || !confirm}
+                            fullWidth
+                            sx={{
+                                mt: 3,
+                                backgroundColor: colors.color3,
+                                '&:hover': { backgroundColor: colors.color4 },
+                                textTransform: 'none'
+                            }}
+                        >
+                            {t('reset.changePassword')}
+                        </Button>
                     </>
                 )}
-            </div>
-        </div>
+            </Paper>
+        </Box>
     );
 }
