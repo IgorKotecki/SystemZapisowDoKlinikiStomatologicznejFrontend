@@ -1,20 +1,20 @@
 import { colors } from "../../utils/colors";
 import UserNavigation from "../../components/userComponents/userNavigation";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import { useTranslation } from "react-i18next";
 import AppointmentsDataGrid from "../../components/AppointementDataGrid";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import { useState, useEffect } from "react";
 import type { Appointment } from "../../Interfaces/Appointment";
 import { showAlert } from "../../utils/GlobalAlert";
 import get from "../../api/get";
 import put from "../../api/put";
 import { useLocation } from "react-router-dom";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { IconButton, Box, Typography, FormControlLabel, Switch } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function UserAppointmentsHistory() {
     const location = useLocation();
+    const navigate = useNavigate();
     const { userId } = location.state as { userId: number };
     const { t, i18n } = useTranslation();
     const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -82,9 +82,18 @@ export default function UserAppointmentsHistory() {
                 }}
             >
                 <Box sx={{ width: "100%", maxWidth: 1500 }}>
-                    <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
-                        {t("userAppointmentsHistory.title")}
-                    </Typography>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+                        <IconButton
+                            onClick={() => navigate(-1)}
+                            sx={{ color: colors.color5, pl: 0 }}
+                            aria-label="go back"
+                        >
+                            <ArrowBackIcon />
+                        </IconButton>
+                        <Typography variant="h4" sx={{ color: colors.color5 }}>
+                            {t("userAppointmentsHistory.title")}
+                        </Typography>
+                    </Box>
                     <Box
                         sx={{
                             display: "flex",

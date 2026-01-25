@@ -28,6 +28,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({ open, onClose, serv
     const [loading, setLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         if (open && serviceId) {
@@ -48,28 +49,28 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({ open, onClose, serv
 
 
     const validate = (): boolean => {
-    if (!serviceData?.namePl?.trim() || !serviceData?.nameEn?.trim()) {
-        showAlert({ type: "error", message: t("receptionistServices.errorEmptyFields") });
-        return false;
-    }
+        if (!serviceData?.namePl?.trim() || !serviceData?.nameEn?.trim()) {
+            showAlert({ type: "error", message: t("receptionistServices.errorEmptyFields") });
+            return false;
+        }
 
-    const low = Number(serviceData.lowPrice || 0);
-    const high = Number(serviceData.highPrice || 0);
-    if (low <= 0 && high <= 0) {
-        showAlert({ type: "error", message: t("receptionistServices.errorPriceRequired") });
-        return false;
-    }
-    if (low > 0 && high > 0 && high <= low) {
-        showAlert({ type: "error", message: t("receptionistServices.errorPriceRange") });
-        return false;
-    }
-    if (!serviceData.serviceCategoryIds || serviceData.serviceCategoryIds.length === 0) {
-        showAlert({ type: "error", message: t("receptionistServices.errorCategory") });
-        return false;
-    }
+        const low = Number(serviceData.lowPrice || 0);
+        const high = Number(serviceData.highPrice || 0);
+        if (low <= 0 && high <= 0) {
+            showAlert({ type: "error", message: t("receptionistServices.errorPriceRequired") });
+            return false;
+        }
+        if (low > 0 && high > 0 && high <= low) {
+            showAlert({ type: "error", message: t("receptionistServices.errorPriceRange") });
+            return false;
+        }
+        if (!serviceData.serviceCategoryIds || serviceData.serviceCategoryIds.length === 0) {
+            showAlert({ type: "error", message: t("receptionistServices.errorCategory") });
+            return false;
+        }
 
-    return true;
-};
+        return true;
+    };
 
     const handleSave = async () => {
         if (!serviceData || !serviceId || !validate()) return;
@@ -88,6 +89,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({ open, onClose, serv
 
     const handleDelete = async () => {
         if (!serviceId) return;
+        setIsDeleting(true);
         try {
             await serviceDelete.deleteService(serviceId);
             showAlert({ type: "success", message: t("editService.deleteSuccess") });
@@ -95,8 +97,10 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({ open, onClose, serv
             onClose();
         } catch (e) {
             showAlert({ type: "error", message: t("editService.deleteError") });
+            setIsDeleting(false);
         } finally {
             setIsDeleteDialogOpen(false);
+            setIsDeleting(false);
         }
     };
 
@@ -227,13 +231,41 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({ open, onClose, serv
                 </Paper>
             </Modal>
 
-            <Dialog open={isDeleteDialogOpen} onClose={() => setIsDeleteDialogOpen(false)}
-                PaperProps={{ sx: { backgroundColor: colors.color2, color: colors.white, borderRadius: 3 } }}>
+            <Dialog
+                open={isDeleteDialogOpen}
+                onClose={isDeleting ? undefined : () => setIsDeleteDialogOpen(false)} 
+                PaperProps={{ sx: { backgroundColor: colors.color2, color: colors.white, borderRadius: 3 } }}
+            >
                 <DialogTitle sx={{ color: colors.color5 }}>{t("editService.deleteService")}</DialogTitle>
-                <DialogContent><DialogContentText sx={{ color: colors.white }}>{t("editService.deleteConfirmText")}</DialogContentText></DialogContent>
+                <DialogContent>
+                    <DialogContentText sx={{ color: colors.white }}>
+                        {t("editService.deleteConfirmText")}
+                    </DialogContentText>
+                </DialogContent>
                 <DialogActions sx={{ p: 2 }}>
-                    <Button onClick={() => setIsDeleteDialogOpen(false)} sx={{ color: colors.white }}>{t("editService.cancel")}</Button>
-                    <Button onClick={handleDelete} variant="contained" sx={{ backgroundColor: "#ff4444" }}>{t("editService.delete")}</Button>
+                    <Button
+                        onClick={() => setIsDeleteDialogOpen(false)}
+                        disabled={isDeleting}
+                        sx={{ color: colors.white }}
+                    >
+                        {t("editService.cancel")}
+                    </Button>
+                    <Button
+                        onClick={handleDelete}
+                        variant="contained"
+                        disabled={isDeleting}
+                        sx={{
+                            backgroundColor: "#ff4444",
+                            minWidth: "100px",
+                            "&:hover": { backgroundColor: colors.cancelled }
+                        }}
+                    >
+                        {isDeleting ? (
+                            <CircularProgress size={24} sx={{ color: colors.white }} />
+                        ) : (
+                            t("editService.delete")
+                        )}
+                    </Button>
                 </DialogActions>
             </Dialog>
         </>
