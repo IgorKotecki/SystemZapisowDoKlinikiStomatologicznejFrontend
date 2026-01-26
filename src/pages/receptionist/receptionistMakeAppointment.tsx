@@ -14,7 +14,7 @@ import {
   ListItem,
   ListItemIcon,
   Checkbox,
-  ListItemText,
+  ListItemText, IconButton, 
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -30,9 +30,12 @@ import get from "../../api/get";
 import type { User } from "../../Interfaces/User";
 import { useLocation } from "react-router-dom";
 import { showAlert } from "../../utils/GlobalAlert";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate } from "react-router-dom";
 
 export default function ReceptionistAppointment() {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const location = useLocation();
   const state = location.state as { user: User } | null;
   const [date, setDate] = useState<Date | null>(null);
@@ -105,10 +108,12 @@ export default function ReceptionistAppointment() {
         const response = await get.getTimeBlocks(doctorId, date)
 
         setTimeBlocks(response);
-      } catch (err) {
-        console.error("Błąd pobierania bloków czasowych:", err);
-        showAlert({ type: "error", message: t("errorFetchingTimeBlocks") });
-        setTimeBlocks([]);
+      } catch (err: any) {
+        if (err.response?.status !== 404) {
+          console.error("Błąd pobierania bloków czasowych:", err);
+          showAlert({ type: "error", message: t("errorFetchingTimeBlocks") });
+          setTimeBlocks([]);
+        }
       } finally {
         setLoadingBlocks(false);
       }
@@ -206,9 +211,18 @@ export default function ReceptionistAppointment() {
         }}
       >
         <Box sx={{ width: "100%", maxWidth: 1500 }}>
-          <Typography variant="h4" gutterBottom sx={{ color: colors.color5 }}>
-            {t("receptionistAppointment.title")}
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+            <IconButton
+              onClick={() => navigate(-1)}
+              sx={{ color: colors.color5, pl: 0 }}
+              aria-label="go back"
+            >
+              <ArrowBackIcon />
+            </IconButton>
+            <Typography variant="h4" sx={{ color: colors.color5 }}>
+              {t("receptionistAppointment.title")}
+            </Typography>
+          </Box>
           <Typography variant="subtitle2" sx={{ mb: 1 }}>
             {state?.user.name} {state?.user.surname} - {state?.user.email} - {state?.user.phoneNumber}
           </Typography>
