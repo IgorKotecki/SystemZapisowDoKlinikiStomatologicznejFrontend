@@ -132,7 +132,7 @@ export default function Team() {
                                         image={member.photoURL}
                                         alt={member.name}
                                         sx={{
-                                            height: 450,
+                                            height: 700,
                                             width: '100%',
                                             objectFit: 'cover',
                                             objectPosition: 'top',
@@ -156,16 +156,6 @@ export default function Team() {
                                                 }
                                             </Typography>
                                         )}
-
-                                        <Box sx={{ mt: 3, pt: 2, borderTop: '1px solid #eee' }}>
-                                            <Button
-                                                size="small"
-                                                sx={{ color: colors.color3, fontWeight: 'bold' }}
-                                                onClick={() => navigate('/appointment')}
-                                            >
-                                                {t('book')}
-                                            </Button>
-                                        </Box>
                                     </CardContent>
                                 </Card>
                             </Grid>

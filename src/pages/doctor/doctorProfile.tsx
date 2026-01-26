@@ -10,22 +10,17 @@ import {
   Avatar,
   IconButton,
   Alert,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
 } from "@mui/material";
 import { Camera } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import UserNavigation from "../../components/userComponents/userNavigation";
 import api from "../../api/axios";
 import post from "../../api/post";
-import deleteUser from "../../api/delete";
 import { colors } from "../../utils/colors";
 import LoadingScreen from "../../components/Loading";
 import { useAuth } from "../../context/AuthContext";
 import type { User } from "../../Interfaces/User";
-import { useNavigate } from "react-router-dom";
+
 
 interface DoctorUpdate extends User {
   specialization?: string;
@@ -33,8 +28,7 @@ interface DoctorUpdate extends User {
 
 export default function DoctorProfile() {
   const { t } = useTranslation();
-  const { userId, updateUserPhoto, logout } = useAuth();
-  const navigate = useNavigate();
+  const { userId, updateUserPhoto } = useAuth();
 
   const [userData, setUserData] = useState<DoctorUpdate | null>(null);
   const [originalUserData, setOriginalUserData] = useState<DoctorUpdate | null>(null);
@@ -43,8 +37,6 @@ export default function DoctorProfile() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [alert, setAlert] = useState<{
     type: "success" | "error";
     message: string;
@@ -187,28 +179,7 @@ export default function DoctorProfile() {
     setIsEditing(false);
   };
 
-  const handleDeleteAccount = async () => {
-    handleOpenDeleteDialog();
-  };
 
-  const handleOpenDeleteDialog = () => setDeleteDialogOpen(true);
-  const handleCloseDeleteDialog = () => setDeleteDialogOpen(false);
-
-  const handleConfirmDelete = async () => {
-    setIsDeleting(true);
-    handleCloseDeleteDialog();
-    try {
-      await deleteUser.deleteUser(userId);
-      setAlert({ type: "success", message: t("userProfile.deleteSuccess") });
-      setTimeout(() => {
-        if (logout) logout();
-        navigate("/");
-      }, 2000);
-    } catch (err) {
-      setAlert({ type: "error", message: t("userProfile.deleteError") });
-      setIsDeleting(false);
-    }
-  };
 
   if (loading) return <LoadingScreen />;
 
@@ -339,75 +310,10 @@ export default function DoctorProfile() {
           </Paper>
           <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
             <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
-              <Button
-                variant="contained"
-                onClick={handleDeleteAccount}
-                disabled={isDeleting}
-                sx={{
-                  backgroundColor: "#d32f2f",
-                  color: colors.white,
-                  px: 8,
-                  py: 1.8,
-                  fontWeight: "bold",
-                  borderRadius: "50px",
-                  fontSize: "1rem",
-                  textTransform: "none",
-                  transition: "0.3s",
-                  "&:hover": {
-                    backgroundColor: "#b71c1c",
-                    transform: "translateY(-2px)",
-                    boxShadow: "0px 4px 20px rgba(0,0,0,0.3)",
-                  },
-                  "&.Mui-disabled": {
-                    backgroundColor: "rgba(211, 47, 47, 0.5)",
-                    color: "rgba(255, 255, 255, 0.7)",
-                  }
-                }}
-              >
-                {isDeleting ? (
-                  <CircularProgress size={24} sx={{ color: colors.white }} />
-                ) : (
-                  t("userProfile.deleteAccount")
-                )}
-              </Button>
             </Box>
           </Box>
         </Box>
       </Box>
-
-      <Dialog
-        open={deleteDialogOpen}
-        onClose={handleCloseDeleteDialog}
-        disableScrollLock
-        aria-labelledby="delete-dialog-title"
-      >
-        <DialogTitle id="delete-dialog-title">
-          {t("userProfile.confirmDeleteTitle")}
-        </DialogTitle>
-        <DialogContent>
-          <Typography>
-            {t("userProfile.confirmDeleteMessage")}
-          </Typography>
-        </DialogContent>
-        <DialogActions sx={{ p: 2, gap: 1 }}>
-          <Button
-            onClick={handleCloseDeleteDialog}
-            color="inherit"
-            sx={{ borderRadius: "20px", px: 3 }}
-          >
-            {t("userProfile.cancel") || t("header.cancel")}
-          </Button>
-          <Button
-            onClick={handleConfirmDelete}
-            variant="contained"
-            color="error"
-            autoFocus
-            sx={{ borderRadius: "20px", px: 3 }}
-          >
-            {t("userProfile.deleteAccount") || t("header.logout")}
-          </Button>
-        </DialogActions>
-      </Dialog>
 
       {alert && (
         <Alert
