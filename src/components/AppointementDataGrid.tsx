@@ -19,8 +19,8 @@ import type { Appointment } from "../Interfaces/Appointment";
 import { colors } from "../utils/colors";
 import type { Service } from "../Interfaces/Service";
 import AppointmentDetailsDialogContent from "./AppointmentDetailsDialogContent";
-import CancellationModal from "./CancellationModal";
-import { storage } from "../utils/storage";
+// import CancellationModal from "./CancellationModal";
+// import { storage } from "../utils/storage";
 
 
 interface AppointmentsDataGridProps {
