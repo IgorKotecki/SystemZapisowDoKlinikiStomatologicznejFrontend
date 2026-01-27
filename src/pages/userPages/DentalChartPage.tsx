@@ -15,7 +15,6 @@ import type { ToothData } from "../../Interfaces/ToothData"
 import { colors } from "../../utils/colors";
 import { useAuth } from "../../context/AuthContext";
 import get from "../../api/get";
-import LoadingScreen from "../../components/Loading";
 
 const DentalChartPage: React.FC = () => {
   const { userId } = useAuth();

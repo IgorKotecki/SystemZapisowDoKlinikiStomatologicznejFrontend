@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress} from "@mui/material";
 import UserNavigation from "./userComponents/userNavigation";
 import { colors } from "../utils/colors";
 
