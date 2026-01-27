@@ -277,6 +277,7 @@ const AdditionalInformation: React.FC = () => {
                         </DialogContent>
                         <DialogActions sx={{ p: 2, gap: 1 }}>
                           <Button
+                            disabled={isDeleting}
                             onClick={
                                 () => {
                                     setDeleteDialogOpen(false);

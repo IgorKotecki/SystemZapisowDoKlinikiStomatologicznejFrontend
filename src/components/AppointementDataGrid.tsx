@@ -1,4 +1,3 @@
-// components/AppointmentsDataGrid.tsx
 import { useState } from "react";
 import {
   Box,
@@ -19,8 +18,6 @@ import type { Appointment } from "../Interfaces/Appointment";
 import { colors } from "../utils/colors";
 import type { Service } from "../Interfaces/Service";
 import AppointmentDetailsDialogContent from "./AppointmentDetailsDialogContent";
-// import CancellationModal from "./CancellationModal";
-// import { storage } from "../utils/storage";
 
 
 interface AppointmentsDataGridProps {
@@ -54,7 +51,7 @@ export default function AppointmentsDataGrid({
     {
       field: 'timeRange',
       headerName: t("userAppointments.hour"),
-      width: 110,
+      width: 160,
       valueGetter: (_, row) => {
         const start = new Date(row.startTime);
         const end = new Date(row.endTime);

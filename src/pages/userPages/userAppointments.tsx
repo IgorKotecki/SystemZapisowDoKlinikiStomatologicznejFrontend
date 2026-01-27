@@ -19,25 +19,28 @@ export default function VisitsHistoryPage() {
   const { t, i18n } = useTranslation();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshData, setRefreshData] = useState(false);
   const [showCancelled, setShowCancelled] = useState(true);
   const [showCompleted, setShowCompleted] = useState(true);
   
 
   const fetchAppointments = async (showCancelled: boolean, showCompleted: boolean) => {
     try {
-      setLoading(true);
+      setRefreshData(true);
       const lang = i18n.language || "pl";
       const response = await get.getUserAppointments(lang, showCancelled, showCompleted, true);
       setAppointments(response);
     } catch (err) {
       showAlert({ type: "error", message: t("userAppointments.fetchError") });
     } finally {
-      setLoading(false);
+      setRefreshData(false);
     }
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchAppointments(showCancelled, showCompleted);
+    setLoading(false);
   }, [i18n.language]);
 
   const handleCancelAppointment = async (appointment: Appointment) => {
@@ -56,7 +59,9 @@ export default function VisitsHistoryPage() {
     }
   };
 
-  if (loading) return <LoadingScreen />;
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <Box
@@ -130,7 +135,7 @@ export default function VisitsHistoryPage() {
           
           <AppointmentsDataGrid
             appointments={appointments}
-            loading={loading}
+            loading={refreshData}
             onCancelAppointment={handleCancelAppointment}
           />
         </Box>

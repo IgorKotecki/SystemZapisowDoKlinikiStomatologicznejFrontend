@@ -213,14 +213,29 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({ open, onClose, serv
 
                                 <Grid size={{ xs: 12 }}>
                                     <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
-                                        <Button variant="outlined" color="error" startIcon={<Trash2 />} onClick={() => setIsDeleteDialogOpen(true)}
-                                            sx={{ borderColor: "#ff4444", color: "#ff4444" }}>
+                                        <Button variant="outlined"
+                                            color="error"
+                                            startIcon={<Trash2 />}
+                                            disabled={isSubmitting}
+                                            onClick={() => setIsDeleteDialogOpen(true)}
+                                            sx={{ borderColor: "#ff4444", color: "#ff4444" }}
+                                            >
                                             {t("editService.delete")}
                                         </Button>
                                         <Box sx={{ display: "flex", gap: 2 }}>
-                                            <Button onClick={onClose} sx={{ color: colors.white }}>{t("userProfile.cancel")}</Button>
-                                            <Button variant="contained" onClick={handleSave} disabled={isSubmitting}
-                                                sx={{ backgroundColor: colors.color5, color: colors.color1, fontWeight: 'bold' }}>
+                                            <Button
+                                                onClick={onClose}
+                                                disabled={isSubmitting}
+                                                sx={{ color: colors.white }}
+                                            >
+                                                {t("userProfile.cancel")}
+                                            </Button>
+                                            <Button
+                                                variant="contained"
+                                                onClick={handleSave}
+                                                disabled={isSubmitting}
+                                                sx={{ backgroundColor: colors.color5, color: colors.color1, fontWeight: 'bold' }}
+                                            >
                                                 {isSubmitting ? <CircularProgress size={24} color="inherit" /> : t("userProfile.save")}
                                             </Button>
                                         </Box>
@@ -233,7 +248,7 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({ open, onClose, serv
 
             <Dialog
                 open={isDeleteDialogOpen}
-                onClose={isDeleting ? undefined : () => setIsDeleteDialogOpen(false)} 
+                onClose={isDeleting ? undefined : () => setIsDeleteDialogOpen(false)}
                 PaperProps={{ sx: { backgroundColor: colors.color2, color: colors.white, borderRadius: 3 } }}
             >
                 <DialogTitle sx={{ color: colors.color5 }}>{t("editService.deleteService")}</DialogTitle>

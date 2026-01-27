@@ -295,6 +295,7 @@ export default function DoctorProfile() {
                   </Button>
                   <Button
                     variant="outlined"
+                    disabled={uploading}
                     onClick={handleCancel}
                     sx={{
                       borderColor: colors.color5, color: colors.color5,

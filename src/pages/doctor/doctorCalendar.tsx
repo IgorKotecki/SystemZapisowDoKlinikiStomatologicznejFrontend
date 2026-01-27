@@ -323,6 +323,7 @@ const DoctorCalendar: React.FC = () => {
           <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
             <Button
               variant="outlined"
+              disabled={deleting}
               onClick={() => setOpenModal(false)}
               sx={{ borderColor: colors.color3, color: colors.white }}
             >
@@ -359,6 +360,7 @@ const DoctorCalendar: React.FC = () => {
           <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
             <Button
               variant="outlined"
+              disabled={adding}
               onClick={() => setAddTimeModalOpen(false)}
               sx={{ borderColor: colors.color3, color: colors.white }}
             >

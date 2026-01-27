@@ -313,6 +313,7 @@ export default function ReceptionistProfile() {
                   <Button
                     variant="outlined"
                     onClick={handleCancel}
+                    disabled={uploading}
                     sx={{
                       borderColor: colors.color5,
                       color: colors.color5,

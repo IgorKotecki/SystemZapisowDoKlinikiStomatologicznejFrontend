@@ -320,6 +320,7 @@ export default function DoctorAppointmentsConsole() {
                 </DialogContent>
                 <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
                     <Button
+                    disabled={completing}
                         onClick={() => {
                             setConfirmOpen(false);
                             setNote("");

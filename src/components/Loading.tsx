@@ -15,8 +15,16 @@ export default function LoadingScreen() {
       }}
     >
       <UserNavigation />
-      <CircularProgress size={60} sx={{ color: colors.color5, mb: 3 }} />
-      <Typography variant="h6">Ładowanie...</Typography>
+      <Box
+        component="main"
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}>
+        <CircularProgress size={60} sx={{ color: colors.color5, mb: 3 }} />
+      </Box>
     </Box>
   );
 }

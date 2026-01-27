@@ -360,6 +360,7 @@ export default function ProfilePage() {
                   <Button
                     variant="outlined"
                     onClick={handleCancel}
+                    disabled={uploading}
                     sx={{
                       borderColor: colors.color5,
                       color: colors.color5,
@@ -429,6 +430,7 @@ export default function ProfilePage() {
         </DialogContent>
         <DialogActions sx={{ p: 2, gap: 1 }}>
           <Button
+            disabled={isDeleting}
             onClick={handleCloseDeleteDialog}
             color="inherit"
             sx={{ borderRadius: "20px", px: 3 }}

@@ -15,6 +15,7 @@ import type { ToothData } from "../../Interfaces/ToothData"
 import { colors } from "../../utils/colors";
 import { useAuth } from "../../context/AuthContext";
 import get from "../../api/get";
+import LoadingScreen from "../../components/Loading";
 
 const DentalChartPage: React.FC = () => {
   const { userId } = useAuth();
@@ -41,23 +42,6 @@ const DentalChartPage: React.FC = () => {
 
     fetchTeethData();
   }, [t]);
-
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          minHeight: "100vh",
-          width: "100%",
-          backgroundColor: colors.color1,
-        }}
-      >
-        <UserNavigation />
-        <CircularProgress sx={{ color: colors.color5 }} />
-      </Box>
-    );
-  }
 
   return (
     <Box
@@ -97,7 +81,7 @@ const DentalChartPage: React.FC = () => {
         <Typography variant="subtitle1" sx={{ mb: 4 }}>
           {t("dentalChart.subtitle")}
         </Typography>
-        <TeethModel teeth={teeth} />
+        {loading ? <CircularProgress size={60} sx={{ color: colors.color5, mb: 3 }} /> : <TeethModel teeth={teeth} />}
       </Box>
     </Box>
   );
