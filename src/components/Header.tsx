@@ -65,12 +65,12 @@ export default function Header() {
 
   return (
     <>
-      <AppBar 
-        position="sticky" 
-        sx={{ 
-          backgroundColor: colors.white, 
-          color: colors.color1, 
-          boxShadow: '0 2px 10px rgba(0,0,0,0.05)' 
+      <AppBar
+        position="sticky"
+        sx={{
+          backgroundColor: colors.white,
+          color: colors.color1,
+          boxShadow: '0 2px 10px rgba(0,0,0,0.05)'
         }}
       >
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', py: 1 }}>
@@ -99,12 +99,12 @@ export default function Header() {
               { label: t('header.prices'), path: '/prices' },
               { label: t('header.contact'), path: '/contacts' },
             ].map((item) => (
-              <Button 
+              <Button
                 key={item.path}
                 onClick={nav(item.path)}
-                sx={{ 
-                  color: colors.color1, 
-                  fontWeight: 600, 
+                sx={{
+                  color: colors.color1,
+                  fontWeight: 600,
                   textTransform: 'none',
                   '&:hover': { color: colors.color3, backgroundColor: 'transparent' }
                 }}
@@ -114,12 +114,12 @@ export default function Header() {
             ))}
           </Box>
           <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2 }}>
-            <Box 
+            <Box
               onClick={handleLangOpen}
-              sx={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: 0.5, 
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 0.5,
                 cursor: 'pointer',
                 color: colors.color1,
                 '&:hover': { color: colors.color3 }
@@ -131,32 +131,36 @@ export default function Header() {
               </Typography>
               <KeyboardArrowDownIcon sx={{ fontSize: 16 }} />
             </Box>
-            
+
             <Menu
               anchorEl={langAnchor}
               open={Boolean(langAnchor)}
               onClose={() => handleLangClose()}
               disableScrollLock
-              PaperProps={{ sx: { mt: 1, borderRadius: 2, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}}
+              PaperProps={{ sx: { mt: 1, borderRadius: 2, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' } }}
             >
               <MenuItem onClick={() => handleLangClose('pl')} sx={{ fontWeight: i18n.language === 'pl' ? 'bold' : 'normal' }}>Polski</MenuItem>
               <MenuItem onClick={() => handleLangClose('en')} sx={{ fontWeight: i18n.language === 'en' ? 'bold' : 'normal' }}>English</MenuItem>
             </Menu>
-            <Button
-              variant="outlined"
-              onClick={nav('/appointment')}
-              sx={{
-                borderColor: colors.color3,
-                color: colors.color3,
-                fontWeight: 'bold',
-                textTransform: 'none',
-                borderRadius: '20px',
-                px: 3,
-                '&:hover': { borderColor: colors.color4, backgroundColor: 'rgba(0,121,135,0.04)' }
-              }}
-            >
-              {t('header.book')}
-            </Button>
+            {(!isLoggedIn || (isLoggedIn && userRole === 'Registered_user')) && (
+              <Button
+                variant="outlined"
+                onClick={() => navigate(isLoggedIn ? '/user/makeAppointment' : '/appointment')}
+                sx={{
+                  borderColor: colors.color3,
+                  color: colors.color3,
+                  fontWeight: 'bold',
+                  textTransform: 'none',
+                  borderRadius: '20px',
+                  px: 3,
+                  '&:hover': { borderColor: colors.color4, backgroundColor: 'rgba(0,121,135,0.04)' }
+                }}
+              >
+                {t('header.book')}
+              </Button>
+            )}
+
+
             {isLoggedIn ? (
               <>
                 <Box
