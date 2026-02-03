@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import {
   Box,
   Typography,
@@ -32,6 +32,7 @@ import { applayStatusColor } from "../../utils/colorsUtils";
 import AppointmentDetailsDialogContent from "../../components/AppointmentDetailsDialogContent";
 import type { User } from "../../Interfaces/User";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const DoctorCalendar: React.FC = () => {
   const navigate = useNavigate();
@@ -53,25 +54,43 @@ const DoctorCalendar: React.FC = () => {
   const [openDetailDialog, setOpenDetailDialog] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [adding, setAdding] = useState(false);
+  const workingAbortControllerRef = useRef<AbortController | null>(null);
+  const appointmentsAbortControllerRef = useRef<AbortController | null>(null);
 
   const fetchDoctorWorkingHours = async (date: string) => {
+    if (workingAbortControllerRef.current) {
+      workingAbortControllerRef.current.abort();
+    }
+    workingAbortControllerRef.current = new AbortController();
     try {
-      const response = await get.getDoctorWorkingHours(date);
+      const response = await get.getDoctorWorkingHours(date, workingAbortControllerRef.current.signal);
       setWorkingHours(response);
       setLoading(false);
     } catch (err) {
+      if (axios.isCancel(err)) {
+        console.log('Previous request canceled', err.message);
+        return;
+      }
       showAlert({ type: 'error', message: t('globalAlert.errorLoadingData') });
       console.error(err);
     }
   };
 
   const fetchAppointments = async (date: string, showCancelled: boolean, showCompleted: boolean) => {
+    if (appointmentsAbortControllerRef.current) {
+      appointmentsAbortControllerRef.current.abort();
+    }
+    appointmentsAbortControllerRef.current = new AbortController();
     try {
       const language = i18n.language;
-      const response = await get.getDoctorAppointments(language, date, showCancelled, showCompleted);
+      const response = await get.getDoctorAppointments(language, date, showCancelled, showCompleted, appointmentsAbortControllerRef.current.signal);
       setAppointments(response);
       setLoading(false);
     } catch (err) {
+      if (axios.isCancel(err)) {
+        console.log('Previous request canceled', err.message);
+        return;
+      }
       showAlert({ type: 'error', message: t('globalAlert.errorLoadingData') });
       console.error(err);
     }
@@ -80,6 +99,15 @@ const DoctorCalendar: React.FC = () => {
   useEffect(() => {
     fetchDoctorWorkingHours(currentWeekStart);
     fetchAppointments(currentWeekStart, showCancelled, showCompleted);
+
+    return () => {
+      if (workingAbortControllerRef.current) {
+        workingAbortControllerRef.current.abort();
+      }
+      if (appointmentsAbortControllerRef.current) {
+        appointmentsAbortControllerRef.current.abort();
+      }
+    };
   }, [currentWeekStart, t]);
 
   const events = useMemo(

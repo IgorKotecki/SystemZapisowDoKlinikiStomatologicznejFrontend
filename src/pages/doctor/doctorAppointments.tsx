@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import {
   Box,
   Typography,
@@ -27,6 +27,7 @@ import { applayStatusColor } from "../../utils/colorsUtils";
 import { showAlert } from "../../utils/GlobalAlert";
 import { Drawer } from "@mui/material";
 import AppointmentDetailsDialogContent from "../../components/AppointmentDetailsDialogContent";
+import axios from "axios";
 
 const DoctorAppointments: React.FC = () => {
   const { t } = useTranslation();
@@ -39,21 +40,36 @@ const DoctorAppointments: React.FC = () => {
   const [openDetailDialog, setOpenDetailDialog] = useState(false);
   const navigate = useNavigate();
   const [selectedAppointment, setSelectedAppointment] = useState<IDoctorAppointment | null>(null);
+  const abortConstrollerRef = useRef<AbortController | null>(null);
 
   const fetchDoctorsAppointemtAsync = async (date: string, showCancelled: boolean, showCompleted: boolean) => {
     const language = i18n.language;
+    if (abortConstrollerRef.current) {
+      abortConstrollerRef.current.abort();
+    }
+    abortConstrollerRef.current = new AbortController();
     try {
-      const response = await get.getDoctorAppointments(language, date, showCancelled, showCompleted);
+      const response = await get.getDoctorAppointments(language, date, showCancelled, showCompleted, abortConstrollerRef.current.signal);
       setAppointments(CalendarMapper.ApiAppointmentsToDoctorAppointments(response));
       console.log(response);
       setLoading(false);
     } catch (err) {
+      if (axios.isCancel(err)) {
+        console.log('Request cancelled');
+        return;
+      }
       console.error(err);
     }
   };
 
   useEffect(() => {
     fetchDoctorsAppointemtAsync(currentWeekStart, showCancelled, showCompleted);
+
+    return () => {
+      if (abortConstrollerRef.current) {
+        abortConstrollerRef.current.abort();
+      }
+    };
   }, [currentWeekStart, t]);
 
   const events = useMemo(
@@ -156,41 +172,41 @@ const DoctorAppointments: React.FC = () => {
         )}
       </Box>
       <Dialog
-          open={openDetailDialog}
-          onClose={() => setOpenDetailDialog(false)}
-          PaperProps={{
-            sx: {
-              backgroundColor: colors.color2,
-              color: colors.white,
-              borderRadius: 3,
-              minWidth: 700,
-              p: 4,
-            },
-          }}
-        >
-          <DialogTitle>
-            <Typography component="h1" variant="h6" sx={{ color: colors.color5, fontWeight: "bold" }}>
-              {t("receptionistCalendar.appointmentDetails")}
-            </Typography>
-          </DialogTitle>
-          {selectedAppointment && (
-            <AppointmentDetailsDialogContent
-              selectedAppointmentDetail={CalendarMapper.DoctorAppointmentToApiAppointment(selectedAppointment)}
-            />
-          )}
-          <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                setOpenDetailDialog(false);
-                setSelectedAppointment(null);
-              }}
-              sx={{ borderColor: colors.color3, color: colors.white }}
-            >
-              {t("receptionistCalendar.close")}
-            </Button>
-          </DialogActions>
-        </Dialog>
+        open={openDetailDialog}
+        onClose={() => setOpenDetailDialog(false)}
+        PaperProps={{
+          sx: {
+            backgroundColor: colors.color2,
+            color: colors.white,
+            borderRadius: 3,
+            minWidth: 700,
+            p: 4,
+          },
+        }}
+      >
+        <DialogTitle>
+          <Typography component="h1" variant="h6" sx={{ color: colors.color5, fontWeight: "bold" }}>
+            {t("receptionistCalendar.appointmentDetails")}
+          </Typography>
+        </DialogTitle>
+        {selectedAppointment && (
+          <AppointmentDetailsDialogContent
+            selectedAppointmentDetail={CalendarMapper.DoctorAppointmentToApiAppointment(selectedAppointment)}
+          />
+        )}
+        <DialogActions sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setOpenDetailDialog(false);
+              setSelectedAppointment(null);
+            }}
+            sx={{ borderColor: colors.color3, color: colors.white }}
+          >
+            {t("receptionistCalendar.close")}
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Drawer
         anchor="right"
         open={drawerOpen}
@@ -206,15 +222,15 @@ const DoctorAppointments: React.FC = () => {
             </Typography>
 
             <Typography variant="body2" sx={{ color: colors.color1, display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'gray'}} />
+              <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'gray' }} />
               - {t("receptionistCalendar.legend.cancelled")}
             </Typography>
             <Typography variant="body2" sx={{ color: colors.color1, display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'green'}} />
+              <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'green' }} />
               - {t("receptionistCalendar.legend.completed")}
             </Typography>
             <Typography variant="body2" sx={{ color: colors.color1, display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#3788D8'}} />
+              <Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#3788D8' }} />
               - {t("receptionistCalendar.legend.scheduled")}
             </Typography>
           </Box>

@@ -8,9 +8,9 @@ export const getUserAppointments = async (lang: string, showCancelled: boolean, 
   return response.data;
 }
 
-export const getDoctorAppointments = async (lang: string, date: string, showCancelled: boolean, showCompleted: boolean) => {
-  
-  const response = await api.get(`/api/Appointment/doctor/appointments?lang=${lang}&date=${date}&showCancelled=${showCancelled}&showCompleted=${showCompleted}`);
+export const getDoctorAppointments = async (lang: string, date: string, showCancelled: boolean, showCompleted: boolean, signal?: AbortSignal) => {
+
+  const response = await api.get(`/api/Appointment/doctor/appointments?lang=${lang}&date=${date}&showCancelled=${showCancelled}&showCompleted=${showCompleted}`, {signal});
   return response.data;
 }
 
@@ -77,9 +77,16 @@ export const getUserById = async (userId: number) => {
   return response.data;
 }
 
-export const getAppointmentsForRecepcionist = async (lang: string, date: string, showCancelled : boolean, showCompleted : boolean) => {
-  const response = await api
-  .get(`/api/Appointment/receptionist/appointments?lang=${lang}&date=${date}&showCancelled=${showCancelled}&showCompleted=${showCompleted}`);
+export const getAppointmentsForRecepcionist = async (lang: string, date: string, showCancelled: boolean, showCompleted: boolean, signal?: AbortSignal) => {
+  const response = await api.get('/api/Appointment/receptionist/appointments', {
+    params: {
+      lang,
+      date,
+      showCancelled,
+      showCompleted
+    },
+    signal
+  });
   return response.data;
 }
 
@@ -116,11 +123,12 @@ export const getServiceCategories = async () => {
   return response.data;
 }
 
-export const getDoctorWorkingHours = async (date: string) => {
+export const getDoctorWorkingHours = async (date: string, signal?: AbortSignal) => {
   const response = await api.get(`/api/time-blocks/working-hours`, {
     params: {
       date: date,
     },
+    signal
   });
   return response.data;
 }

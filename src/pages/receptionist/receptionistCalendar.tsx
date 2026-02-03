@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import {
   Box,
   Typography,
@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 import CancellationModal from "../../components/CancellationModal";
 import { showAlert } from "../../utils/GlobalAlert";
 import AppointmentDetailsDialogContent from "../../components/AppointmentDetailsDialogContent";
+import axios from "axios";
 
 const ReceptionistCalendar: React.FC = () => {
   const { t } = useTranslation();
@@ -38,6 +39,7 @@ const ReceptionistCalendar: React.FC = () => {
   const [doctors, setDoctors] = useState<User[]>([]);
   const [showCancelled, setShowCancelled] = useState(true);
   const [showCompleted, setShowCompleted] = useState(true);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const navigate = useNavigate();
 
   const getStatusIcon = (status: string) => {
@@ -58,12 +60,21 @@ const ReceptionistCalendar: React.FC = () => {
 
   const fetchDoctorsAppointemtAsync = async (date: string, showCancelled: boolean, showCompleted: boolean) => {
     const language = i18n.language;
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
+
     try {
-      const response = await get.getAppointmentsForRecepcionist(language, date, showCancelled, showCompleted);
+      const response = await get.getAppointmentsForRecepcionist(language, date, showCancelled, showCompleted, abortControllerRef.current.signal);
       console.log('API Response:', response);
       setAppointments(CalendarMapper.ApiAppointmentsToDoctorAppointments(response));
       setLoading(false);
     } catch (err) {
+      if (axios.isCancel(err)) {
+        console.log('Request cancelled');
+        return;
+      }
       console.error(err);
       showAlert({ type: "error", message: t("receptionistCalendar.errorFetchingAppointments") });
     }
@@ -78,9 +89,16 @@ const ReceptionistCalendar: React.FC = () => {
       showAlert({ type: "error", message: t("receptionistCalendar.errorFetchingDoctors") });
     }
   };
+
   useEffect(() => {
     fetchDoctorsAppointemtAsync(currentWeekStart, showCancelled, showCompleted);
     fetchDoctors();
+
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
   }, [currentWeekStart, t]);
 
   const switchDoctorColor = (doctorId: number) => {
