@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Modal,
   Paper,
@@ -14,7 +14,50 @@ import { colors } from "../utils/colors";
 import type { User } from "../Interfaces/User";
 import get from "../api/get";
 import put from "../api/put";
-import { showAlert } from "../utils/GlobalAlert"; 
+import { showAlert } from "../utils/GlobalAlert";
+import ToothDiagram from "./TeethModel";
+import type { ToothData } from "../Interfaces/ToothData";
+import i18n from "../i18n";
+
+function decodeJwt(token: string) {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
+  } catch {
+    return null;
+  }
+}
+
+function getUserRoleFromToken() {
+  const token = localStorage.getItem("token");
+  if (!token) return "Unregistered";
+  const claims = decodeJwt(token);
+  if (!claims) return "Unregistered";
+
+  const msRole =
+    claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+  const simpleRole =
+    claims.role || (Array.isArray(claims.roles) ? claims.roles[0] : null);
+
+  const role = msRole || simpleRole || "Unregistered";
+
+  if (typeof role === "string") {
+    const r = role.toLowerCase();
+    if (r.includes("admin")) return "Admin";
+    if (r.includes("user") || r.includes("registered")) return "User";
+    if (r.includes("receptionist")) return "Receptionist";
+    if (r.includes("doctor")) return "Doctor";
+  }
+
+  return "Unregistered";
+}
 
 interface EditUserModalProps {
   open: boolean;
@@ -28,8 +71,23 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ open, onClose, userId, on
   const [loading, setLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userData, setUserData] = useState<User | null>(null);
+  const [teeth, setTeeth] = useState<ToothData[]>([]);
+  const role = useMemo(() => getUserRoleFromToken(), []);
 
   const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
+  const fetchTeethModel = async (userId: number) => {
+    try {
+      const language = i18n.language;
+      const teethData = await get.getTeethModel(userId, language);
+      setTeeth(teethData);
+    } catch (err) {
+      showAlert({
+        type: "error",
+        message: t("editUser.fetchTeethError"),
+      });
+    }
+  };
 
   useEffect(() => {
     if (open && userId) {
@@ -48,6 +106,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ open, onClose, userId, on
         }
       };
       fetchUser();
+      fetchTeethModel(userId);
     }
   }, [open, userId, t]);
 
@@ -91,12 +150,12 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ open, onClose, userId, on
       };
 
       await put.updateUserById(userId, dto);
-      
+
       showAlert({
         type: "success",
         message: t("editUser.saveSuccess"),
       });
-      
+
       onSuccess();
       onClose();
     } catch (err) {
@@ -124,7 +183,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ open, onClose, userId, on
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: { xs: "95%", md: 600 },
+          width: { xs: "95%", md: 800 },
           p: 4,
           backgroundColor: colors.color2,
           color: colors.white,
@@ -142,7 +201,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ open, onClose, userId, on
           </Box>
         ) : userData ? (
           <Grid container spacing={3}>
-            <Grid size={{xs:12, sm:6}}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 fullWidth
                 label={t("receptionistUsers.firstName")}
@@ -151,7 +210,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ open, onClose, userId, on
                 onChange={(e) => setUserData({ ...userData, name: e.target.value })}
               />
             </Grid>
-            <Grid size={{xs:12, sm:6}}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 fullWidth
                 label={t("receptionistUsers.lastName")}
@@ -160,7 +219,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ open, onClose, userId, on
                 onChange={(e) => setUserData({ ...userData, surname: e.target.value })}
               />
             </Grid>
-            <Grid size={{xs:12, sm:6}}>
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 fullWidth
                 label="Email"
@@ -169,7 +228,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ open, onClose, userId, on
                 onChange={(e) => setUserData({ ...userData, email: e.target.value })}
               />
             </Grid>
-            <Grid size={{xs:12}}>
+            <Grid size={{ xs: 12 }}>
               <TextField
                 fullWidth
                 label={t("receptionistUsers.phone")}
@@ -178,8 +237,12 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ open, onClose, userId, on
                 onChange={(e) => setUserData({ ...userData, phoneNumber: e.target.value })}
               />
             </Grid>
-
-            <Grid size={{xs:12}}>
+            {role === "Doctor" && (
+            <Box sx= {{ justifyContent: "center", display: "flex", width: "100%"}}>
+              <ToothDiagram teeth={teeth} />
+            </Box>
+            )}
+            <Grid size={{ xs: 12 }}>
               <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 2 }}>
                 <Button onClick={onClose} sx={{ color: colors.white }}>
                   {t("userProfile.cancel")}
