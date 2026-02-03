@@ -274,7 +274,8 @@
     "notes": "Notes",
     "close": "Close",
     "noTeethData": "No teeth data available for this user (Probably unregistered).",
-    "createModel": "Create Teeth Model"
+    "createModel": "Create Teeth Model",
+    "noTeethInfo": "You can create a dental model for this patient during their first appointment."
   },
   "receptionistNavigation": {
     "profile": "Profile",

@@ -279,7 +279,8 @@
     "notes": "Uwagi",
     "close": "Zamknij",
     "noTeethData": "Brak danych o zębach dla tego użytkownika (Prawdopodobnie niezarejestrowany).",
-    "createModel": "Utwórz model zębów"
+    "createModel": "Utwórz model zębów",
+    "noTeethInfo": "Bedziesz mógł stowrzyć model zębów dla tego użytkownika przy jego pierwszej wizycie."
   },
   "receptionistNavigation": {
     "profile": "Profil",

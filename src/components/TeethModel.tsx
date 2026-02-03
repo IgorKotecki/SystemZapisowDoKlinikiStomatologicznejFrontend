@@ -58,7 +58,7 @@ export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth, c
                 <Typography variant="h6" sx={{ mb: 3, color: colors.color5 }}>
                     {t("dentalChart.toothDiagram")}
                 </Typography>
-                {teeth.length === 0 && (
+                {teeth.length === 0 && createModel && (
                     <>
                         <Typography color={colors.white}>{t("dentalChart.noTeethData")}</Typography>
                         <Button onClick={createModel} disabled={creatingModel} sx={{ mt: 2, backgroundColor: colors.color3, color: colors.white }}>
@@ -66,6 +66,13 @@ export default function ToothDiagram({ teeth, setSelectedTooth, selectedTooth, c
                         </Button>
                     </>
                 )}
+                {teeth.length === 0 && !createModel && (
+                    <>
+                    <Typography color={colors.white}>{t("dentalChart.noTeethData")}</Typography>
+                    <Typography color={colors.white}>{t("dentalChart.noTeethInfo")}</Typography>
+                    </>
+                )
+                }
                 <Grid container justifyContent="center" spacing={1} sx={{ mb: 5 }}>
                     {teeth.slice(0, 16).map((tooth) => (
 
