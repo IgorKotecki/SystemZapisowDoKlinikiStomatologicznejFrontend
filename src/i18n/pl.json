@@ -656,6 +656,7 @@
   "INVALID_WORKING_HOURS_ADDITION": "Nie można dodać godzin pracy w przeszłości.",
   "CANCELLATION_OF_PAST_APPOINTMENT": "Nie można anulować wizyty, która już się odbyła.",
   "APPOINTMENT_IN_FUTURE": "Nie można zapisać zmian dla wizyty, która jeszcze się nie odbyła.",
+  "INVALID_APPOINTMENT_DURATION": "Nie można zaplanować wizyty tylko na podstawie produktu (czas trwania jest zerowy).",
   "globalAlert": {
     "errorLoadingData": "Błąd podczas ładowania danych. Spróbuj ponownie później."
   },

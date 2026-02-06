@@ -639,6 +639,7 @@
   "INVALID_WORKING_HOURS_ADDITION": "Cannot add working hours in the past.",
   "CANCELLATION_OF_PAST_APPOINTMENT": "Cannot cancel an appointment that has already occurred.",
   "APPOINTMENT_IN_FUTURE": "Cannot save changes for appointments that are yet to take place.",
+  "INVALID_APPOINTMENT_DURATION": "Cannot schedule an appointment based solely on the product (duration is zero).",
   "globalAlert": {
     "errorLoadingData": "Error loading data. Please try again later."
   },
