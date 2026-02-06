@@ -124,6 +124,7 @@ export default function ReceptionistAppointment() {
 
   const submitAppointment = async (e: React.FormEvent) => {
     e.preventDefault();
+    document.body.style.pointerEvents = "none";
 
     var startTime = timeBlocks.find(t => t.doctorBlockId == timeBlockId)?.timeStart;
 
@@ -169,6 +170,7 @@ export default function ReceptionistAppointment() {
       });
     } finally {
       setLoading(false);
+      document.body.style.pointerEvents = "auto";
     }
   };
 
